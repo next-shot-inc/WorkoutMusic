@@ -6,13 +6,15 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "iphone",
       "size" : "20x20",
+      "idiom" : "iphone",
+      "filename" : "runner-music-60.png",
       "scale" : "3x"
     },
     {
-      "idiom" : "iphone",
       "size" : "29x29",
+      "idiom" : "iphone",
+      "filename" : "runner-music-58.png",
       "scale" : "2x"
     },
     {
@@ -31,8 +33,9 @@
       "scale" : "3x"
     },
     {
-      "idiom" : "iphone",
       "size" : "60x60",
+      "idiom" : "iphone",
+      "filename" : "runner-music-120.png",
       "scale" : "2x"
     },
     {
@@ -86,8 +89,9 @@
       "scale" : "2x"
     },
     {
-      "idiom" : "ios-marketing",
       "size" : "1024x1024",
+      "idiom" : "ios-marketing",
+      "filename" : "runner-music-1024-without-alpha.png",
       "scale" : "1x"
     }
   ],
