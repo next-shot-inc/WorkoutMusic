@@ -43,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2FA01D1623DD06770005A7EB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2FEC2DD223D39A7E0075C560 /* WorkoutMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FEC2DD523D39A7E0075C560 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FEC2DD823D39A7E0075C560 /* WorkoutMusic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WorkoutMusic.xcdatamodel; sourceTree = "<group>"; };
@@ -95,6 +96,7 @@
 		2FEC2DC923D39A7E0075C560 = {
 			isa = PBXGroup;
 			children = (
+				2FA01D1623DD06770005A7EB /* README.md */,
 				2FEC2DD423D39A7E0075C560 /* WorkoutMusic */,
 				2FEC2DF023D39A800075C560 /* WorkoutMusicTests */,
 				2FEC2DFB23D39A800075C560 /* WorkoutMusicUITests */,
