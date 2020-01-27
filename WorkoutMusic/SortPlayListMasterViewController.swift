@@ -1,25 +1,21 @@
 //
-//  MasterViewController.swift
+//  SortPlayListMasterViewController.swift
 //  WorkoutMusic
 //
-//  Created by next-shot on 1/18/20.
+//  Created by next-shot on 1/26/20.
 //  Copyright © 2020 next-shot. All rights reserved.
 //
 
+import Foundation
 import UIKit
-import CoreData
 
-var globalAppleMusic = FetchAppleMusic()
-
-class MasterViewPlayListCell : UITableViewCell {
-    
-    @IBOutlet weak var name: UILabel!
-    
-    @IBOutlet weak var comment: UILabel!
+class SortPlayListMasterCell : UITableViewCell {
+    @IBOutlet weak var playListName: UILabel!
+    @IBOutlet weak var playListDescription: UILabel!
 }
 
-class MasterViewController: UITableViewController {
-
+class SortPlayListMasterViewController : UITableViewController {
+    
     var userPlayLists = [FetchAppleMusic.PlayListInfo]()
     var spinnerView : UIView?
     
@@ -40,17 +36,6 @@ class MasterViewController: UITableViewController {
                 }
             }
         })
-        
-        // Do any additional setup after loading the view.
-        // Add the "Edit" button on the navigationBar (left Button)
-        //navigationItem.leftBarButtonItem = editButtonItem
-        navigationItem.title = "Build From User's playlist"
-
-        // Add the "+" button on the navigationbar (right Button)
-        //let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        //navigationItem.rightBarButtonItem = addButton
-        //navigationItem.leftItemsSupplementBackButton = true
-        
     }
     
     func showSpinner(onView : UIView) {
@@ -94,9 +79,12 @@ class MasterViewController: UITableViewController {
         if segue.identifier == "showDetails" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let object = userPlayLists[indexPath.row]
-                let controller = segue.destination as! DetailViewTableViewControler
+                let controller = segue.destination as! SortPlayListDetailViewController
                 controller.appleMusic = globalAppleMusic
                 controller.detailItem = object
+                controller.playListNames = userPlayLists.map({ (info) -> String in
+                    info.name
+                })
             }
         }
     }
@@ -112,7 +100,7 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MasterViewPlayListCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SortPlayListMasterCell", for: indexPath)
         let event = userPlayLists[indexPath.row]
         configureCell(cell, withPlayList: event)
         return cell
@@ -124,9 +112,9 @@ class MasterViewController: UITableViewController {
     }
 
     func configureCell(_ cell: UITableViewCell, withPlayList playlist: FetchAppleMusic.PlayListInfo) {
-        let ecell = cell as? MasterViewPlayListCell
-        ecell!.name!.text = playlist.name
-        ecell!.comment!.text = playlist.description
+        let ecell = cell as? SortPlayListMasterCell
+        ecell!.playListName!.text = playlist.name
+        ecell!.playListDescription!.text = playlist.description
     }
+    
 }
-

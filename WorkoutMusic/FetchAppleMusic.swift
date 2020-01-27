@@ -57,30 +57,45 @@ class FetchAppleMusic {
         checkMusicLibraryAuthorizationStatus()
     }
     
-    func setup( completion: @escaping () -> ()) {
+    func setup( completion: @escaping (_ error: String) -> ()) {
         if( setupCompleted  ) {
-            completion()
+            completion("")
             return 
         }
         checkCurrentMusicLibaryCapabilities( completion: {
             let controler = SKCloudServiceController()
-            controler.requestStorefrontCountryCode { (countryCode, error) in
-                if( countryCode != nil ) {
-                    self.countryCode = countryCode!
-                } else {
-                    print("Cannot access IMusic store")
+            
+            func requestCodes() {
+                controler.requestStorefrontCountryCode { (countryCode, error) in
+                    if( countryCode != nil ) {
+                        self.countryCode = countryCode!
+                        
+                        controler.requestUserToken(forDeveloperToken: self.developerToken) { (userToken, error) in
+                            if( userToken != nil ) {
+                                self.userToken = userToken!
+                                completion("")
+                            } else {
+                                completion("Cannot access IMusic user credential")
+                            }
+                            self.setupCompleted = true
+                        }
+                    } else {
+                        completion("Cannot access IMusic store")
+                    }
                 }
             }
             
-            controler.requestUserToken(forDeveloperToken: self.developerToken) { (userToken, error) in
-                if( userToken != nil ) {
-                    self.userToken = userToken!
+            // You can only play music from Apple Music if the user has an account.
+            // Once you've requested access to their music library, you can check the user's capabilities.
+            controler.requestCapabilities { capabilities, error in
+                if capabilities.contains(.musicCatalogPlayback) {
+                    // User has Apple Music account
+                    requestCodes()
                 } else {
-                    print("Cannot access IMusic user credential")
+                    completion("Need Apple Music subscription to play from Apple Music")
                 }
-                self.setupCompleted = true
-                completion()
             }
+            
         })
     }
     
@@ -250,6 +265,8 @@ class FetchAppleMusic {
                                     }
                                 }
                                 completion( playListInfos )
+                            } else {
+                                completion( [] )
                             }
                         }
                     }
@@ -282,7 +299,7 @@ class FetchAppleMusic {
         func shortName() -> String {
             let index = name.firstIndex(of: "(") ?? name.endIndex
             let beginning = name[..<index]
-            return String(beginning)
+            return String(beginning).trimmingCharacters(in: .whitespaces)
         }
     }
     
@@ -326,6 +343,8 @@ class FetchAppleMusic {
                                 }
                             }
                             completion(tracks)
+                        } else {
+                            completion( [] )
                         }
                     }
                 }

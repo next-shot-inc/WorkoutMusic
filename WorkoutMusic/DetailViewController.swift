@@ -110,7 +110,7 @@ class DetailViewTrackListCell : UITableViewCell {
             let duration = fmt.string(from: Double(wtrack!.durationTime))
             playedIntervalLabel.text = duration!
             
-            appleMusic.stopPlaying()
+            globalAppleMusic.stopPlaying()
             timer = nil
         }
     }

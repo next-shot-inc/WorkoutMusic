@@ -307,13 +307,13 @@ class PlayWorkoutPlayController : UIViewController {
     @IBAction func executeWorkout(_ sender: Any) {
         if( playing == false ) {
             if( selectedWorkout != nil ) {
-                appleMusic.playSongs(workoutMusic: selectedWorkout!.tracks)
+                globalAppleMusic.playSongs(workoutMusic: selectedWorkout!.tracks)
                 playing = true
                 workoutPlayButton.setTitle("Pause", for: .normal)
             }
         } else {
             workoutPlayButton.setTitle("Start", for: .normal)
-            appleMusic.pausePlaying()
+            globalAppleMusic.pausePlaying()
             playing = false
         }
     }

@@ -24,42 +24,6 @@ extension UIImageView {
     }
 }
 
-class SearchSongGenreCell : UICollectionViewCell {
-    weak var controller: SearchSongGenresCollectionViewController?
-    
-    @IBAction func toggleButtonPushed(_ sender: Any) {
-        toggleButton.isSelected = !toggleButton.isSelected
-        controller?.set(genre: toggleButton.title(for: .normal) ?? "", selected: toggleButton.isSelected)
-    }
-    @IBOutlet weak var toggleButton: UIButton!
-}
-
-class SearchSongGenresCollectionViewController : UICollectionViewController {
-    var genres = ["electronic", "rock", "heavy metal", "pop", "jazz", "country", "hip hop", "rap", "classical"]
-    var selectedGenres = [String:Bool]()
-    
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return genres.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCollectionViewCell", for: indexPath) as! SearchSongGenreCell
-        
-        cell.toggleButton.setTitle(genres[indexPath.row], for: .normal)
-        cell.toggleButton.setTitle(genres[indexPath.row], for: .selected)
-        if let state = selectedGenres[genres[indexPath.row]] {
-            cell.toggleButton.isSelected = state
-        }
-        cell.controller = self
-        return cell
-    }
-    func set(genre: String, selected: Bool) {
-        selectedGenres[genre] = selected
-    }
-}
 
 class SearchSongTableCell : UITableViewCell {
     weak var controller: SearchSongTableViewControler?
@@ -72,17 +36,25 @@ class SearchSongTableCell : UITableViewCell {
 }
 
 class SearchSongTableViewControler : UITableViewController {
-    class SearchedSong {
+    class SearchedSong : SearchAndSortPlaylistSongHelper.PlayListSong {
         let song: FetchSongBPM.Song
-        var track: FetchAppleMusic.MusicTrackInfo?
         enum SearchStatus { case notSearched, searchedAndFound, searchedAndNotFound }
         var search : SearchStatus = .notSearched
-        var added = false
+        
         init(song: FetchSongBPM.Song) {
             self.song = song
+            super.init()
+        }
+        
+        override func songName() -> String? {
+            return track == nil ? song.name : track!.name
+        }
+        override func albumName() -> String? {
+            return track == nil ? song.albumName : track!.albumName
         }
     }
-    var songs = [SearchedSong]()
+    var genres = [String]()
+    var songs = [Int: [SearchedSong]]()
     var playing = false
     weak var searchSongViewController : SearchSongViewController?
     
@@ -90,80 +62,150 @@ class SearchSongTableViewControler : UITableViewController {
         super.viewDidLoad()
     }
     
+    func setSongs(songs: [FetchSongBPM.Song]) {
+        self.genres.removeAll()
+        self.songs.removeAll()
+        for song in songs {
+            let genre = song.genres[0]
+            var sectionIndex = genres.firstIndex(of: genre)
+            if( sectionIndex == nil ) {
+                genres.append(genre)
+                sectionIndex = genres.count-1
+            }
+            var songsInGenre = self.songs[sectionIndex!]
+            if( songsInGenre == nil ) {
+                songsInGenre = [SearchedSong]()
+            }
+            songsInGenre!.append(SearchedSong(song: song))
+            self.songs[sectionIndex!] = songsInGenre!
+        }
+    }
+    
+    func findSong(song: SearchedSong) -> IndexPath? {
+        for songList in self.songs.values.enumerated() {
+            let firstIndex = songList.element.firstIndex { (isong) -> Bool in
+                isong === song
+            }
+            if( firstIndex != nil ) {
+                return IndexPath(row: firstIndex!, section: songList.offset)
+            }
+        }
+        return nil
+    }
+    
+    func getSong(index: IndexPath) -> SearchedSong? {
+        if let songList = self.songs[index.section] {
+            if( index.row >= 0 && index.row < songList.count ) {
+                return songList[index.row]
+            }
+        }
+        return nil
+    }
+    
+    func reloadSong(song: SearchSongTableViewControler.SearchedSong) {
+        if let index = findSong(song: song) {
+            self.tableView.reloadRows(at: [index], with: .none)
+            if( searchSongViewController?.playAndAddToPlayListView.controller.currentSelectedSong === song ) {
+                self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
+            }
+        }
+    }
+    
+    func changeCurrentPlayListName() {
+        for songList in self.songs.values.enumerated() {
+            for song in songList.element.enumerated() {
+                song.element.inPlayList = false
+            }
+        }
+        tableView.reloadData()
+    }
+    
     // MARK: - Table View
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return genres.count
     }
 
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return genres[section]
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
+        return songs[section]!.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchSongTableCell", for: indexPath) as! SearchSongTableCell
         
-        configureCell(cell: cell, row : indexPath.row)
+        configureCell(cell: cell, indexPath : indexPath)
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        searchSongViewController?.setSelectedSong(song: songs[indexPath.row])
+        if let song = getSong(index: indexPath) {
+            searchSongViewController?.setSelectedSong(song: song)
+        }
     }
     
-    func configureCell(cell: SearchSongTableCell, row: Int) {
-        cell.songName.text = songs[row].song.name
-        cell.authorName.text = songs[row].song.authorName
-        cell.controller = self
-        cell.addedToPlaylistWidget.isHidden = !songs[row].added
-        cell.foundMusicWidget.isHidden = songs[row].search != .searchedAndFound
-        cell.notFoundMusicWidget.isHidden =
-            songs[row].search != .searchedAndNotFound
+    func configureCell(cell: SearchSongTableCell, indexPath: IndexPath) {
+        if let song = getSong(index: indexPath) {
+            cell.songName.text = song.song.name
+            cell.authorName.text = song.song.authorName
+            cell.controller = self
+            cell.addedToPlaylistWidget.isHidden = !song.inPlayList
+            cell.foundMusicWidget.isHidden = song.search != .searchedAndFound
+            cell.notFoundMusicWidget.isHidden = song.search != .searchedAndNotFound
+        }
     }
 }
 
-class SearchSongViewController : UIViewController {
+class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDelegate {
+    
+    var appleMusic: FetchAppleMusic?
+    
     @IBOutlet weak var bpmStepper: UIStepper!
     @IBOutlet weak var bpmValue: UILabel!
     @IBOutlet weak var songsTableView: UITableView!
-    @IBOutlet weak var genreCollectionView: UICollectionView!
-    
-    @IBOutlet weak var playMusicButton: UIButton!
     
     @IBOutlet weak var searchButtton: UIButton!
-    @IBOutlet weak var addMusicButton: UIButton!
     @IBOutlet weak var searchResultLabel : UILabel!
     
+    @IBOutlet weak var customContainerView: UIView!
     var searchSongTableViewController = SearchSongTableViewControler()
-    var genreCollectionViewController = SearchSongGenresCollectionViewController()
-    var existingWorkoutPlayListTracks = [FetchAppleMusic.MusicTrackInfo]()
     
-    var currentSelection : SearchSongTableViewControler.SearchedSong?
-    var playing = false
+    var searchAndSortHelper : SearchAndSortPlaylistSongHelper!
+    var playAndAddToPlayListView: UIPlayAndAddToPlayListView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let defaultPlayList = "workout music playlist"
+        
         // Disable search button until the apple music service is on.
         searchButtton.isEnabled = false
+        appleMusic = globalAppleMusic
         
-        appleMusic.setup( completion: { () -> () in
+        searchAndSortHelper = SearchAndSortPlaylistSongHelper(appleMusic: appleMusic!)
+        
+        appleMusic?.setup( completion: { (error) -> () in
             // Retrieve the current content of the workout play list
             // So that we do not add the same song multiple time
-            let playListName = "workout music playlist"
-            appleMusic.searchOnePlaylist(searchTerm: playListName, exactMatch: true, completion: { (playListInfos) in
-                if( playListInfos.count == 1 ) {
-                    appleMusic.getTracksForPlaylist(playList: playListInfos[0]) { (musicTracks) in
-                        self.existingWorkoutPlayListTracks = musicTracks
+            if( error.isEmpty ) {
+                self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: defaultPlayList, completion: { _ in 
+                    DispatchQueue.main.async {
+                        self.searchButtton.isEnabled = true
                     }
-                }
-                DispatchQueue.main.async {
-                    self.searchButtton.isEnabled = true
-                }
-            })
+                })
+                
+                self.appleMusic?.searchAllLibraryPlaylists( completion: { (playLists) in
+                    DispatchQueue.main.async {
+                        self.playAndAddToPlayListView.setPlayLists(playListNames: playLists.map({ (info) -> String in
+                            info.name
+                        }))
+                    }
+                })
+            }
         })
-        
-        setPlayButtonState()
         
         searchSongTableViewController.searchSongViewController = self
         
@@ -171,11 +213,17 @@ class SearchSongViewController : UIViewController {
         songsTableView.dataSource = searchSongTableViewController
         searchSongTableViewController.tableView = songsTableView
         
-        genreCollectionView.delegate = genreCollectionViewController
-        genreCollectionView.dataSource = genreCollectionViewController
-        for g in genreCollectionViewController.genres {
-            genreCollectionViewController.selectedGenres[g] = true
+        if let customView = Bundle.main.loadNibNamed("PlayAndAddToPlayListView", owner: self, options: nil)?.first as? UIPlayAndAddToPlayListView {
+            customView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            customView.translatesAutoresizingMaskIntoConstraints = true
+            customView.backgroundColor = nil
+            self.customContainerView.addSubview(customView)
+            customView.anchorAllEdgesToSuperview()
+            playAndAddToPlayListView = customView
         }
+        
+        playAndAddToPlayListView.delegate = self
+        playAndAddToPlayListView.initialize(playListNames: [defaultPlayList], mainController: self)
     }
     
     @IBAction func bpmValueChanged(_ sender: Any) {
@@ -187,19 +235,22 @@ class SearchSongViewController : UIViewController {
         let bpm = Int(bpmStepper.value)
         fetchSong.getSongForBPM(bpm: bpm) { (songs) in
             let filtered_songs = songs.filter({ (song) -> Bool in
-                for genre in song.genres {
-                    let state = self.genreCollectionViewController.selectedGenres[genre]
+                if( song.genres.count == 0 ) {
+                    return false
+                }
+                let genre = song.genres[0]
+                //for genre in song.genres {
+                    let state = genreSettings.genresPreference[genre]
                     if( state != nil && state! ) {
                        return true
                     }
-                }
+                //}
                 return false
             })
             let tableViewCtrler = self.searchSongTableViewController
             tableViewCtrler.songs.removeAll()
-            for song in filtered_songs {
-                tableViewCtrler.songs.append(SearchSongTableViewControler.SearchedSong(song: song))
-            }
+            tableViewCtrler.setSongs(songs: filtered_songs)
+            
             DispatchQueue.main.async {
                 self.songsTableView.reloadData()
                 if( filtered_songs.count > 1 ) {
@@ -213,59 +264,28 @@ class SearchSongViewController : UIViewController {
         }
     }
     
+    func addedToPlayList(playListName: String, song: SearchAndSortPlaylistSongHelper.PlayListSong) {
+        DispatchQueue.main.async {
+            self.searchSongTableViewController.reloadSong(song: song as! SearchSongTableViewControler.SearchedSong)
+        }
+    }
+    
+    func changedCurrentPlaylist(playListName: String) {
+        DispatchQueue.main.async {
+            self.searchSongTableViewController.changeCurrentPlayListName()
+        }
+    }
+    
     func setSelectedSong( song: SearchSongTableViewControler.SearchedSong) {
-        currentSelection = song
         if( song.track == nil && song.search == .notSearched ) {
-            checkSongAvailability()
+            checkSongAvailability(song: song)
         }
-        setPlayButtonState()
+        playAndAddToPlayListView.setSelectedSong(song: song)
     }
     
-    func reloadCurrentSelectedRow() {
-        let index = searchSongTableViewController.songs.firstIndex { (song) -> Bool in
-            currentSelection === song
-        }
-        if( index != nil ) {
-            self.songsTableView.reloadRows(at: [IndexPath(row: index!, section: 0)], with: .none)
-        }
-    }
-    
-    // If the current song has been found with the correct
-    // play information, enable the play and add button
-    func setPlayButtonState() {
-        self.playMusicButton.isEnabled = false
-        self.addMusicButton.isEnabled = false
-        
-        if( currentSelection?.track != nil ) {
-            let musicTrack = currentSelection!.track!
-            
-            // See if it is not already in the existing workout list
-            let firstIndex = existingWorkoutPlayListTracks.firstIndex { (ex_musicTrack) -> Bool in
-                ex_musicTrack.albumName == musicTrack.albumName && ex_musicTrack.name == musicTrack.name
-            }
-            currentSelection!.added = firstIndex != nil
-            
-            switch musicTrack.playId {
-            case .catalog:
-                self.playMusicButton.isEnabled = true
-                currentSelection!.search = .searchedAndFound
-                self.addMusicButton.isEnabled = !currentSelection!.added
-            case .purchased:
-                self.playMusicButton.isEnabled = true
-                currentSelection!.search = .searchedAndFound
-                self.addMusicButton.isEnabled = !currentSelection!.added
-            default:
-                print("got library id only")
-            }
-        }
-    }
-    
-    func checkSongAvailability() {
-        guard let insong = currentSelection?.song  else {
-            return
-        }
-        let song = FetchAppleMusic.SearchSongInfo(
-            name: insong.name, artistName: insong.authorName, albumName: insong.albumName
+    func checkSongAvailability(song: SearchSongTableViewControler.SearchedSong) {
+        let search_song = FetchAppleMusic.SearchSongInfo(
+            name: song.song.name, artistName: song.song.authorName, albumName: song.song.albumName
         )
             
         /*
@@ -276,59 +296,34 @@ class SearchSongViewController : UIViewController {
         })
         */
            
-        appleMusic.seachSongInStore(song: song, completion: { (musicTracks) in
+        appleMusic?.seachSongInStore(song: search_song, completion: { (musicTracks) in
             DispatchQueue.main.async {
                 if( musicTracks.count >= 1 ) {
-                    self.currentSelection!.track = musicTracks[0]
-                    self.setPlayButtonState()
-                    self.reloadCurrentSelectedRow()
+                    song.track = musicTracks[0]
+                    
+                    // See if it is not already in the existing workout list
+                    self.searchAndSortHelper.setInPlayListFlag(song: song)
+                    
+                    switch musicTracks[0].playId {
+                    case .catalog:
+                        song.search = .searchedAndFound
+                    case .purchased:
+                        song.search = .searchedAndFound
+                    default:
+                        print("got library id only")
+                    }
+                    
+                    if( self.playAndAddToPlayListView.controller.currentSelectedSong === song ) {
+                        // If the current song is still the same as when we called this function...
+                        self.playAndAddToPlayListView.setPlayButtonState(song: song)
+                    }
+                    self.searchSongTableViewController.reloadSong(song: song)
                 } else {
-                    self.currentSelection!.search = .searchedAndNotFound
-                    self.reloadCurrentSelectedRow()
+                    song.search = .searchedAndNotFound
+                    self.searchSongTableViewController.reloadSong(song: song)
                 }
             }
         })
     }
-       
-    @IBAction func playMusicTrack(_ sender: Any) {
-        if( playing ) {
-            appleMusic.stopPlaying()
-            
-            playMusicButton.setTitle("Play", for: .normal)
-            playing = false
-        } else {
-            if( currentSelection?.track != nil ) {
-                appleMusic.playSongs(tracks: [currentSelection!.track!])
-                
-                // Change the "role of the button"
-                playMusicButton.setTitle("Stop", for: .normal)
-                playing = true
-            }
-        }
-    }
     
-    @IBAction func addMusicToPlaylist(_ sender: Any) {
-        let playListName = "workout music playlist"
-        appleMusic.searchOnePlaylist(searchTerm: playListName, exactMatch: true, completion: { (playListInfos) in
-            if( playListInfos.count == 0 ) {
-                appleMusic.createPlayList(playListName: playListName, completion: { (playListInfo) in
-                    appleMusic.addTrackToPlayList(
-                        playList: playListInfos[0], track: self.currentSelection!.track!, completion : {
-                            DispatchQueue.main.async {
-                                self.currentSelection?.added = true
-                                self.reloadCurrentSelectedRow()
-                            }
-                    })
-                })
-            } else {
-                appleMusic.addTrackToPlayList(playList: playListInfos[0], track: self.currentSelection!.track!, completion: {
-                      DispatchQueue.main.async {
-                          self.currentSelection?.added = true
-                          self.reloadCurrentSelectedRow()
-                      }
-                })
-            }
-        })
-        
-    }
 }

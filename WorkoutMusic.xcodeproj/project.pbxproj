@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F59C5AE23DE57D00002ACCE /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5AD23DE57D00002ACCE /* UserSettings.swift */; };
+		2F59C5B023DE93310002ACCE /* SortPlayListMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */; };
+		2F59C5B223DE96C10002ACCE /* SortPlayListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5B123DE96C10002ACCE /* SortPlayListDetailViewController.swift */; };
+		2F59C5B423DEADA40002ACCE /* SearchAndSortHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5B323DEADA40002ACCE /* SearchAndSortHelper.swift */; };
+		2FC9FBEA23DF4C1200086246 /* PlayAndAddToPlayListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2FC9FBE923DF4C1200086246 /* PlayAndAddToPlayListView.xib */; };
+		2FC9FBEC23DF4E6800086246 /* PlayAndAddToPlayListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC9FBEB23DF4E6800086246 /* PlayAndAddToPlayListView.swift */; };
+		2FC9FBEE23DF7A2700086246 /* CustomViewFromNib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FC9FBED23DF7A2700086246 /* CustomViewFromNib.swift */; };
 		2FEC2DD623D39A7E0075C560 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEC2DD523D39A7E0075C560 /* AppDelegate.swift */; };
 		2FEC2DD923D39A7E0075C560 /* WorkoutMusic.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2FEC2DD723D39A7E0075C560 /* WorkoutMusic.xcdatamodeld */; };
 		2FEC2DDB23D39A7E0075C560 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEC2DDA23D39A7E0075C560 /* SceneDelegate.swift */; };
@@ -43,7 +50,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F59C5AD23DE57D00002ACCE /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortPlayListMasterViewController.swift; sourceTree = "<group>"; };
+		2F59C5B123DE96C10002ACCE /* SortPlayListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortPlayListDetailViewController.swift; sourceTree = "<group>"; };
+		2F59C5B323DEADA40002ACCE /* SearchAndSortHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAndSortHelper.swift; sourceTree = "<group>"; };
 		2FA01D1623DD06770005A7EB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2FC9FBE923DF4C1200086246 /* PlayAndAddToPlayListView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayAndAddToPlayListView.xib; sourceTree = "<group>"; };
+		2FC9FBEB23DF4E6800086246 /* PlayAndAddToPlayListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayAndAddToPlayListView.swift; sourceTree = "<group>"; };
+		2FC9FBED23DF7A2700086246 /* CustomViewFromNib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewFromNib.swift; sourceTree = "<group>"; };
 		2FEC2DD223D39A7E0075C560 /* WorkoutMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FEC2DD523D39A7E0075C560 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2FEC2DD823D39A7E0075C560 /* WorkoutMusic.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WorkoutMusic.xcdatamodel; sourceTree = "<group>"; };
@@ -118,6 +132,8 @@
 			isa = PBXGroup;
 			children = (
 				2FEC2E1023D6A4A50075C560 /* SearchSongByPBM.swift */,
+				2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */,
+				2F59C5B323DEADA40002ACCE /* SearchAndSortHelper.swift */,
 				2FEC2E0E23D63E040075C560 /* TimeIntervalUIView.swift */,
 				2FEC2DD523D39A7E0075C560 /* AppDelegate.swift */,
 				2FEC2E0A23D3A4030075C560 /* FetchAppleMusic.swift */,
@@ -127,6 +143,11 @@
 				2FEC2DDE23D39A7E0075C560 /* DetailViewController.swift */,
 				2FEC2E5523DA64D10075C560 /* WorkoutIntensityView.swift */,
 				2FEC2DE023D39A7E0075C560 /* Main.storyboard */,
+				2FC9FBED23DF7A2700086246 /* CustomViewFromNib.swift */,
+				2FC9FBE923DF4C1200086246 /* PlayAndAddToPlayListView.xib */,
+				2FC9FBEB23DF4E6800086246 /* PlayAndAddToPlayListView.swift */,
+				2F59C5B123DE96C10002ACCE /* SortPlayListDetailViewController.swift */,
+				2F59C5AD23DE57D00002ACCE /* UserSettings.swift */,
 				2FEC2DE323D39A800075C560 /* Assets.xcassets */,
 				2FEC2DE523D39A800075C560 /* LaunchScreen.storyboard */,
 				2FEC2DE823D39A800075C560 /* Info.plist */,
@@ -264,6 +285,7 @@
 				2FEC2DE723D39A800075C560 /* LaunchScreen.storyboard in Resources */,
 				2FEC2DE423D39A800075C560 /* Assets.xcassets in Resources */,
 				2FEC2DE223D39A7E0075C560 /* Main.storyboard in Resources */,
+				2FC9FBEA23DF4C1200086246 /* PlayAndAddToPlayListView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,14 +311,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FEC2E1123D6A4A50075C560 /* SearchSongByPBM.swift in Sources */,
+				2FC9FBEE23DF7A2700086246 /* CustomViewFromNib.swift in Sources */,
+				2F59C5AE23DE57D00002ACCE /* UserSettings.swift in Sources */,
 				2FEC2E0F23D63E040075C560 /* TimeIntervalUIView.swift in Sources */,
 				2FEC2DDD23D39A7E0075C560 /* MasterViewController.swift in Sources */,
 				2FEC2E0B23D3A4030075C560 /* FetchAppleMusic.swift in Sources */,
 				2FEC2DD623D39A7E0075C560 /* AppDelegate.swift in Sources */,
 				2FEC2DDF23D39A7E0075C560 /* DetailViewController.swift in Sources */,
+				2F59C5B023DE93310002ACCE /* SortPlayListMasterViewController.swift in Sources */,
 				2FEC2E5623DA64D10075C560 /* WorkoutIntensityView.swift in Sources */,
 				2FEC2DD923D39A7E0075C560 /* WorkoutMusic.xcdatamodeld in Sources */,
 				2FEC2E5423DA610D0075C560 /* PlayWorkoutPlayList.swift in Sources */,
+				2FC9FBEC23DF4E6800086246 /* PlayAndAddToPlayListView.swift in Sources */,
+				2F59C5B423DEADA40002ACCE /* SearchAndSortHelper.swift in Sources */,
+				2F59C5B223DE96C10002ACCE /* SortPlayListDetailViewController.swift in Sources */,
 				2FEC2E0D23D3CB930075C560 /* MusicData.swift in Sources */,
 				2FEC2DDB23D39A7E0075C560 /* SceneDelegate.swift in Sources */,
 			);
@@ -472,7 +500,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A8SRM3ENGN;
 				INFOPLIST_FILE = WorkoutMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -492,7 +520,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A8SRM3ENGN;
 				INFOPLIST_FILE = WorkoutMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
