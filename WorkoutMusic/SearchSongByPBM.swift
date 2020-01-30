@@ -191,8 +191,9 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
             // Retrieve the current content of the workout play list
             // So that we do not add the same song multiple time
             if( error.isEmpty ) {
-                self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: defaultPlayList, completion: { _ in 
+                self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: defaultPlayList, completion: { musicTracks in
                     DispatchQueue.main.async {
+                        self.searchAndSortHelper.existingPlayListTracks = musicTracks
                         self.searchButtton.isEnabled = true
                     }
                 })
@@ -201,7 +202,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
                     DispatchQueue.main.async {
                         self.playAndAddToPlayListView.setPlayLists(playListNames: playLists.map({ (info) -> String in
                             info.name
-                        }))
+                        }), fromPlayList: String())
                     }
                 })
             }
@@ -213,17 +214,9 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         songsTableView.dataSource = searchSongTableViewController
         searchSongTableViewController.tableView = songsTableView
         
-        if let customView = Bundle.main.loadNibNamed("PlayAndAddToPlayListView", owner: self, options: nil)?.first as? UIPlayAndAddToPlayListView {
-            customView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            customView.translatesAutoresizingMaskIntoConstraints = true
-            customView.backgroundColor = nil
-            self.customContainerView.addSubview(customView)
-            customView.anchorAllEdgesToSuperview()
-            playAndAddToPlayListView = customView
-        }
-        
+        playAndAddToPlayListView = loadNibView(nibName: "PlayAndAddToPlayListView", into:customContainerView) as? UIPlayAndAddToPlayListView
         playAndAddToPlayListView.delegate = self
-        playAndAddToPlayListView.initialize(playListNames: [defaultPlayList], mainController: self)
+        playAndAddToPlayListView.initialize(playListNames: [defaultPlayList], mainController: self, fromPlayList: String())
     }
     
     @IBAction func bpmValueChanged(_ sender: Any) {
@@ -233,6 +226,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
     @IBAction func searchButtonClicked(_ sender: Any) {
         let fetchSong = FetchSongBPM()
         let bpm = Int(bpmStepper.value)
+        searchButtton.isHighlighted = true
         fetchSong.getSongForBPM(bpm: bpm) { (songs) in
             let filtered_songs = songs.filter({ (song) -> Bool in
                 if( song.genres.count == 0 ) {
@@ -252,6 +246,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
             tableViewCtrler.setSongs(songs: filtered_songs)
             
             DispatchQueue.main.async {
+                self.searchButtton.isHighlighted = false
                 self.songsTableView.reloadData()
                 if( filtered_songs.count > 1 ) {
                     self.searchResultLabel.text = "Found \(filtered_songs.count) songs"
@@ -270,8 +265,9 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         }
     }
     
-    func changedCurrentPlaylist(playListName: String) {
+    func changedCurrentPlaylist(playListName: String, musicTracks: [FetchAppleMusic.MusicTrackInfo]) {
         DispatchQueue.main.async {
+            self.searchAndSortHelper.existingPlayListTracks = musicTracks
             self.searchSongTableViewController.changeCurrentPlayListName()
         }
     }

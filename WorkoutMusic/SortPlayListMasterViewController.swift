@@ -85,6 +85,7 @@ class SortPlayListMasterViewController : UITableViewController {
                 controller.playListNames = userPlayLists.map({ (info) -> String in
                     info.name
                 })
+                controller.fromPlayListName = object.name
             }
         }
     }

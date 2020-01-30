@@ -41,7 +41,7 @@ class StoredWorkoutMusicPlayList {
         let bpm_min = bpms.min()!
         let bpm_max = bpms.max()!
         
-        return timestring! + " - \(bpm_min)-\(bpm_max) pbm"
+        return timestring! + " @ \(bpm_min)-\(bpm_max)"
     }
     
     var totalDuration : Double {

@@ -303,14 +303,15 @@ class FetchAppleMusic {
         }
     }
     
-    func getTracksForPlaylist(playList: PlayListInfo, completion: @escaping ([MusicTrackInfo]) -> ()) {
+    func getTracksForPlaylist(playList: PlayListInfo, beginAt: Int = 0, completion: @escaping ([MusicTrackInfo]) -> ()) {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.music.apple.com"
         components.path = playList.url + "/tracks"
         
         components.queryItems = [
-            URLQueryItem(name: "limit", value: "100")
+            URLQueryItem(name: "limit", value: "100"),
+            URLQueryItem(name: "offset", value: String(beginAt))
         ]
         
         guard let url = components.url else {
@@ -334,6 +335,8 @@ class FetchAppleMusic {
                     
                     // The response is of type Library.Song (which is different from Song)
                     if let response = json as? [String: Any] {
+                        //let nextMarker = response["next"] as? String?
+                        //print(nextMarker)
                         if let datas = response["data"] as? [[String:Any]] {
                             var tracks = [MusicTrackInfo]()
                             for data in datas {
@@ -346,6 +349,7 @@ class FetchAppleMusic {
                         } else {
                             completion( [] )
                         }
+                        
                     }
                 }
                 catch {

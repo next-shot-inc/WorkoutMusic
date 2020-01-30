@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+// Class to add a song to a playlist or to find if a aong belongs to a Playlist.
 class SearchAndSortPlaylistSongHelper {
     var existingPlayListTracks = [FetchAppleMusic.MusicTrackInfo]()
     
@@ -61,16 +62,12 @@ class SearchAndSortPlaylistSongHelper {
     }
     
     func retrieveCurrentPlayListTracks( playListName: String, completion: @escaping ([FetchAppleMusic.MusicTrackInfo]) -> ()) {
-        existingPlayListTracks.removeAll()
-        
         appleMusic.searchOnePlaylist(searchTerm: playListName, exactMatch: true, completion: { (playListInfos) in
             if( playListInfos.count == 1 ) {
                 self.appleMusic.getTracksForPlaylist(playList: playListInfos[0]) { (musicTracks) in
-                    self.existingPlayListTracks = musicTracks
                     completion(musicTracks)
                 }
             } else {
-                self.existingPlayListTracks = []
                 completion([])
             }
         })

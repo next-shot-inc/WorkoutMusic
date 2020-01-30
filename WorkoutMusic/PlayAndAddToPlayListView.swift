@@ -11,12 +11,13 @@ import UIKit
 
 protocol PlayAndAddToPlayListViewDelegate {
     func addedToPlayList(playListName: String, song: SearchAndSortPlaylistSongHelper.PlayListSong)
-    func changedCurrentPlaylist(playListName: String)
+    func changedCurrentPlaylist(playListName: String, musicTracks: [FetchAppleMusic.MusicTrackInfo])
     
     var searchAndSortHelper : SearchAndSortPlaylistSongHelper! { get set }
     var appleMusic : FetchAppleMusic? { get set }
 }
 
+// Display the possible playlist names
 class UIPlayListPickerViewController : NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
     var playListNames = [String]()
     weak var controller : PlayAndAddToPlayListViewController?
@@ -53,6 +54,9 @@ class UIPlayListPickerViewController : NSObject, UIPickerViewDataSource, UIPicke
     }
 }
 
+// Class that manages the UIPlayAndAddToPlayListView
+// It manages the play list selection and the current song selection.
+
 class PlayAndAddToPlayListViewController {
     var currentPlayListName = "workout music playlist"
     var currentSelectedSong : SearchAndSortPlaylistSongHelper.PlayListSong?
@@ -61,12 +65,15 @@ class PlayAndAddToPlayListViewController {
     let view: UIPlayAndAddToPlayListView
     var pickViewController = UIPlayListPickerViewController()
     
-    init(view: UIPlayAndAddToPlayListView, playListNames: [String]) {
+    init(view: UIPlayAndAddToPlayListView, playListNames: [String], fromPlayList: String) {
         self.view = view
         pickViewController.controller = self
         view.playListPickerView.dataSource = pickViewController
         view.playListPickerView.delegate = pickViewController
         pickViewController.playListNames = playListNames
+        if let firstIndex = pickViewController.playListNames.firstIndex(of: fromPlayList) {
+            pickViewController.playListNames.remove(at: firstIndex)
+        }
         
         setupPlayListsPickerView()
     }
@@ -81,8 +88,11 @@ class PlayAndAddToPlayListViewController {
         view.playListPickerView.selectRow(firstIndex!, inComponent: 0, animated: false)
     }
 
-    func setPlayListNames(playlistNames: [String]) {
+    func setPlayListNames(playlistNames: [String], fromPlayList: String) {
         pickViewController.playListNames = playlistNames
+        if let firstIndex = pickViewController.playListNames.firstIndex(of: fromPlayList) {
+            pickViewController.playListNames.remove(at: firstIndex)
+        }
         setupPlayListsPickerView()
     }
     
@@ -90,13 +100,15 @@ class PlayAndAddToPlayListViewController {
         let name = pickViewController.playListNames[row]
         currentPlayListName = name
         
-        view.delegate?.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: name, completion: { (_) in
-            self.view.delegate?.changedCurrentPlaylist(playListName: name)
+        view.delegate?.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: name, completion: { (musicTracks) in
+            self.view.delegate?.changedCurrentPlaylist(playListName: name, musicTracks: musicTracks)
         })
     }
 
 }
 
+// Class associated to .xib that defines the UI to play a song and add it to a playlist.
+// Also allows a new playlist to be created.
 class UIPlayAndAddToPlayListView : UIView {
     
     var delegate : PlayAndAddToPlayListViewDelegate?
@@ -108,16 +120,16 @@ class UIPlayAndAddToPlayListView : UIView {
     @IBOutlet weak var selectedSongLabel: UILabel!
     @IBOutlet weak var playListPickerView: UIPickerView!
 
-    func initialize(playListNames: [String], mainController: UIViewController) {
-        controller = PlayAndAddToPlayListViewController(view: self, playListNames: playListNames)
+    func initialize(playListNames: [String], mainController: UIViewController, fromPlayList: String) {
+        controller = PlayAndAddToPlayListViewController(view: self, playListNames: playListNames, fromPlayList: fromPlayList)
         self.mainController = mainController
     }
     
-    func setPlayLists(playListNames: [String]) {
-        controller.setPlayListNames(playlistNames: playListNames)
+    func setPlayLists(playListNames: [String], fromPlayList: String) {
+        controller.setPlayListNames(playlistNames: playListNames, fromPlayList: fromPlayList)
     }
     
-    func setSelectedSong( song: SortPlayListDetailViewTableController.Song) {
+    func setSelectedSong( song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         setPlayButtonState(song: song)
         
         if( controller.playing && song !== controller.currentSelectedSong ) {
@@ -128,7 +140,7 @@ class UIPlayAndAddToPlayListView : UIView {
         self.selectedSongLabel.text = song.songName()
     }
     
-    func setPlayButtonState(song: SortPlayListDetailViewTableController.Song) {
+    func setPlayButtonState(song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         
         self.playMusicButton.isEnabled = false
         self.addMusicButton.isEnabled = false
@@ -170,8 +182,8 @@ class UIPlayAndAddToPlayListView : UIView {
     func doChangeCurrentPlayList(name: String) {
         controller.currentPlayListName = name
         
-        delegate?.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: name, completion: { _ in 
-            self.delegate?.changedCurrentPlaylist(playListName: name)
+        delegate?.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: name, completion: { musicTracks in
+            self.delegate?.changedCurrentPlaylist(playListName: name, musicTracks: musicTracks)
         })
         controller.setupPlayListsPickerView()
     }
@@ -195,6 +207,7 @@ class UIPlayAndAddToPlayListView : UIView {
     }
     
     @IBAction func addToPlayList(_ sender: Any) {
+        addMusicButton.isHighlighted = true
         let playListName = controller.currentPlayListName
         guard let song = controller.currentSelectedSong else {
             return
@@ -202,6 +215,9 @@ class UIPlayAndAddToPlayListView : UIView {
         
         delegate?.searchAndSortHelper.addToPlayList(playListName: playListName, song: song) { (_) in
             self.delegate?.addedToPlayList(playListName: playListName, song: song)
+            DispatchQueue.main.async {
+                self.addMusicButton.isHighlighted = false
+            }
         }
     }
 }
