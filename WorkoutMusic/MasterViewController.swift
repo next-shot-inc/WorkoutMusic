@@ -9,8 +9,6 @@
 import UIKit
 import CoreData
 
-var globalAppleMusic = FetchAppleMusic()
-
 class MasterViewPlayListCell : UITableViewCell {
     
     @IBOutlet weak var name: UILabel!
@@ -21,25 +19,18 @@ class MasterViewPlayListCell : UITableViewCell {
 class MasterViewController: UITableViewController {
 
     var userPlayLists = [FetchAppleMusic.PlayListInfo]()
-    var spinnerView : UIView?
+    var appleMusic : FetchAppleMusic? {
+        didSet {
+            if( viewIfLoaded != nil ) {
+                self.getUserPlayList(self)
+            }
+        }
+    
+    }
+    var spinnerCtrler = ShowSpinnerController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        globalAppleMusic.setup( completion: { (error) -> () in
-            if( error.isEmpty ) {
-               self.insertNewObject(self)
-            } else {
-                DispatchQueue.main.async {
-                    let ac = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
-                    
-                    let submitAction = UIAlertAction(title: "OK", style: .default)
-                    ac.addAction(submitAction)
-                    
-                    self.present(ac, animated: true)
-                }
-            }
-        })
         
         // Do any additional setup after loading the view.
         // Add the "Edit" button on the navigationBar (left Button)
@@ -51,39 +42,22 @@ class MasterViewController: UITableViewController {
         //navigationItem.rightBarButtonItem = addButton
         //navigationItem.leftItemsSupplementBackButton = true
         
-    }
-    
-    func showSpinner(onView : UIView) {
-        spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView!.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-        let ai = UIActivityIndicatorView.init(style: .large)
-        ai.startAnimating()
-        ai.center = spinnerView!.center
-        
-        DispatchQueue.main.async {
-            self.spinnerView!.addSubview(ai)
-            onView.addSubview(self.spinnerView!)
-        }
-    }
-    
-    func removeSpinner() {
-        DispatchQueue.main.async {
-            self.spinnerView?.removeFromSuperview()
-            self.spinnerView = nil
+        if( appleMusic != nil ) {
+            self.getUserPlayList(self)
         }
     }
 
     @objc
-    func insertNewObject(_ sender: Any) {
+    func getUserPlayList(_ sender: Any) {
          DispatchQueue.main.async {
-            self.showSpinner(onView: self.view)
+            self.spinnerCtrler.showSpinner(onView: self.view)
         }
         
-        globalAppleMusic.searchAllLibraryPlaylists( completion: { (playLists) in
+        appleMusic?.searchAllLibraryPlaylists( completion: { (playLists) in
             self.userPlayLists = playLists
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                self.removeSpinner()
+                self.spinnerCtrler.removeSpinner()
             }
         })
     }
@@ -95,7 +69,7 @@ class MasterViewController: UITableViewController {
             if let indexPath = tableView.indexPathForSelectedRow {
                 let object = userPlayLists[indexPath.row]
                 let controller = segue.destination as! DetailViewTableViewControler
-                controller.appleMusic = globalAppleMusic
+                controller.appleMusic = appleMusic
                 controller.detailItem = object
             }
         }
@@ -104,7 +78,25 @@ class MasterViewController: UITableViewController {
     // MARK: - Table View
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        let youHaveData = userPlayLists.count != 0
+        if youHaveData {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView = nil
+            return 1
+        } else {
+            let noDataLabel: UILabel  = UILabel(frame: CGRect(x: 20, y: 0, width: tableView.bounds.size.width - 20, height: tableView.bounds.size.height))
+            if( appleMusic == nil ) {
+                noDataLabel.text = "Apple Music service not available. Cannot construct a workout playlist."
+            } else {
+                noDataLabel.text = "No Music library playlist available"
+            }
+            noDataLabel.textColor     = UIColor.black
+            noDataLabel.textAlignment = .center
+            noDataLabel.numberOfLines = 0
+            tableView.backgroundView  = noDataLabel
+            tableView.separatorStyle  = .none
+            return 1
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

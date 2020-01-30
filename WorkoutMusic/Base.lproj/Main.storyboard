@@ -74,12 +74,21 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vog-X6-n2K">
-                                            <rect key="frame" x="305" y="73.5" width="50" height="21"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vog-X6-n2K" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                            <rect key="frame" x="295" y="68.5" width="60" height="31"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                             <state key="normal" title="Edit" image="play.circle" catalog="system">
                                                 <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                             </state>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                                    <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="10"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                             <connections>
                                                 <action selector="startPlayToEditStartAndEnd:" destination="CTI-Kp-SRI" eventType="primaryActionTriggered" id="gGa-Gk-mEK"/>
                                             </connections>
@@ -229,7 +238,7 @@
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YzV-5c-OpR" customClass="WorkoutIntensityView" customModule="WorkoutMusic" customModuleProvider="target">
                                                     <rect key="frame" x="260" y="4" width="100" height="54"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="JJT-bu-I3J"/>
                                                     </constraints>
@@ -295,14 +304,23 @@
                                     <constraint firstAttribute="height" constant="2" id="S0J-NW-nwv"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZg-nD-1Ty">
-                                <rect key="frame" x="144.5" y="548" width="86.5" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZg-nD-1Ty" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="134.5" y="548" width="106.5" height="41"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                 <inset key="imageEdgeInsets" minX="-6" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="Start" image="play" catalog="system">
                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <state key="disabled" title="Select Workout"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="executeWorkout:" destination="4mG-D0-R1U" eventType="primaryActionTriggered" id="HzH-fP-MnE"/>
                                 </connections>
@@ -330,6 +348,7 @@
                             <constraint firstItem="lgM-B4-pmu" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="nvx-gg-mTX"/>
                             <constraint firstItem="dvv-GV-JiR" firstAttribute="centerY" secondItem="ky9-KC-vWv" secondAttribute="centerY" id="o9E-TY-A8e"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="top" secondItem="6d8-HC-QOg" secondAttribute="bottom" id="tnF-UO-oe0"/>
+                            <constraint firstItem="ky9-KC-vWv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dvv-GV-JiR" secondAttribute="trailing" constant="10" id="x1S-oW-EHi"/>
                             <constraint firstItem="dvv-GV-JiR" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" constant="8" id="z12-vk-maO"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="9v3-VA-rxv"/>
@@ -394,28 +413,37 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXm-7m-giu">
-                                <rect key="frame" x="288.5" y="51.5" width="81.5" height="36"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXm-7m-giu" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="282" y="51.5" width="88" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="6qS-sG-FW3"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
                                 <state key="normal" title=" Search" image="magnifyingglass" catalog="system">
                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
                                 <state key="highlighted" title="Searching ..." image="magnifyingglass" catalog="system"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="searchButtonClicked:" destination="o58-kX-hQ4" eventType="primaryActionTriggered" id="CVs-Th-of8"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="Global search by GetSongBPM.com " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="83a-G0-y3r" userLabel="Global search provided by GetSongBPM.com">
-                                <rect key="frame" x="10" y="95.5" width="283.5" height="13.5"/>
+                                <rect key="frame" x="10" y="95.5" width="277" height="13.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="No results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AGi-xd-HJF">
-                                <rect key="frame" x="288.5" y="92" width="81.5" height="20.5"/>
+                                <rect key="frame" x="282" y="92" width="88" height="20.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -541,7 +569,7 @@
                             <constraint firstItem="hzn-Jf-c2k" firstAttribute="leading" secondItem="6cv-bU-HuQ" secondAttribute="leading" id="eVR-58-XFC"/>
                             <constraint firstItem="h3k-Cc-d7D" firstAttribute="leading" secondItem="d3J-nB-iVJ" secondAttribute="leading" id="f9H-cP-BQE"/>
                             <constraint firstItem="hzn-Jf-c2k" firstAttribute="trailing" secondItem="6cv-bU-HuQ" secondAttribute="trailing" id="rKe-WB-e77"/>
-                            <constraint firstItem="PXm-7m-giu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="I0s-WZ-DRY" secondAttribute="trailing" constant="20" id="tPA-FG-mAP"/>
+                            <constraint firstItem="PXm-7m-giu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="I0s-WZ-DRY" secondAttribute="trailing" priority="250" constant="10" id="tPA-FG-mAP"/>
                             <constraint firstItem="hzn-Jf-c2k" firstAttribute="top" secondItem="4jD-9q-yMD" secondAttribute="bottom" id="uot-J4-oo8"/>
                             <constraint firstItem="Fi3-Le-8Jl" firstAttribute="leading" secondItem="Tad-iw-qka" secondAttribute="trailing" constant="2" id="vCW-fM-mrg"/>
                             <constraint firstItem="6cv-bU-HuQ" firstAttribute="top" secondItem="bAb-p4-bl2" secondAttribute="top" constant="-15" id="vLt-yj-vMf"/>
@@ -634,7 +662,9 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="WKA-az-Sw0" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="cyz-dw-4t8" secondAttribute="bottom" id="GbV-TQ-50g"/>
+                            <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="JcT-rF-1bZ" secondAttribute="trailing" constant="5" id="RfW-Ua-fhn"/>
                             <constraint firstItem="cyz-dw-4t8" firstAttribute="top" secondItem="JcT-rF-1bZ" secondAttribute="bottom" constant="19" id="cG0-0J-jOx"/>
+                            <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QYz-GW-A9d" secondAttribute="trailing" constant="5" id="hf3-oj-0qe"/>
                             <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" secondItem="cyz-dw-4t8" secondAttribute="trailing" constant="10" id="ne0-L3-MI4"/>
                             <constraint firstItem="cyz-dw-4t8" firstAttribute="leading" secondItem="nuG-gc-NoT" secondAttribute="leadingMargin" id="oZY-po-QC2"/>
                             <constraint firstItem="JcT-rF-1bZ" firstAttribute="top" secondItem="WKA-az-Sw0" secondAttribute="top" constant="20" id="pfe-31-d67"/>
@@ -755,54 +785,54 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="120" maximumValue="300" stepValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="1DA-LT-fPO">
-                                <rect key="frame" x="105.5" y="65" width="94" height="32"/>
+                                <rect key="frame" x="105.5" y="67.5" width="94" height="32"/>
                                 <connections>
                                     <action selector="bpmValueChanged:" destination="tOk-GV-Ly8" eventType="primaryActionTriggered" id="ovr-8k-Yq9"/>
                                 </connections>
                             </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Song BPM's by GetSongBPM.com " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qwc-or-eRf">
-                                <rect key="frame" x="10" y="116" width="180.5" height="13.5"/>
+                                <rect key="frame" x="10" y="118.5" width="180.5" height="15.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="BPM/Tempo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Edm-EH-3ic">
-                                <rect key="frame" x="10" y="71" width="93.5" height="20.5"/>
+                                <rect key="frame" x="10" y="73.5" width="93.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="thl-9B-QGu">
-                                <rect key="frame" x="201.5" y="72" width="25" height="18"/>
+                                <rect key="frame" x="201.5" y="74.5" width="25" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LUc-xf-QOg" userLabel="searchResultLabel">
-                                <rect key="frame" x="10" y="108" width="345" height="0.0"/>
+                                <rect key="frame" x="10" y="110.5" width="345" height="0.0"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jpf-cW-Wpc" userLabel="separator1">
-                                <rect key="frame" x="0.0" y="149.5" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="154" width="375" height="2"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="A2H-RJ-bLT"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mBv-P7-9SM" userLabel="separator2">
-                                <rect key="frame" x="0.0" y="485" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="489.5" width="375" height="2"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="9vG-SZ-rlT"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eqO-OW-oub">
-                                <rect key="frame" x="0.0" y="487" width="375" height="131"/>
+                                <rect key="frame" x="0.0" y="491.5" width="375" height="126.5"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ldc-p5-1rC">
-                                <rect key="frame" x="258.5" y="107" width="111.5" height="22.5"/>
+                                <rect key="frame" x="258.5" y="112" width="111.5" height="22"/>
                                 <state key="normal" title="Apply Filter" image="square" catalog="system">
                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
@@ -811,18 +841,30 @@
                                     <action selector="filterButtonPushed:" destination="tOk-GV-Ly8" eventType="primaryActionTriggered" id="sbj-Fa-6HW"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dWA-lG-A90">
-                                <rect key="frame" x="258.5" y="64" width="80" height="34"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dWA-lG-A90" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="258.5" y="64" width="90" height="39"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <inset key="contentEdgeInsets" minX="5" minY="2" maxX="5" maxY="3"/>
                                 <state key="normal" title="Filter" image="magnifyingglass" catalog="system">
                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="filterSongsByPBM:" destination="tOk-GV-Ly8" eventType="primaryActionTriggered" id="d21-yT-C6T"/>
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="250" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dP1-tC-UKe">
-                                <rect key="frame" x="0.0" y="151.5" width="375" height="333.5"/>
+                                <rect key="frame" x="0.0" y="156" width="375" height="333.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SortPlayListDetailTableCell" rowHeight="50" id="GGE-44-ihH" customClass="SortPlayListDetailTableCell" customModule="WorkoutMusic" customModuleProvider="target">

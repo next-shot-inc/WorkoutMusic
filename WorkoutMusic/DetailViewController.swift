@@ -113,7 +113,7 @@ class DetailViewTrackListCell : UITableViewCell {
         case .end:
             editor.defineBoundState = .none
             editor.row = -1
-            editButton.setTitle( "Edit Interval", for: .normal)
+            editButton.setTitle( "Edit", for: .normal)
             
             let timeOfEnd = -editor.startDate.timeIntervalSince(Date())
             timeInterval.upperValue = timeOfEnd
@@ -128,7 +128,7 @@ class DetailViewTrackListCell : UITableViewCell {
             let duration = fmt.string(from: Double(wtrack!.durationTime))
             playedIntervalLabel.text = duration!
             
-            globalAppleMusic.stopPlaying()
+            detailViewTableViewControler?.appleMusic?.stopPlaying()
             timer = nil
             
             // Update total workout time label
@@ -177,7 +177,7 @@ class DetailViewTrackListCell : UITableViewCell {
         case .start:
             editButton.setTitle( "Set end time", for: .normal)
         case .end:
-            editButton.setTitle( "Edit Interval", for: .normal)
+            editButton.setTitle( "Edit", for: .normal)
         }
     }
 }

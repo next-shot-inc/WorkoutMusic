@@ -24,7 +24,8 @@ extension UIImageView {
     }
 }
 
-
+/// Class associated to the UITableViewCell to display songName, author, and different
+/// status indicators.
 class SearchSongTableCell : UITableViewCell {
     weak var controller: SearchSongTableViewControler?
     
@@ -34,6 +35,9 @@ class SearchSongTableCell : UITableViewCell {
     @IBOutlet weak var addedToPlaylistWidget: UIImageView!
     @IBOutlet weak var notFoundMusicWidget: UIImageView!
 }
+
+/// The controller linked to the table listing the song retrieve from the
+/// FetchSongBPM query.
 
 class SearchSongTableViewControler : UITableViewController {
     class SearchedSong : SearchAndSortPlaylistSongHelper.PlayListSong {
@@ -123,14 +127,34 @@ class SearchSongTableViewControler : UITableViewController {
     // MARK: - Table View
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return genres.count
+        let youHaveData = searchSongViewController?.appleMusic != nil
+        if youHaveData {
+            tableView.separatorStyle = .singleLine
+            tableView.backgroundView = nil
+            return genres.count
+        } else {
+            let noDataLabel: UILabel  = UILabel(frame: CGRect(x: 20, y: 0, width: tableView.bounds.size.width - 20, height: tableView.bounds.size.height))
+            noDataLabel.text = "Apple Music service not available"
+            noDataLabel.textColor     = UIColor.black
+            noDataLabel.textAlignment = .center
+            noDataLabel.numberOfLines = 0
+            tableView.backgroundView  = noDataLabel
+            tableView.separatorStyle  = .none
+            return 1
+        }
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if( genres.count == 0 ) {
+            return ""
+        }
         return genres[section]
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if( searchSongViewController?.appleMusic == nil ) {
+            return 0
+        }
         return songs[section]!.count
     }
 
@@ -159,9 +183,16 @@ class SearchSongTableViewControler : UITableViewController {
     }
 }
 
+/// The controller managing the tableView, the search button and the add to play list widget.
+
 class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDelegate {
+    let defaultPlayList = "workout music playlist"
     
-    var appleMusic: FetchAppleMusic?
+    var appleMusic: FetchAppleMusic? {
+        didSet {
+            appleMusicOrViewInitialized()
+        }
+    }
     
     @IBOutlet weak var bpmStepper: UIStepper!
     @IBOutlet weak var bpmValue: UILabel!
@@ -179,34 +210,8 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let defaultPlayList = "workout music playlist"
-        
         // Disable search button until the apple music service is on.
         searchButtton.isEnabled = false
-        appleMusic = globalAppleMusic
-        
-        searchAndSortHelper = SearchAndSortPlaylistSongHelper(appleMusic: appleMusic!)
-        
-        appleMusic?.setup( completion: { (error) -> () in
-            // Retrieve the current content of the workout play list
-            // So that we do not add the same song multiple time
-            if( error.isEmpty ) {
-                self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: defaultPlayList, completion: { musicTracks in
-                    DispatchQueue.main.async {
-                        self.searchAndSortHelper.existingPlayListTracks = musicTracks
-                        self.searchButtton.isEnabled = true
-                    }
-                })
-                
-                self.appleMusic?.searchAllLibraryPlaylists( completion: { (playLists) in
-                    DispatchQueue.main.async {
-                        self.playAndAddToPlayListView.setPlayLists(playListNames: playLists.map({ (info) -> String in
-                            info.name
-                        }), fromPlayList: String())
-                    }
-                })
-            }
-        })
         
         searchSongTableViewController.searchSongViewController = self
         
@@ -217,6 +222,33 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         playAndAddToPlayListView = loadNibView(nibName: "PlayAndAddToPlayListView", into:customContainerView) as? UIPlayAndAddToPlayListView
         playAndAddToPlayListView.delegate = self
         playAndAddToPlayListView.initialize(playListNames: [defaultPlayList], mainController: self, fromPlayList: String())
+        
+        appleMusicOrViewInitialized()
+    }
+    
+    func appleMusicOrViewInitialized() {
+        if( viewIfLoaded == nil ) {
+            return
+        }
+        if( appleMusic == nil ) {
+            return 
+        }
+        searchAndSortHelper = SearchAndSortPlaylistSongHelper(appleMusic: appleMusic!)
+        
+        self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: defaultPlayList, completion: { musicTracks in
+            DispatchQueue.main.async {
+                self.searchAndSortHelper.existingPlayListTracks = musicTracks
+                self.searchButtton.isEnabled = true
+            }
+        })
+        
+        self.appleMusic?.searchAllLibraryPlaylists( completion: { (playLists) in
+            DispatchQueue.main.async {
+                self.playAndAddToPlayListView.setPlayLists(playListNames: playLists.map({ (info) -> String in
+                    info.name
+                }), fromPlayList: String())
+            }
+        })
     }
     
     @IBAction func bpmValueChanged(_ sender: Any) {
@@ -233,6 +265,8 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
                     return false
                 }
                 let genre = song.genres[0]
+                // To have song in only one genre so that there is only one tableCell associated to a song
+                // simplifying the cell update process when the song music is retrieved, added to a playlist, etc.
                 //for genre in song.genres {
                     let state = genreSettings.genresPreference[genre]
                     if( state != nil && state! ) {
@@ -259,6 +293,8 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         }
     }
     
+    /// MARK - PlayAndAddToPlayListViewDelegate related functions
+    
     func addedToPlayList(playListName: String, song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         DispatchQueue.main.async {
             self.searchSongTableViewController.reloadSong(song: song as! SearchSongTableViewControler.SearchedSong)
@@ -272,6 +308,8 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         }
     }
     
+    /// MARK - TableView related operations
+    
     func setSelectedSong( song: SearchSongTableViewControler.SearchedSong) {
         if( song.track == nil && song.search == .notSearched ) {
             checkSongAvailability(song: song)
@@ -279,7 +317,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         playAndAddToPlayListView.setSelectedSong(song: song)
     }
     
-    func checkSongAvailability(song: SearchSongTableViewControler.SearchedSong) {
+    private func checkSongAvailability(song: SearchSongTableViewControler.SearchedSong) {
         let search_song = FetchAppleMusic.SearchSongInfo(
             name: song.song.name, artistName: song.song.authorName, albumName: song.song.albumName
         )

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F39DF6123E366010082408F /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F39DF6023E366010082408F /* RoundedButton.swift */; };
 		2F59C5AE23DE57D00002ACCE /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5AD23DE57D00002ACCE /* UserSettings.swift */; };
 		2F59C5B023DE93310002ACCE /* SortPlayListMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */; };
 		2F59C5B223DE96C10002ACCE /* SortPlayListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5B123DE96C10002ACCE /* SortPlayListDetailViewController.swift */; };
@@ -51,6 +52,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F39DF6023E366010082408F /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		2F59C5AD23DE57D00002ACCE /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortPlayListMasterViewController.swift; sourceTree = "<group>"; };
 		2F59C5B123DE96C10002ACCE /* SortPlayListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortPlayListDetailViewController.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				2FEC2DE823D39A800075C560 /* Info.plist */,
 				2FEC2DD723D39A7E0075C560 /* WorkoutMusic.xcdatamodeld */,
 				2FEC2E5323DA610D0075C560 /* PlayWorkoutPlayList.swift */,
+				2F39DF6023E366010082408F /* RoundedButton.swift */,
 			);
 			path = WorkoutMusic;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				2FEC2E1123D6A4A50075C560 /* SearchSongByPBM.swift in Sources */,
 				2FC9FBEE23DF7A2700086246 /* CustomViewFromNib.swift in Sources */,
 				2F59C5AE23DE57D00002ACCE /* UserSettings.swift in Sources */,
+				2F39DF6123E366010082408F /* RoundedButton.swift in Sources */,
 				2FEC2E0F23D63E040075C560 /* TimeIntervalUIView.swift in Sources */,
 				2FEC2DDD23D39A7E0075C560 /* MasterViewController.swift in Sources */,
 				2FEC2E0B23D3A4030075C560 /* FetchAppleMusic.swift in Sources */,
@@ -504,7 +508,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = A8SRM3ENGN;
 				INFOPLIST_FILE = WorkoutMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -524,7 +528,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = A8SRM3ENGN;
 				INFOPLIST_FILE = WorkoutMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

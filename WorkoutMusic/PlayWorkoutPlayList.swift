@@ -256,6 +256,8 @@ class PlayWorkoutPlayListController : UITableViewController , NSFetchedResultsCo
 // UIViewController related to the execution of a WorkoutPlayList
 class PlayWorkoutPlayController : UIViewController {
     
+    var appleMusic: FetchAppleMusic?
+    
     @IBOutlet weak var workoutPlayButton: UIButton!
     @IBOutlet weak var workoutsTableView: UITableView!
     var workoutTableController = PlayWorkoutPlayListController()
@@ -307,13 +309,13 @@ class PlayWorkoutPlayController : UIViewController {
     @IBAction func executeWorkout(_ sender: Any) {
         if( playing == false ) {
             if( selectedWorkout != nil ) {
-                globalAppleMusic.playSongs(workoutMusic: selectedWorkout!.tracks)
+                appleMusic?.playSongs(workoutMusic: selectedWorkout!.tracks)
                 playing = true
                 workoutPlayButton.setTitle("Pause", for: .normal)
             }
         } else {
             workoutPlayButton.setTitle("Start", for: .normal)
-            globalAppleMusic.pausePlaying()
+            appleMusic?.pausePlaying()
             playing = false
         }
     }
