@@ -9,6 +9,8 @@
 import UIKit
 import MediaPlayer
 
+/// Class that contains the list of WorkoutMusicPlayListTrack
+/// Its main role is to compute the total duration.
 class WorkoutMusicPlayList {
     var tracks = [WorkoutMusicPlayListTrack]()
     
@@ -21,20 +23,33 @@ class WorkoutMusicPlayList {
         }
     }
     
+    /// Return "33:00 Workout" for example if the total duration is 33 minutes.
     func detailText() -> String {
-        var totalDuration : Double = 0
-        for track in tracks {
-            totalDuration += Double(track.durationTime)
-        }
-        
         let fmt = DateComponentsFormatter()
         fmt.zeroFormattingBehavior = .pad
         fmt.allowedUnits = [.minute, .second]
         let timestring = fmt.string(from: totalDuration)
         return timestring! + " Workout"
     }
+    
+    var totalDuration : Double {
+        get {
+            var totalDuration : Double = 0
+            for track in tracks {
+                totalDuration += Double(track.durationTime)
+            }
+            return totalDuration
+        }
+    }
+    
+    func indexOf(track: WorkoutMusicPlayListTrack) -> Int? {
+        return tracks.firstIndex(where: { (iwt) -> Bool in
+            iwt === track
+        })
+    }
 }
 
+/// Contains the track of Music to play and its interval (start time and end time).
 class WorkoutMusicPlayListTrack {
     var song : FetchAppleMusic.MusicTrackInfo
     var startTime = 0  // In seconds
@@ -54,10 +69,10 @@ class WorkoutMusicPlayListTrack {
     }
 }
 
+/// UITableViewCell for a WorkoutPlayListMusicTrack
 class DetailViewTrackListCell : UITableViewCell {
     weak var detailViewTableViewControler : DetailViewTableViewControler?
     weak var wtrack: WorkoutMusicPlayListTrack?
-    var row = 0
     var timer: Timer?
     
     @IBOutlet weak var editButton: UIButton!
@@ -68,8 +83,11 @@ class DetailViewTrackListCell : UITableViewCell {
     @IBOutlet weak var playedIntervalLabel: UILabel!
     
     @IBAction func startPlayToEditStartAndEnd(_ sender: Any) {
+        if( detailViewTableViewControler == nil ) {
+            return
+        }
         let editor = detailViewTableViewControler!.playSongIntervalEditor
-        editor.row = row
+        editor.row = detailViewTableViewControler!.wplaylist.indexOf(track: wtrack!)!
         
         switch editor.defineBoundState {
         case .none:
@@ -112,6 +130,9 @@ class DetailViewTrackListCell : UITableViewCell {
             
             globalAppleMusic.stopPlaying()
             timer = nil
+            
+            // Update total workout time label
+            detailViewTableViewControler!.updateTitle()
         }
     }
     
@@ -172,8 +193,6 @@ class DetailViewTableViewControler : UITableViewController {
     weak var appleMusic : FetchAppleMusic?
     var wplaylist = WorkoutMusicPlayList()
     var playSongIntervalEditor = PlaySongIntervalEditor()
-    
-    @IBOutlet weak var playSelectedButtonItem: UIBarButtonItem!
 
     var detailItem: FetchAppleMusic.PlayListInfo? {
         didSet {
@@ -187,11 +206,6 @@ class DetailViewTableViewControler : UITableViewController {
         if let detail = detailItem {
             let playList = FetchAppleMusic.PlayListInfo(name: detail.name, description: detail.description, url: detail.url)
             appleMusic?.getTracksForPlaylist(playList:  playList, completion: { (tracks) in
-                var totalDuration : Double = 0
-                for track in tracks {
-                    totalDuration += Double(track.durationInMs)
-                }
-                
                 self.wplaylist = WorkoutMusicPlayList(songs: tracks)
                 
                 DispatchQueue.main.async {
@@ -199,14 +213,19 @@ class DetailViewTableViewControler : UITableViewController {
                     self.title = self.wplaylist.detailText()
                     self.tableView.reloadData()
                     
-                    for track in tracks.enumerated() {
+                    // Proceed carefully as the task completion may return while rows have already been deleted
+                    let tracks = self.wplaylist.tracks // Copy
+                    for track in tracks {
                         let songBpm = FetchSongBPM()
-                        songBpm.getSongPBM(song: track.element, completion: { (bpm) in
-                            self.wplaylist.tracks[track.offset].song.bpm = bpm
+                        songBpm.getSongPBM(song: track.song, completion: { (bpm) in
                             
-                            DispatchQueue.main.async {
-                                if( self.playSongIntervalEditor.row != track.offset ) {
-                                     self.tableView.reloadRows(at: [IndexPath(row: track.offset, section: 0)], with: .none)
+                            if let offset = self.wplaylist.indexOf(track: track) {
+                                self.wplaylist.tracks[offset].song.bpm = bpm
+                            
+                                DispatchQueue.main.async {
+                                    if( self.playSongIntervalEditor.row != offset ) {
+                                        self.tableView.reloadRows(at: [IndexPath(row: offset, section: 0)], with: .none)
+                                    }
                                 }
                             }
                         })
@@ -219,17 +238,17 @@ class DetailViewTableViewControler : UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // On the navigation bar: we have on the right, the back button and on the left, the edit and save button
        // navigationItem.rightBarButtonItem = self.editButtonItem
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveWPlayList(_:)))
         navigationItem.rightBarButtonItems = [self.editButtonItem, saveButton]
         navigationItem.leftItemsSupplementBackButton = true
         
-        playSelectedButtonItem.isEnabled = false
-        
         // Do any additional setup after loading the view.
         configureView()
     }
 
+    // MARK: UITableViewController stubs
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -263,6 +282,7 @@ class DetailViewTableViewControler : UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         wplaylist.tracks.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+        updateTitle()
     }
     
     // Enable movement up/down of the songs.
@@ -278,7 +298,6 @@ class DetailViewTableViewControler : UITableViewController {
     
     func configureCell(_ cell: DetailViewTrackListCell, with: WorkoutMusicPlayListTrack, row: Int) {
         cell.wtrack = with
-        cell.row = row
         cell.detailViewTableViewControler = self
         
         cell.songName.text = with.song.name
@@ -308,53 +327,27 @@ class DetailViewTableViewControler : UITableViewController {
         if( row == playSongIntervalEditor.row ) {
             cell.configureEditing()
         }
-        if( tableView.isEditing ) {
-            cell.timeInterval.isHidden = true
-        }
+        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        playSelectedButtonItem.isEnabled = true
+       
+    }
+    
+    // MARK - Actions
+    
+    func updateTitle() {
+        title = wplaylist.detailText()
     }
     
     func play( wtracks: [WorkoutMusicPlayListTrack], complete: Bool = false) {
         appleMusic?.playSongs(wtracks: wtracks, complete: complete)
-        
-        /*
-        let playListQuery = MPMediaQuery.playlists()
-        let collections = playListQuery.collections
-        for collection in collections! {
-            print(collection.description)
-            for item in collection.items {
-                print(item.albumTitle)
-                print(item.playbackStoreID)
-            }
-        }
-        */
     }
     
     func hitPlayForEdit(row: Int) {
         var wtracks = [WorkoutMusicPlayListTrack]()
         wtracks.append(wplaylist.tracks[row])
         play(wtracks: wtracks, complete: true)
-    }
-    
-    @IBAction func hitPlaySelected(_ sender: Any) {
-        var wtracks = [WorkoutMusicPlayListTrack]()
-        let selectedRows = tableView.indexPathsForSelectedRows
-        if( selectedRows == nil ) {
-            wtracks = wplaylist.tracks
-        } else {
-            for row in selectedRows! {
-                wtracks.append(wplaylist.tracks[row.row])
-            }
-        }
-        play(wtracks: wtracks)
-    }
-    
-    @IBAction func hitPlay(_ sender: Any) {
-        let wtracks = wplaylist.tracks
-        play(wtracks: wtracks)
     }
     
     @objc

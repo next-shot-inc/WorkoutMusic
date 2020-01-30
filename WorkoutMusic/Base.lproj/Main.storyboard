@@ -47,7 +47,7 @@
                                             <rect key="frame" x="107.5" y="69.5" width="120" height="29"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="120" id="8Iq-El-wnN"/>
+                                                <constraint firstAttribute="width" priority="250" constant="120" id="8Iq-El-wnN"/>
                                                 <constraint firstAttribute="height" constant="29" id="QSN-0F-TA3"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
@@ -75,9 +75,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vog-X6-n2K">
-                                            <rect key="frame" x="245" y="73.5" width="110" height="21"/>
+                                            <rect key="frame" x="305" y="73.5" width="50" height="21"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                            <state key="normal" title="Edit Interval" image="play.circle" catalog="system">
+                                            <state key="normal" title="Edit" image="play.circle" catalog="system">
                                                 <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                             </state>
                                             <connections>
@@ -130,25 +130,14 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
-                        <barButtonItem title="Play All" id="w7S-K5-P1b">
-                            <connections>
-                                <action selector="hitPlay:" destination="iUE-GL-R43" id="yBB-a7-axd"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem title="Play Selected" id="xKr-KY-dhn">
-                            <connections>
-                                <action selector="hitPlaySelected:" destination="iUE-GL-R43" id="eks-mR-Yri"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem title="Play All" id="w7S-K5-P1b"/>
+                        <barButtonItem title="Play Selected" id="xKr-KY-dhn"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Sort &amp; Select" id="BeX-Gl-hSD"/>
-                    <connections>
-                        <outlet property="playSelectedButtonItem" destination="xKr-KY-dhn" id="BwZ-eh-Jsb"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx6-9Y-4JV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="881" y="-529"/>
+            <point key="canvasLocation" x="880.79999999999995" y="-529.38530734632684"/>
         </scene>
         <!--Build From Playlist-->
         <scene sceneID="smW-Zh-WAh">
