@@ -7,6 +7,10 @@
         <attribute name="url" optional="YES" attributeType="String"/>
         <userInfo/>
     </entity>
+    <entity name="SongBPMData" representedClassName="SongBPMData" syncable="YES" codeGenerationType="class">
+        <attribute name="bpm" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="storeId" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="WorkoutPlayListData" representedClassName="WorkoutPlayListData" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="elements" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="WorkoutSongData" inverseName="owner" inverseEntity="WorkoutSongData"/>
@@ -23,5 +27,6 @@
         <element name="Event" positionX="-51.328125" positionY="-62.234375" width="128" height="103"/>
         <element name="WorkoutPlayListData" positionX="-181.11328125" positionY="175.8671875" width="128" height="58"/>
         <element name="WorkoutSongData" positionX="89.8125" positionY="174.7578125" width="128" height="133"/>
+        <element name="SongBPMData" positionX="-45" positionY="90" width="128" height="73"/>
     </elements>
 </model>

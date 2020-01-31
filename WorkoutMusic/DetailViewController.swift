@@ -213,9 +213,16 @@ class DetailViewTableViewControler : UITableViewController {
                     self.title = self.wplaylist.detailText()
                     self.tableView.reloadData()
                     
+                    let songBPStorage = SongBPMStore()
+                    
                     // Proceed carefully as the task completion may return while rows have already been deleted
                     let tracks = self.wplaylist.tracks // Copy
                     for track in tracks {
+                        if let songBPM = songBPStorage.retrieve(song: track.song) {
+                            track.song.bpm = songBPM
+                            continue
+                        }
+                        
                         let songBpm = FetchSongBPM()
                         songBpm.getSongPBM(song: track.song, completion: { (bpm) in
                             
@@ -226,8 +233,10 @@ class DetailViewTableViewControler : UITableViewController {
                                     if( self.playSongIntervalEditor.row != offset ) {
                                         self.tableView.reloadRows(at: [IndexPath(row: offset, section: 0)], with: .none)
                                     }
+                                    songBPStorage.save(song: track.song)
                                 }
                             }
+                            
                         })
                     }
                 }

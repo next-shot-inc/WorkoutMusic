@@ -301,6 +301,17 @@ class FetchAppleMusic {
             let beginning = name[..<index]
             return String(beginning).trimmingCharacters(in: .whitespaces)
         }
+        
+        var storeId : String? {
+            switch playId {
+            case let .catalog (id) :
+                return id
+            case let .purchased (id):
+                return id
+            default:
+                return nil
+            }
+        }
     }
     
     func getTracksForPlaylist(playList: PlayListInfo, beginAt: Int = 0, completion: @escaping ([MusicTrackInfo]) -> ()) {
@@ -593,15 +604,7 @@ class FetchAppleMusic {
         request.httpMethod = "post"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let storeId : String?
-        switch track.playId {
-        case let .catalog(id):
-            storeId = id
-        case let.purchased(id):
-            storeId = id
-        default:
-            storeId = nil
-        }
+        let storeId = track.storeId
         if( storeId == nil ) {
             return
         }

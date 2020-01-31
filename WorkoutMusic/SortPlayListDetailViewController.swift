@@ -23,7 +23,7 @@ class SortPlayListDetailViewTableController : UITableViewController {
     
     weak var sortSongViewController : SortPlayListDetailViewController?
     
-    var songs = [SearchAndSortPlaylistSongHelper.PlayListSong]()
+    var songs = [Song]()
     var filtered_songs = [SearchAndSortPlaylistSongHelper.PlayListSong]()
     var filter_applied = false
     
@@ -43,6 +43,9 @@ class SortPlayListDetailViewTableController : UITableViewController {
             noDataLabel.numberOfLines = 0
             tableView.backgroundView  = noDataLabel
             tableView.separatorStyle  = .none
+        } else {
+            tableView.backgroundView = nil
+            tableView.separatorStyle = .singleLine
         }
         return 1
     }
@@ -134,6 +137,19 @@ class SortPlayListDetailViewTableController : UITableViewController {
             if( sortSongViewController?.playAndAddToPlayListView.controller.currentSelectedSong === song ) {
                 self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
             }
+        } else {
+            // Song not found - If the filtered is applied see if the songs should not be added to that list
+            if( filter_applied ) {
+                let filterValue = Int(sortSongViewController!.bpmStepper.value)
+                let songBpm = song.track?.bpm ?? 0
+                if( songBpm < filterValue + 5 || songBpm >= filterValue - 5 ) {
+                    filtered_songs.append(song)
+                    let newIndexPath = IndexPath(row: filtered_songs.count-1, section: 0)
+                    tableView.beginUpdates()
+                    tableView.insertRows(at: [newIndexPath], with: .fade)
+                    tableView.endUpdates()
+                }
+            }
         }
     }
     
@@ -150,12 +166,14 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
     weak var appleMusic : FetchAppleMusic?
     var playListNames = [String]()
     var fromPlayListName = String()
+    var songsWithoutBPMs = 0
     
     @IBOutlet weak var songsDetailView: UITableView!
     @IBOutlet weak var bpmValueLabel: UILabel!
     @IBOutlet weak var bpmStepper: UIStepper!
     @IBOutlet weak var applyFilterButton: UIButton!
     
+    @IBOutlet weak var stillLoadingBPMLabel: UILabel!
     @IBOutlet weak var customContainerView: UIView!
     
     var playAndAddToPlayListView: UIPlayAndAddToPlayListView!
@@ -177,6 +195,8 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
                     self.songsDetailView.reloadData()
                     
                     let songs = self.sortPlayListDetailViewTableController.songs
+                    self.songsWithoutBPMs = songs.count
+                    self.stillLoadingBPMLabel.text = "\(self.songsWithoutBPMs) without BPMs information"
                      
                     // See which of the track exist in the current play list track
                     self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: self.playAndAddToPlayListView.controller.currentPlayListName, completion: { musicTracks in
@@ -190,14 +210,31 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
                         }
                     })
                     
+                    func setStillLoadingSongsBPM() {
+                        self.songsWithoutBPMs = self.songsWithoutBPMs - 1
+                        if( self.songsWithoutBPMs > 0 ) {
+                             self.stillLoadingBPMLabel.text = "\(self.songsWithoutBPMs) without BPMs information"
+                        } else {
+                            self.stillLoadingBPMLabel.text = ""
+                        }
+                    }
+                    
                     // Get PBM for each song
+                    let songBPStorage = SongBPMStore()
                     for song in songs {
+                        if let songBPM = songBPStorage.retrieve(song: song.track!) {
+                            setStillLoadingSongsBPM()
+                            song.track!.bpm = songBPM
+                            continue
+                        }
                         let songBpm = FetchSongBPM()
                         songBpm.getSongPBM(song: song.track!, completion: { (bpm) in
                             song.track!.bpm = bpm
                             
                             DispatchQueue.main.async {
+                                setStillLoadingSongsBPM()
                                 self.sortPlayListDetailViewTableController.reloadSong(song: song)
+                                songBPStorage.save(song: song.track!)
                             }
                         })
                     }
@@ -219,7 +256,7 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
         searchAndSortHelper = SearchAndSortPlaylistSongHelper(appleMusic: appleMusic!)
         
         navigationItem.backBarButtonItem?.title = "Back"
-        navigationItem.title = "Filter and Add tracks"
+        navigationItem.title = "Sort: \"" + fromPlayListName + "\""
         
         playAndAddToPlayListView = loadNibView(nibName: "PlayAndAddToPlayListView", into:customContainerView) as? UIPlayAndAddToPlayListView
         playAndAddToPlayListView.delegate = self
@@ -236,7 +273,7 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
     @IBAction func filterSongsByPBM(_ sender: Any) {
         let value = Int(bpmStepper.value)
         sortPlayListDetailViewTableController.filtered_songs = sortPlayListDetailViewTableController.songs.filter({ (song) -> Bool in
-            song.track!.bpm < value + 9 && song.track!.bpm > value - 9
+            song.track!.bpm <= value + 5 && song.track!.bpm > value - 5
         })
         sortPlayListDetailViewTableController.filter_applied = true
         songsDetailView.reloadData()

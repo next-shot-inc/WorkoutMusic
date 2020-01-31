@@ -45,13 +45,13 @@
                     </connections>
                 </button>
                 <pickerView contentMode="scaleToFill" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fYH-sO-WdJ">
-                    <rect key="frame" x="217.5" y="77" width="207.5" height="110"/>
+                    <rect key="frame" x="217.5" y="65" width="207.5" height="110"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="110" id="MpS-s2-K3R"/>
                     </constraints>
                 </pickerView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xPh-3e-tbr" userLabel="addNewPlaylist" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
-                    <rect key="frame" x="433" y="116" width="32" height="32"/>
+                    <rect key="frame" x="433" y="104" width="32" height="32"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="IY4-Fu-gy4"/>
                         <constraint firstAttribute="width" constant="32" id="KI3-fk-8Cu"/>
@@ -109,7 +109,7 @@
                 <constraint firstItem="wY5-Qr-AJL" firstAttribute="top" secondItem="9LN-vg-btq" secondAttribute="bottom" multiplier="1.5" constant="8" symbolic="YES" id="U32-dU-Bc2"/>
                 <constraint firstItem="9LN-vg-btq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" symbolic="YES" id="WVO-fE-Uw8"/>
                 <constraint firstItem="EaS-1J-Z3f" firstAttribute="centerY" secondItem="9LN-vg-btq" secondAttribute="centerY" id="a7w-SR-r3b"/>
-                <constraint firstItem="fYH-sO-WdJ" firstAttribute="top" secondItem="EaS-1J-Z3f" secondAttribute="bottom" constant="20" id="br5-zg-bho"/>
+                <constraint firstItem="fYH-sO-WdJ" firstAttribute="top" secondItem="EaS-1J-Z3f" secondAttribute="bottom" constant="8" symbolic="YES" id="br5-zg-bho"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fYH-sO-WdJ" secondAttribute="bottom" constant="20" symbolic="YES" id="efc-Zo-gXW"/>
                 <constraint firstItem="wY5-Qr-AJL" firstAttribute="leading" secondItem="9LN-vg-btq" secondAttribute="leading" id="lfa-ve-nkv"/>
             </constraints>
