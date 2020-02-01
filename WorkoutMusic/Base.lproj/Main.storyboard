@@ -396,25 +396,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="120" maximumValue="300" stepValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="Fi3-Le-8Jl">
-                                <rect key="frame" x="100.5" y="63.5" width="94" height="32"/>
+                                <rect key="frame" x="100.5" y="61" width="94" height="32"/>
                                 <connections>
                                     <action selector="bpmValueChanged:" destination="o58-kX-hQ4" eventType="valueChanged" id="Qee-Jq-tXk"/>
                                 </connections>
                             </stepper>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="BPM/Tempo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tad-iw-qka">
-                                <rect key="frame" x="10" y="70" width="88.5" height="19.5"/>
+                                <rect key="frame" x="10" y="67.5" width="88.5" height="19.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0s-WZ-DRY">
-                                <rect key="frame" x="202.5" y="70.5" width="25" height="18"/>
+                                <rect key="frame" x="202.5" y="68" width="25" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PXm-7m-giu" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
-                                <rect key="frame" x="272" y="61.5" width="98" height="36"/>
+                                <rect key="frame" x="272" y="59" width="98" height="36"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="36" id="6qS-sG-FW3"/>
                                 </constraints>
@@ -437,43 +437,43 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="Global search by GetSongBPM.com " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="83a-G0-y3r" userLabel="Global search provided by GetSongBPM.com">
-                                <rect key="frame" x="10" y="105.5" width="267" height="13.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <rect key="frame" x="10" y="103" width="267" height="16"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="No results" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AGi-xd-HJF">
-                                <rect key="frame" x="272" y="102" width="98" height="20.5"/>
+                                <rect key="frame" x="272" y="101" width="98" height="20.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4jD-9q-yMD" userLabel="separator1">
-                                <rect key="frame" x="0.0" y="137.5" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="136.5" width="375" height="2"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="0er-J0-uG4"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IbR-o4-9MX" userLabel="separator2">
-                                <rect key="frame" x="0.0" y="473" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="472" width="375" height="2"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="7g4-ot-7Rc"/>
                                 </constraints>
                             </view>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h3k-Cc-d7D">
-                                <rect key="frame" x="0.0" y="483" width="375" height="135"/>
+                                <rect key="frame" x="0.0" y="482" width="375" height="136"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Add songs to playlist(s)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAb-p4-bl2">
-                                <rect key="frame" x="76.5" y="15" width="222.5" height="26.5"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" text="Browse &amp; Add to playlist(s)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="bAb-p4-bl2">
+                                <rect key="frame" x="71" y="15" width="233.5" height="24"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="250" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hzn-Jf-c2k">
-                                <rect key="frame" x="0.0" y="139.5" width="375" height="333.5"/>
+                                <rect key="frame" x="0.0" y="138.5" width="375" height="333.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchSongTableCell" rowHeight="50" id="3ne-ZA-TLD" customClass="SearchSongTableCell" customModule="WorkoutMusic" customModuleProvider="target">
@@ -483,7 +483,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ee4-vQ-gUy" userLabel="songName">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="song" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ee4-vQ-gUy" userLabel="songName">
                                                     <rect key="frame" x="20" y="15" width="38" height="20.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                     <nil key="textColor"/>
@@ -553,6 +553,7 @@
                             <constraint firstAttribute="trailing" secondItem="IbR-o4-9MX" secondAttribute="trailing" id="Cn5-um-YDJ"/>
                             <constraint firstItem="h3k-Cc-d7D" firstAttribute="trailing" secondItem="d3J-nB-iVJ" secondAttribute="trailing" id="Dbe-jV-349"/>
                             <constraint firstItem="4jD-9q-yMD" firstAttribute="top" secondItem="AGi-xd-HJF" secondAttribute="bottom" constant="15" id="IPh-ua-gTb"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bAb-p4-bl2" secondAttribute="trailing" constant="10" id="Ihk-nA-EHE"/>
                             <constraint firstItem="83a-G0-y3r" firstAttribute="leading" secondItem="Tad-iw-qka" secondAttribute="leading" id="Kw0-jn-H3b"/>
                             <constraint firstItem="h3k-Cc-d7D" firstAttribute="top" secondItem="IbR-o4-9MX" secondAttribute="bottom" constant="8" symbolic="YES" id="LPi-rb-Cl6"/>
                             <constraint firstItem="hzn-Jf-c2k" firstAttribute="height" secondItem="d3J-nB-iVJ" secondAttribute="height" multiplier="0.5" priority="250" id="Oxg-Jp-ROl"/>
@@ -570,6 +571,7 @@
                             <constraint firstItem="h3k-Cc-d7D" firstAttribute="leading" secondItem="d3J-nB-iVJ" secondAttribute="leading" id="f9H-cP-BQE"/>
                             <constraint firstItem="hzn-Jf-c2k" firstAttribute="trailing" secondItem="6cv-bU-HuQ" secondAttribute="trailing" id="rKe-WB-e77"/>
                             <constraint firstItem="PXm-7m-giu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="I0s-WZ-DRY" secondAttribute="trailing" priority="250" constant="10" id="tPA-FG-mAP"/>
+                            <constraint firstItem="bAb-p4-bl2" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="d3J-nB-iVJ" secondAttribute="leading" constant="10" id="uQZ-sQ-S55"/>
                             <constraint firstItem="hzn-Jf-c2k" firstAttribute="top" secondItem="4jD-9q-yMD" secondAttribute="bottom" id="uot-J4-oo8"/>
                             <constraint firstItem="Fi3-Le-8Jl" firstAttribute="leading" secondItem="Tad-iw-qka" secondAttribute="trailing" constant="2" id="vCW-fM-mrg"/>
                             <constraint firstItem="6cv-bU-HuQ" firstAttribute="top" secondItem="bAb-p4-bl2" secondAttribute="top" constant="-15" id="vLt-yj-vMf"/>
@@ -822,14 +824,14 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mBv-P7-9SM" userLabel="separator2">
-                                <rect key="frame" x="0.0" y="494.5" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="528" width="375" height="2"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="9vG-SZ-rlT"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eqO-OW-oub">
-                                <rect key="frame" x="0.0" y="496.5" width="375" height="121.5"/>
+                                <rect key="frame" x="0.0" y="530" width="375" height="88"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ldc-p5-1rC">
                                 <rect key="frame" x="258.5" y="117" width="111.5" height="22"/>
@@ -864,7 +866,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="250" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dP1-tC-UKe">
-                                <rect key="frame" x="0.0" y="161" width="375" height="333.5"/>
+                                <rect key="frame" x="0.0" y="161" width="375" height="367"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SortPlayListDetailTableCell" rowHeight="50" id="GGE-44-ihH" customClass="SortPlayListDetailTableCell" customModule="WorkoutMusic" customModuleProvider="target">
@@ -935,8 +937,8 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TOz-5D-LN8">
-                                <rect key="frame" x="10" y="140" width="39.5" height="19.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TOz-5D-LN8">
+                                <rect key="frame" x="10" y="140" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                 <color key="textColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -967,7 +969,7 @@
                             <constraint firstItem="TOz-5D-LN8" firstAttribute="top" secondItem="Qwc-or-eRf" secondAttribute="bottom" constant="1" id="MfZ-EB-AON"/>
                             <constraint firstItem="hgV-rC-jln" firstAttribute="trailing" secondItem="dP1-tC-UKe" secondAttribute="trailing" id="MmV-ZR-87y"/>
                             <constraint firstItem="hgV-rC-jln" firstAttribute="trailing" secondItem="LUc-xf-QOg" secondAttribute="trailing" constant="20" id="PI0-YJ-tiP"/>
-                            <constraint firstItem="dP1-tC-UKe" firstAttribute="height" secondItem="lAZ-4E-eax" secondAttribute="height" multiplier="0.5" priority="250" id="W40-K9-s7H"/>
+                            <constraint firstItem="dP1-tC-UKe" firstAttribute="height" secondItem="lAZ-4E-eax" secondAttribute="height" multiplier="0.55" priority="250" id="W40-K9-s7H"/>
                             <constraint firstItem="Ldc-p5-1rC" firstAttribute="top" secondItem="dWA-lG-A90" secondAttribute="bottom" constant="9" id="aSR-hm-2FA"/>
                             <constraint firstItem="hgV-rC-jln" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="thl-9B-QGu" secondAttribute="trailing" id="cPW-EO-keF"/>
                             <constraint firstItem="hgV-rC-jln" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="TOz-5D-LN8" secondAttribute="trailing" symbolic="YES" id="ej8-9P-j2F"/>

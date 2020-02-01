@@ -119,7 +119,8 @@ class UIPlayAndAddToPlayListView : UIView {
     @IBOutlet weak var playMusicButton: UIButton!
     @IBOutlet weak var selectedSongLabel: UILabel!
     @IBOutlet weak var playListPickerView: UIPickerView!
-
+    @IBOutlet weak var artworkImageView: UIImageView!
+    
     func initialize(playListNames: [String], mainController: UIViewController, fromPlayList: String) {
         controller = PlayAndAddToPlayListViewController(view: self, playListNames: playListNames, fromPlayList: fromPlayList)
         self.mainController = mainController
@@ -137,13 +138,19 @@ class UIPlayAndAddToPlayListView : UIView {
             playMusicTrack(self)
         }
         controller.currentSelectedSong = song
-        self.selectedSongLabel.text = song.songName()
+    }
+    
+    var selectedSong : SearchAndSortPlaylistSongHelper.PlayListSong? {
+        get {
+            return controller.currentSelectedSong
+        }
     }
     
     func setPlayButtonState(song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         
         self.playMusicButton.isEnabled = false
         self.addMusicButton.isEnabled = false
+        self.selectedSongLabel.text = song.songName()
         
         if( song.track != nil ) {
             let musicTrack = song.track!
@@ -158,6 +165,15 @@ class UIPlayAndAddToPlayListView : UIView {
             default:
                 print("got library id only")
             }
+            
+            displayArtwork(song: song)
+        }
+    }
+    
+    func displayArtwork(song: SearchAndSortPlaylistSongHelper.PlayListSong) {
+        if let artworkURL = song.track?.artworkUrl {
+            let artwork = AppleMusicArtwork(url: artworkURL)
+            self.artworkImageView.load(url: artwork.imageURL(size: CGSize(width: 64, height: 64)))
         }
     }
     

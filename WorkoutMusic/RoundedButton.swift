@@ -57,4 +57,11 @@ class UIRoundButton: UIButton {
 
         return CGSize(width: adjustedWidth, height: adjustedHeight)
     }
+    
+    /// Function called when going from dark to light mode
+    /// recreate the bg image according to the new color trait
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+         let image = createImage(color: bgColor)
+         setBackgroundImage(image, for:.normal)
+    }
 }

@@ -132,10 +132,15 @@ class SortPlayListDetailViewTableController : UITableViewController {
     
     func reloadSong(song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         if let index = findSong(song: song) {
+            let selectedIndex = self.tableView.indexPathForSelectedRow
             self.tableView.reloadRows(at: [index], with: .none)
             
-            if( sortSongViewController?.playAndAddToPlayListView.controller.currentSelectedSong === song ) {
+            if( sortSongViewController?.currentSong === song ) {
                 self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
+            } else if( selectedIndex != nil ) {
+                if( selectedIndex! == index ) {
+                    self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
+                }
             }
         } else {
             // Song not found - If the filtered is applied see if the songs should not be added to that list
@@ -159,14 +164,47 @@ class SortPlayListDetailViewTableController : UITableViewController {
             self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
         }
     }
+}
 
+/// Class to manage the multi-threading download counter of the BPM songs value
+/// We need to protect the counter manipulation inside a specific queue.
+class BPMLoadingDownCounter {
+    var unsafeCounter = 0
+    weak var label : UILabel?
+    var counter : Int {
+        return unsafeCounter
+    }
+    init() {
+    }
+    
+    private let concurrentCounterQueue =
+        DispatchQueue(label: "com.next-shot-inc.com.WorkoutMusic.bpmLoadingQueue", attributes: .concurrent)
+    
+    func add() {
+        concurrentCounterQueue.async(flags: .barrier) { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.unsafeCounter = self.unsafeCounter - 1
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.postContentAddedNotification()
+        }
+    }
+    func postContentAddedNotification() {
+        if( self.counter > 0 ) {
+            self.label?.text = "\(self.counter) without BPMs information"
+        } else {
+            self.label?.text = ""
+        }
+    }
 }
 
 class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListViewDelegate {
     weak var appleMusic : FetchAppleMusic?
     var playListNames = [String]()
     var fromPlayListName = String()
-    var songsWithoutBPMs = 0
+    var songsWithoutBPMs = BPMLoadingDownCounter()
     
     @IBOutlet weak var songsDetailView: UITableView!
     @IBOutlet weak var bpmValueLabel: UILabel!
@@ -195,8 +233,8 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
                     self.songsDetailView.reloadData()
                     
                     let songs = self.sortPlayListDetailViewTableController.songs
-                    self.songsWithoutBPMs = songs.count
-                    self.stillLoadingBPMLabel.text = "\(self.songsWithoutBPMs) without BPMs information"
+                    self.songsWithoutBPMs.unsafeCounter = songs.count
+                    self.songsWithoutBPMs.postContentAddedNotification()
                      
                     // See which of the track exist in the current play list track
                     self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: self.playAndAddToPlayListView.controller.currentPlayListName, completion: { musicTracks in
@@ -210,29 +248,20 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
                         }
                     })
                     
-                    func setStillLoadingSongsBPM() {
-                        self.songsWithoutBPMs = self.songsWithoutBPMs - 1
-                        if( self.songsWithoutBPMs > 0 ) {
-                             self.stillLoadingBPMLabel.text = "\(self.songsWithoutBPMs) without BPMs information"
-                        } else {
-                            self.stillLoadingBPMLabel.text = ""
-                        }
-                    }
-                    
                     // Get PBM for each song
                     let songBPStorage = SongBPMStore()
                     for song in songs {
                         if let songBPM = songBPStorage.retrieve(song: song.track!) {
-                            setStillLoadingSongsBPM()
+                            self.songsWithoutBPMs.add()
                             song.track!.bpm = songBPM
                             continue
                         }
-                        let songBpm = FetchSongBPM()
-                        songBpm.getSongPBM(song: song.track!, completion: { (bpm) in
+                        let fetchSongBpm = FetchSongBPM()
+                        fetchSongBpm.getSongPBM(song: song.track!, completion: { (bpm) in
                             song.track!.bpm = bpm
+                            self.songsWithoutBPMs.add()
                             
                             DispatchQueue.main.async {
-                                setStillLoadingSongsBPM()
                                 self.sortPlayListDetailViewTableController.reloadSong(song: song)
                                 songBPStorage.save(song: song.track!)
                             }
@@ -261,6 +290,8 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
         playAndAddToPlayListView = loadNibView(nibName: "PlayAndAddToPlayListView", into:customContainerView) as? UIPlayAndAddToPlayListView
         playAndAddToPlayListView.delegate = self
         playAndAddToPlayListView.initialize(playListNames: playListNames, mainController: self, fromPlayList: fromPlayListName)
+        
+        songsWithoutBPMs.label = stillLoadingBPMLabel
         
         // Do any additional setup after loading the view.
         configureView()
@@ -302,6 +333,12 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
             }
             self.songsDetailView.reloadData()
             self.sortPlayListDetailViewTableController.reselectSongAfterReloadTable()
+        }
+    }
+    
+    var currentSong : SearchAndSortPlaylistSongHelper.PlayListSong? {
+        get {
+            return playAndAddToPlayListView.selectedSong
         }
     }
 }

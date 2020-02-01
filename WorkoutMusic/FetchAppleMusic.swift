@@ -105,6 +105,7 @@ class FetchAppleMusic {
         var url : String
     }
     
+    /// Search global Apple Music playlists 
     func searchGlobalPlaylist(searchTerm : String = "workouts", completion : @escaping ([PlayListInfo]) -> ())  {
         var components = URLComponents()
         components.scheme = "https"
@@ -161,6 +162,7 @@ class FetchAppleMusic {
         task.resume()
     }
     
+    /// Search all the user library playlist (limited to the first 100).
     func searchAllLibraryPlaylists(completion : @escaping ([PlayListInfo]) -> ()) {
         var components = URLComponents()
         components.scheme = "https"
@@ -293,6 +295,7 @@ class FetchAppleMusic {
         }
         let playId : PlayParamId
         var bpm = 0
+        let artworkUrl : String?
         
         // Sometime song like "Stronger (What ...)" have multiple names - For some queries we need to choose
         // as the same song may be named "What ... (Stronger)
@@ -397,9 +400,13 @@ class FetchAppleMusic {
                     playId = MusicTrackInfo.PlayParamId.catalog(id!)
                 }
             }
+            var artworkURL : String? = nil
+            if let artwork = attributes["artwork"] as? [String:Any] {
+                artworkURL = artwork["url"] as? String
+            }
+            
             let musicTrack = MusicTrackInfo(
-                href: href!, albumName: albumName!, genreName: genreNames![0], artistName: artistName!, name: name!, durationInMs: duration!,
-                playId: playId
+                href: href!, albumName: albumName!, genreName: genreNames![0], artistName: artistName!, name: name!, durationInMs: duration!, playId: playId, artworkUrl: artworkURL
             )
             return musicTrack
         }
@@ -715,137 +722,28 @@ class FetchAppleMusic {
     }
 }
 
-/***********************************************************************************************/
-
-// Using https://getsongbpm.com/api
-
-class FetchSongBPM {
-    let api_key = "18c8f804a043762df117e7fb79b2f9e3"
-    
-    func getSongPBM(song: FetchAppleMusic.MusicTrackInfo, completion: @escaping (Int)->() ) {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api.getsongbpm.com"
-        components.path = "/search/"
-        
-        components.queryItems = [
-            URLQueryItem(name: "api_key", value: api_key),
-            URLQueryItem(name: "type", value: "both"),
-            URLQueryItem(name: "lookup", value: "song:"+song.shortName()+"artist:"+song.artistName)
-        ]
-        
-        guard let url = components.url else {
-            return
-        }
-        print(url)
-        let request = URLRequest(url: url)
-        
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if( data != nil ) {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                    
-                    print("Searching for song \(song.name) from \(song.artistName) in GetSongBPM Database")
-                    let prdata = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
-                    let jsonString = NSString(data: prdata, encoding: String.Encoding.utf8.rawValue)
-                    print(jsonString!)
-                    
-                    // Returns a search result object
-                    if let response = json as? [String: Any] {
-                        if let search_datas = response["search"] as? [[String:Any]] {
-                            for data in search_datas {
-                                let song_title = data["song_title"] as? String
-                                if let artist = data["artist"] as? [String:Any] {
-                                    let artistName = artist["name"] as? String
-                                    // If we have an exact match or there is only one result.
-                                    if( (artistName == song.artistName && song_title! == song.name) ||
-                                        (search_datas.count == 1)
-                                    ) {
-                                        if let asongBPM = data["tempo"] as? String {
-                                            if let songBPM = Int(asongBPM) {
-                                                completion(songBPM)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                catch {
-                   
-                }
-            }
-        }
-        task.resume()
+class AppleMusicArtwork {
+    let urlTemplateString: String
+    init(url: String) {
+        urlTemplateString = url
     }
-    
-    struct Song {
-        var name : String
-        var authorName: String
-        var albumName : String
-        var genres : [String]
-        var year : String
-        var bpm : Int
-    }
-    
-    func getSongForBPM(bpm: Int, completion: @escaping ([Song])->()) {
-        var components = URLComponents()
-        components.scheme = "https"
-        components.host = "api.getsongbpm.com"
-        components.path = "/tempo/"
+    func imageURL(size: CGSize) -> URL {
         
-        components.queryItems = [
-            URLQueryItem(name: "api_key", value: api_key),
-            URLQueryItem(name: "bpm", value: String(bpm))
-        ]
+        /*
+         There are three pieces of information needed to create the URL for the image we want for a given size.  This information is the width, height
+         and image format.  We can use this information in addition to the `urlTemplateString` to create the URL for the image we wish to use.
+         */
         
-        guard let url = components.url else {
-            completion([])
-            return
-        }
-        print(url)
-        let request = URLRequest(url: url)
+        // 1) Replace the "{w}" placeholder with the desired width as an integer value.
+        var imageURLString = urlTemplateString.replacingOccurrences(of: "{w}", with: "\(Int(size.width))")
         
-        let session = URLSession.shared
-        let task = session.dataTask(with: request) { data, response, error in
-            if( data != nil ) {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: [])
-                    
-                    print("Searching for song in GetSongBPM Database")
-                    let prdata = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
-                    let jsonString = NSString(data: prdata, encoding: String.Encoding.utf8.rawValue)
-                    print(jsonString!)
-                    
-                    // Returns a search result object
-                    if let response = json as? [String: Any] {
-                        if let datas = response["tempo"] as? [[String:Any]] {
-                            var songs = [Song]()
-                            for data in datas {
-                                let songName = data["song_title"] as? String
-                                
-                                let albumData = data["album"] as? [String:Any]
-                                let albumName = albumData?["title"] as? String
-                                let releaseYear = albumData?["year"] as? String
-                                if let artist = data["artist"] as? [String:Any] {
-                                    let artistName = artist["name"] as? String
-                                    let genres = artist["genres"] as? [String]
-                                    if( artistName != nil && songName != nil ) {
-                                        songs.append(Song(name: songName!, authorName: artistName!, albumName: albumName ?? "", genres : genres ?? [], year: releaseYear ?? "", bpm: bpm))
-                                    }
-                                }
-                            }
-                            completion(songs)
-                        }
-                    }
-                }
-                catch {
-                    
-                }
-            }
-        }
-        task.resume()
+        // 2) Replace the "{h}" placeholder with the desired height as an integer value.
+        imageURLString = imageURLString.replacingOccurrences(of: "{h}", with: "\(Int(size.width))")
+        
+        // 3) Replace the "{f}" placeholder with the desired image format.
+        imageURLString = imageURLString.replacingOccurrences(of: "{f}", with: "png")
+        
+        return URL(string: imageURLString)!
     }
 }
+

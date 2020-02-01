@@ -106,10 +106,10 @@ class SearchSongTableViewControler : UITableViewController {
         return nil
     }
     
-    func reloadSong(song: SearchSongTableViewControler.SearchedSong) {
+    func reloadSong(song: SearchedSong) {
         if let index = findSong(song: song) {
             self.tableView.reloadRows(at: [index], with: .none)
-            if( searchSongViewController?.playAndAddToPlayListView.controller.currentSelectedSong === song ) {
+            if( searchSongViewController?.selectedSong === song ) {
                 self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
             }
         }
@@ -298,6 +298,10 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
     func addedToPlayList(playListName: String, song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         DispatchQueue.main.async {
             self.searchSongTableViewController.reloadSong(song: song as! SearchSongTableViewControler.SearchedSong)
+            
+            // Save the song in the BPM store as we are going to use it later in a playlist..
+            let bpmStore = SongBPMStore()
+            bpmStore.save(song: song.track!)
         }
     }
     
@@ -310,11 +314,18 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
     
     /// MARK - TableView related operations
     
+    var selectedSong : SearchSongTableViewControler.SearchedSong? {
+        get {
+            return playAndAddToPlayListView?.selectedSong as? SearchSongTableViewControler.SearchedSong
+        }
+    }
+    
     func setSelectedSong( song: SearchSongTableViewControler.SearchedSong) {
+        playAndAddToPlayListView.setSelectedSong(song: song)
+        
         if( song.track == nil && song.search == .notSearched ) {
             checkSongAvailability(song: song)
         }
-        playAndAddToPlayListView.setSelectedSong(song: song)
     }
     
     private func checkSongAvailability(song: SearchSongTableViewControler.SearchedSong) {
@@ -334,6 +345,8 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
             DispatchQueue.main.async {
                 if( musicTracks.count >= 1 ) {
                     song.track = musicTracks[0]
+                    // Assign the track BPM from the BPMSong's BPM
+                    song.track?.bpm = song.song.bpm
                     
                     // See if it is not already in the existing workout list
                     self.searchAndSortHelper.setInPlayListFlag(song: song)
@@ -347,7 +360,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
                         print("got library id only")
                     }
                     
-                    if( self.playAndAddToPlayListView.controller.currentSelectedSong === song ) {
+                    if( self.selectedSong === song ) {
                         // If the current song is still the same as when we called this function...
                         self.playAndAddToPlayListView.setPlayButtonState(song: song)
                     }
