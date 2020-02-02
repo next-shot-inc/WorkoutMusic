@@ -165,15 +165,16 @@ class UIPlayAndAddToPlayListView : UIView {
             default:
                 print("got library id only")
             }
-            
-            displayArtwork(song: song)
         }
+        displayArtwork(song: song)
     }
     
     func displayArtwork(song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         if let artworkURL = song.track?.artworkUrl {
             let artwork = AppleMusicArtwork(url: artworkURL)
             self.artworkImageView.load(url: artwork.imageURL(size: CGSize(width: 64, height: 64)))
+        } else {
+            self.artworkImageView.image = nil
         }
     }
     

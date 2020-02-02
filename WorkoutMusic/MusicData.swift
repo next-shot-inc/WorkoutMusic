@@ -22,7 +22,7 @@ class SongBPMStore {
         fetchRequest.predicate = NSPredicate(format: "storeId == %@", song.storeId! as CVarArg)
         do {
             let objects = try managedContext.fetch(fetchRequest)
-            if( objects.count == 1 ) {
+            if( objects.count >= 1 ) {
                 return Int(objects[0].bpm)
             } else {
                 return nil

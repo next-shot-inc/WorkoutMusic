@@ -108,9 +108,13 @@ class SearchSongTableViewControler : UITableViewController {
     
     func reloadSong(song: SearchedSong) {
         if let index = findSong(song: song) {
-            self.tableView.reloadRows(at: [index], with: .none)
-            if( searchSongViewController?.selectedSong === song ) {
-                self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
+            if let cell = tableView.cellForRow(at: index) as? SearchSongTableCell {
+                configureCell(cell: cell, song: song)
+            } else {
+               self.tableView.reloadRows(at: [index], with: .none)
+               if( searchSongViewController?.selectedSong === song ) {
+                  self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
+               }
             }
         }
     }
@@ -173,13 +177,17 @@ class SearchSongTableViewControler : UITableViewController {
     
     func configureCell(cell: SearchSongTableCell, indexPath: IndexPath) {
         if let song = getSong(index: indexPath) {
-            cell.songName.text = song.song.name
-            cell.authorName.text = song.song.authorName
-            cell.controller = self
-            cell.addedToPlaylistWidget.isHidden = !song.inPlayList
-            cell.foundMusicWidget.isHidden = song.search != .searchedAndFound
-            cell.notFoundMusicWidget.isHidden = song.search != .searchedAndNotFound
+            configureCell(cell: cell, song: song)
         }
+    }
+    
+    func configureCell(cell: SearchSongTableCell, song: SearchedSong) {
+        cell.songName.text = song.song.name
+        cell.authorName.text = song.song.authorName
+        cell.controller = self
+        cell.addedToPlaylistWidget.isHidden = !song.inPlayList
+        cell.foundMusicWidget.isHidden = song.search != .searchedAndFound
+        cell.notFoundMusicWidget.isHidden = song.search != .searchedAndNotFound
     }
 }
 
@@ -209,9 +217,6 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Disable search button until the apple music service is on.
-        searchButtton.isEnabled = false
         
         searchSongTableViewController.searchSongViewController = self
         

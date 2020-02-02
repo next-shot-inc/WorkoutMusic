@@ -42,24 +42,47 @@ extension UIViewController {
 
 class ShowSpinnerController {
     var spinnerView : UIView?
+    var labelView : UIView?
     
-    func showSpinner(onView : UIView) {
+    func showSpinner(onView : UIView, withLabel : String? = nil) {
         spinnerView = UIView.init(frame: onView.bounds)
         spinnerView!.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
         let ai = UIActivityIndicatorView.init(style: .large)
         ai.startAnimating()
         ai.center = spinnerView!.center
+
+        initLabelView(onView: onView, label: withLabel)
         
         DispatchQueue.main.async {
+            if( self.labelView != nil ) {
+                self.spinnerView?.addSubview(self.labelView!)
+            }
             self.spinnerView!.addSubview(ai)
             onView.addSubview(self.spinnerView!)
+        }
+    }
+    
+    func initLabelView(onView: UIView, label: String?)  {
+        if( label != nil ) {
+            spinnerView!.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.8)
+            let labelHeight : CGFloat = 100
+            let activityIndicatorHeight : CGFloat = 40
+            // Place the label to be just below the activity Indicator.
+            let noDataLabel: UILabel  = UILabel(frame: CGRect(x: 20, y: onView.bounds.size.height/2 - labelHeight/2 + activityIndicatorHeight, width: onView.bounds.size.width - 20, height: labelHeight))
+            noDataLabel.textColor     = UIColor.label
+            noDataLabel.textAlignment = .center
+            noDataLabel.numberOfLines = 0
+            noDataLabel.text = label
+            labelView = noDataLabel
         }
     }
     
     func removeSpinner() {
         DispatchQueue.main.async {
             self.spinnerView?.removeFromSuperview()
+            self.labelView?.removeFromSuperview()
             self.spinnerView = nil
+            self.labelView = nil
         }
     }
 }

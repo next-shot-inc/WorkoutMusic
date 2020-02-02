@@ -20,7 +20,7 @@ class UIWorkoutMusicTabBarController : UITabBarController {
         super.viewDidLoad()
         
         // Show a spinner while waiting for appleMusic setup.
-        spinnerCtrler.showSpinner(onView: view)
+        spinnerCtrler.showSpinner(onView: view, withLabel: "Connecting to Apple Music ...")
         
         appleMusic.setup( completion: { (error) -> () in
             self.spinnerCtrler.removeSpinner()

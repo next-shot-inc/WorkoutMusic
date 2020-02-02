@@ -156,7 +156,7 @@ class WorkoutIntensityView : UIView {
             if( cursorLocationInS != nil ) {
                 context.setFillColor(barLineColor.cgColor )
                 let curX = margin + CGFloat(cursorLocationInS!) * xPerSeconds
-                let rect = CGRect(x: curX-margin/2, y: margin, width: margin, height: frame.height-2*margin)
+                let rect = CGRect(x: curX-margin/2, y: margin, width: margin, height: frame.height-2*margin - timeAxisHeight)
                 context.fill(rect)
                 context.stroke(rect)
             }

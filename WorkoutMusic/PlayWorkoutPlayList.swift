@@ -258,15 +258,15 @@ class PlayWorkoutPlayController : UIViewController {
     
     var appleMusic: FetchAppleMusic?
     
+    @IBOutlet weak var currentMusicArtworkImageView: UIImageView!
     @IBOutlet weak var workoutPlayButton: UIButton!
     @IBOutlet weak var workoutsTableView: UITableView!
+    @IBOutlet weak var countdownLabel: UILabel!
+    
     var workoutTableController = PlayWorkoutPlayListController()
     var selectedWorkout : StoredWorkoutMusicPlayList? {
         didSet {
-            workoutIntensityView.workoutPlayList = selectedWorkout
-            workoutIntensityView.setupTimeAxisLabels()
-            workoutIntensityView.setNeedsDisplay()
-            workoutPlayButton.isEnabled = true
+            setSelectedWorkout()
         }
     }
     var editingTable = false
@@ -283,6 +283,8 @@ class PlayWorkoutPlayController : UIViewController {
         workoutsTableView.delegate = workoutTableController
         workoutTableController.mainController = self
         workoutPlayButton.isEnabled = false
+        countdownLabel.text = ""
+        nowPlayingLabel.text = nil
         
         MPMusicPlayerController.applicationMusicPlayer.beginGeneratingPlaybackNotifications()
 
@@ -302,7 +304,23 @@ class PlayWorkoutPlayController : UIViewController {
         
         NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: MPMusicPlayerController.applicationMusicPlayer)
         NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerPlaybackStateDidChange, object: MPMusicPlayerController.applicationMusicPlayer)
+        timer?.invalidate()
         timer = nil
+    }
+    
+    /// Re-initialize UI when selecting a workout
+    func setSelectedWorkout() {
+        workoutIntensityView.workoutPlayList = selectedWorkout
+        workoutIntensityView.setupTimeAxisLabels()
+        workoutIntensityView.cursorLocationInS = 0
+        workoutIntensityView.setNeedsDisplay()
+        workoutPlayButton.isEnabled = true
+        timer?.invalidate()
+        timer = nil
+        countdownLabel.text = nil
+        currentMusicArtworkImageView.image = nil
+        nowPlayingLabel.text = nil
+        workoutPlayButton.setTitle("Start", for: .normal)
     }
     
     // Execute the playlist linked to the workout
@@ -314,7 +332,7 @@ class PlayWorkoutPlayController : UIViewController {
                 workoutPlayButton.setTitle("Pause", for: .normal)
             }
         } else {
-            workoutPlayButton.setTitle("Start", for: .normal)
+            workoutPlayButton.setTitle("Resume", for: .normal)
             appleMusic?.pausePlaying()
             playing = false
         }
@@ -359,6 +377,9 @@ class PlayWorkoutPlayController : UIViewController {
                         self.workoutIntensityView.cursorLocationInS =
                             self.selectedWorkout!.startTime(songIndex: index)
                     }
+                    //Grab currItem's artwork
+                    let image : UIImage? = item?.artwork?.image(at: CGSize(width: 80, height: 80))
+                    self.currentMusicArtworkImageView.image = image
                 }
             }
         }
@@ -375,9 +396,11 @@ class PlayWorkoutPlayController : UIViewController {
         if( state == .stopped ) {
             DispatchQueue.main.async {
                 self.nowPlayingLabel.text = "Stopped playing"
+                self.timer?.invalidate()
                 self.timer = nil
             }
         } else if( state == .paused ) {
+            self.timer?.invalidate()
             self.timer = nil
             
         } else if( state == .playing ) {
@@ -395,6 +418,14 @@ class PlayWorkoutPlayController : UIViewController {
                self.workoutIntensityView.cursorLocationInS = self.timer!.timeInterval
             } else if( self.timer != nil ) {
                 self.workoutIntensityView.cursorLocationInS = self.workoutIntensityView.cursorLocationInS! + self.timer!.timeInterval
+            }
+            if( self.selectedWorkout != nil ) {
+                let leftTime = self.selectedWorkout!.totalDuration - self.workoutIntensityView.cursorLocationInS!
+                let fmt = DateComponentsFormatter()
+                fmt.zeroFormattingBehavior = .pad
+                fmt.allowedUnits = [.minute, .second]
+                let timestring = fmt.string(from: leftTime)
+                self.countdownLabel.text = timestring
             }
         }
     }

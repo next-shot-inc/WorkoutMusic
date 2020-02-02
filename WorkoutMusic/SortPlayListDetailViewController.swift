@@ -132,16 +132,16 @@ class SortPlayListDetailViewTableController : UITableViewController {
     
     func reloadSong(song: SearchAndSortPlaylistSongHelper.PlayListSong) {
         if let index = findSong(song: song) {
-            let selectedIndex = self.tableView.indexPathForSelectedRow
-            self.tableView.reloadRows(at: [index], with: .none)
-            
-            if( sortSongViewController?.currentSong === song ) {
-                self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
-            } else if( selectedIndex != nil ) {
-                if( selectedIndex! == index ) {
+            if let cell = tableView.cellForRow(at: index) as? SortPlayListDetailTableCell {
+                configureCell(cell, with: song)
+            } else {
+                self.tableView.reloadRows(at: [index], with: .none)
+                
+                if( sortSongViewController?.currentSong === song ) {
                     self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
                 }
             }
+            
         } else {
             // Song not found - If the filtered is applied see if the songs should not be added to that list
             if( filter_applied ) {
