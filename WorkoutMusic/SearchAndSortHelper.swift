@@ -41,9 +41,9 @@ class SearchAndSortPlaylistSongHelper {
         }
         appleMusic.searchOnePlaylist(searchTerm: playListName, exactMatch: true, completion: { (playListInfos) in
             if( playListInfos.count == 0 ) {
-                self.appleMusic.createPlayList(playListName: playListName, completion: { (playListInfo) in
+                self.appleMusic.createPlayList(playListName: playListName, completion: { (newPlayListInfo) in
                     self.appleMusic.addTrackToPlayList(
-                        playList: playListInfos[0], track: track, completion : {
+                        playList: newPlayListInfo, track: track, completion : {
                             DispatchQueue.main.async {
                                 song.inPlayList = true
                                 completion(song)

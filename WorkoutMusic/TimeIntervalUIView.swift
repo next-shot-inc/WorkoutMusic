@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class RangeSliderTrackLayer: CALayer {
+class TimeIntervalViewTrackLayer: CALayer {
     weak var rangeSlider: TimeIntervalUIView?
     
     override func draw(in ctx: CGContext) {
@@ -193,7 +193,7 @@ class TimeIntervalUIView : UIView {
         CATransaction.commit()
     }
     
-    fileprivate let trackLayer = RangeSliderTrackLayer()
+    fileprivate let trackLayer = TimeIntervalViewTrackLayer()
     
     fileprivate var thumbWidth: CGFloat {
         return CGFloat(bounds.height)

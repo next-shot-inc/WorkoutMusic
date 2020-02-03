@@ -110,11 +110,9 @@ class SearchSongTableViewControler : UITableViewController {
         if let index = findSong(song: song) {
             if let cell = tableView.cellForRow(at: index) as? SearchSongTableCell {
                 configureCell(cell: cell, song: song)
+                cell.layoutIfNeeded()
             } else {
                self.tableView.reloadRows(at: [index], with: .none)
-               if( searchSongViewController?.selectedSong === song ) {
-                  self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
-               }
             }
         }
     }
@@ -166,6 +164,7 @@ class SearchSongTableViewControler : UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchSongTableCell", for: indexPath) as! SearchSongTableCell
         
         configureCell(cell: cell, indexPath : indexPath)
+        
         return cell
     }
     
@@ -188,6 +187,10 @@ class SearchSongTableViewControler : UITableViewController {
         cell.addedToPlaylistWidget.isHidden = !song.inPlayList
         cell.foundMusicWidget.isHidden = song.search != .searchedAndFound
         cell.notFoundMusicWidget.isHidden = song.search != .searchedAndNotFound
+        
+        if( searchSongViewController?.selectedSong === song ) {
+            cell.isSelected = true
+        }
     }
 }
 

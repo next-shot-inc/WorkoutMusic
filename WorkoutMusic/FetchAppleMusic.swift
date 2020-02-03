@@ -406,7 +406,8 @@ class FetchAppleMusic {
             }
             
             let musicTrack = MusicTrackInfo(
-                href: href!, albumName: albumName!, genreName: genreNames![0], artistName: artistName!, name: name!, durationInMs: duration!, playId: playId, artworkUrl: artworkURL
+                href: href ?? "", albumName: albumName ?? "",
+                genreName: genreNames?[0] ?? "", artistName: artistName ?? "", name: name ?? "", durationInMs: duration ?? 0, playId: playId, artworkUrl: artworkURL
             )
             return musicTrack
         }
@@ -526,6 +527,51 @@ class FetchAppleMusic {
                                     }
                                 }
                                 completion( musicTracks )
+                            }
+                        }
+                    }
+                }
+                catch {
+                    
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    func seachSongInStore(storeId: String, completion: @escaping (MusicTrackInfo?) -> ()) {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.music.apple.com"
+        components.path = "/v1/catalog/\(countryCode)/songs/\(storeId)"
+        
+        guard let url = components.url else {
+            return completion(nil)
+        }
+        var request = URLRequest(url: url)
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        request.setValue("Bearer \(developerToken)", forHTTPHeaderField: "Authorization")
+
+        let session = URLSession.shared
+        let task = session.dataTask(with: request) { data, response, error in
+            if( data != nil ) {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                    
+                    let prdata = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
+                    let jsonString = NSString(data: prdata, encoding: String.Encoding.utf8.rawValue)
+                    
+                    print("Search songs in store with id ", storeId)
+                    print(jsonString!)
+                    
+                    if let response = json as? [String: Any] {
+                        if let datas = response["data"] as? [[String:Any]] {
+                            if( datas.count > 0 ) {
+                                let song_data = datas[0]
+                                let musicTrack = self.readSongData(data: song_data)
+                                if( musicTrack != nil ) {
+                                    completion( musicTrack )
+                                }
                             }
                         }
                     }

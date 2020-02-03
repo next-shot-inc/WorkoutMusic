@@ -96,6 +96,7 @@ class StoredWorkoutPlayListSong {
 // Cell to display the play list name, duration and intensityView.
 class PlayWorkoutPlayListTableCell : UITableViewCell {
     var playList : StoredWorkoutMusicPlayList?
+    var playlistData : WorkoutPlayListData?
     @IBOutlet weak var playListName: UILabel!
     @IBOutlet weak var playListDuration: UILabel!
     @IBOutlet weak var playListIntensityView: WorkoutIntensityView!
@@ -129,25 +130,38 @@ class PlayWorkoutPlayListController : UITableViewController , NSFetchedResultsCo
             return 0
         }
         let sectionInfo = fetchedResultsController.sections![section]
-        return sectionInfo.numberOfObjects
+        return sectionInfo.numberOfObjects + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WorkoutPlayListTableCell", for: indexPath)
-        let list = fetchedResultsController.object(at: indexPath)
-        configureCell(cell, withPlayList: list)
-        return cell
+        if( indexPath.row == fetchedResultsController.sections![indexPath.section].numberOfObjects ) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AddWorkoutPlayListTableCell", for: indexPath)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WorkoutPlayListTableCell", for: indexPath)
+            let list = fetchedResultsController.object(at: indexPath)
+            configureCell(cell, withPlayList: list)
+            return cell
+        }
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if( indexPath.row == fetchedResultsController.sections![indexPath.section].numberOfObjects ) {
+            return false
+        }
         // Return false if you do not want the specified item to be editable.
         return true
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let list = fetchedResultsController.object(at: indexPath)
-        let workout = StoredWorkoutMusicPlayList(data: list)
-        mainController?.selectedWorkout = workout
+        if( indexPath.row != fetchedResultsController.sections![indexPath.section].numberOfObjects ) {
+            let list = fetchedResultsController.object(at: indexPath)
+            let workout = StoredWorkoutMusicPlayList(data: list)
+            mainController?.selectedWorkout = workout
+        } else {
+            // Go the the build controller which is at index 1.
+            mainController?.tabBarController?.selectedIndex = 1
+        }
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -170,6 +184,7 @@ class PlayWorkoutPlayListController : UITableViewController , NSFetchedResultsCo
         guard let ecell = cell as? PlayWorkoutPlayListTableCell else {
             return
         }
+        ecell.playlistData = playList
         ecell.playList = StoredWorkoutMusicPlayList(data: playList)
         ecell.playListName.text = playList.name!
         ecell.playListDuration.text = ecell.playList!.detailText()
@@ -335,6 +350,25 @@ class PlayWorkoutPlayController : UIViewController {
             workoutPlayButton.setTitle("Resume", for: .normal)
             appleMusic?.pausePlaying()
             playing = false
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "editWorkout" {
+            if let cell = sender as? PlayWorkoutPlayListTableCell? {
+                let object = cell?.playlistData
+                let navController = segue.destination as! UINavigationController
+                if let controller = navController.topViewController as? DetailViewTableViewControler {
+                   controller.appleMusic = appleMusic
+                   controller.object = object
+                }
+            }
+        }
+    }
+    
+    @IBAction func unwindToViewControllerFromEditWorkout(segue: UIStoryboardSegue) {
+        if segue.identifier == "unwindFromEditWorkout" {
+            // The fetchcontroller has already done the update... Nothing to do..
         }
     }
     

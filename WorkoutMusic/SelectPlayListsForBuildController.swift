@@ -16,6 +16,8 @@ class MasterViewPlayListCell : UITableViewCell {
     @IBOutlet weak var comment: UILabel!
 }
 
+/// Display the user playlists that the user can select (multiple rows)
+/// to create a workout playlist.
 class MasterViewController: UITableViewController {
 
     var userPlayLists = [FetchAppleMusic.PlayListInfo]()
@@ -66,8 +68,12 @@ class MasterViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetails" {
-            if let indexPath = tableView.indexPathForSelectedRow {
-                let object = userPlayLists[indexPath.row]
+            // Give the selected playlists to the Workout playlist builder
+            if( tableView.indexPathsForSelectedRows != nil ) {
+                var object = [FetchAppleMusic.PlayListInfo]()
+                for indexPath in tableView.indexPathsForSelectedRows! {
+                    object.append(userPlayLists[indexPath.row])
+                }
                 let controller = segue.destination as! DetailViewTableViewControler
                 controller.appleMusic = appleMusic
                 controller.detailItem = object

@@ -134,6 +134,7 @@ class SortPlayListDetailViewTableController : UITableViewController {
         if let index = findSong(song: song) {
             if let cell = tableView.cellForRow(at: index) as? SortPlayListDetailTableCell {
                 configureCell(cell, with: song)
+                cell.layoutIfNeeded()
             } else {
                 self.tableView.reloadRows(at: [index], with: .none)
                 
@@ -285,7 +286,7 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
         searchAndSortHelper = SearchAndSortPlaylistSongHelper(appleMusic: appleMusic!)
         
         navigationItem.backBarButtonItem?.title = "Back"
-        navigationItem.title = "Sort: \"" + fromPlayListName + "\""
+        navigationItem.title = "Select songs (by BPM) from \"" + fromPlayListName + "\" and add to ..."
         
         playAndAddToPlayListView = loadNibView(nibName: "PlayAndAddToPlayListView", into:customContainerView) as? UIPlayAndAddToPlayListView
         playAndAddToPlayListView.delegate = self

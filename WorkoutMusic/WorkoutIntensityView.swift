@@ -29,7 +29,11 @@ class WorkoutIntensityView : UIView {
         }
     }
     
-    var workoutPlayList : StoredWorkoutMusicPlayList?
+    var workoutPlayList : StoredWorkoutMusicPlayList? {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
     var timeLabel : UILabel?
     var timeAxisHeight : CGFloat = 0
     var timeAxisLabelViews = [UIView]()
