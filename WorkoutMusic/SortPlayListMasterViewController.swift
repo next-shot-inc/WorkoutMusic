@@ -12,6 +12,8 @@ import UIKit
 class SortPlayListMasterCell : UITableViewCell {
     @IBOutlet weak var playListName: UILabel!
     @IBOutlet weak var playListDescription: UILabel!
+    @IBOutlet weak var artworkPlaylistCollectionView: UICollectionView!
+    var musicArtworkCollectionDelegate : MusicArtworkCollectionDelegate?
 }
 
 class SortPlayListMasterViewController : UITableViewController {
@@ -109,6 +111,53 @@ class SortPlayListMasterViewController : UITableViewController {
         let ecell = cell as? SortPlayListMasterCell
         ecell!.playListName!.text = playlist.name
         ecell!.playListDescription!.text = playlist.description
+        
+        ecell!.musicArtworkCollectionDelegate = MusicArtworkCollectionDelegate()
+        ecell!.musicArtworkCollectionDelegate!.collectionView = ecell!.artworkPlaylistCollectionView
+        ecell!.artworkPlaylistCollectionView.dataSource = ecell!.musicArtworkCollectionDelegate
+        ecell!.musicArtworkCollectionDelegate!.appleMusic = appleMusic
+        ecell!.musicArtworkCollectionDelegate!.playlist = playlist
     }
     
+}
+
+/**********************************************************/
+
+// Display a collection of Albums image of the playlist.
+class MusicArtworkCollectionViewCell : UICollectionViewCell {
+    @IBOutlet weak var image: UIImageView!
+    
+}
+
+class MusicArtworkCollectionDelegate : NSObject, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return artworks.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MusicArtworkCollectionViewCell", for: indexPath) as! MusicArtworkCollectionViewCell
+        
+        let artwork = artworks[indexPath.row]
+        cell.image.load(url: artwork.imageURL(size: CGSize(width: 24, height: 24)))
+        return cell
+    }
+   
+    var artworks = [AppleMusicArtwork]()
+    var appleMusic : FetchAppleMusic?
+    weak var collectionView : UICollectionView?
+    
+    var playlist : FetchAppleMusic.PlayListInfo? {
+        didSet {
+            appleMusic?.getTracksForPlaylist(playList: playlist!, limit : 4, completion: { (tracks) in
+                for track in tracks {
+                    if( track.artworkUrl != nil && !track.artworkUrl!.isEmpty ) {
+                        self.artworks.append(AppleMusicArtwork(url: track.artworkUrl!))
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.collectionView?.reloadData()
+                }
+            })
+        }
+    }
 }

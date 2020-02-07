@@ -36,14 +36,14 @@ class UIWorkoutMusicTabBarController : UITabBarController {
                              buildCtrler.appleMusic = self.appleMusic
                         } else if let sortCtrler = subController as? SortPlayListMasterViewController {
                             sortCtrler.appleMusic = self.appleMusic
+                        } else if let playCtrler = subController as? PlayWorkoutPlayController {
+                            playCtrler.appleMusic = self.appleMusic
                         }
                     
                     } else if let seachCtrler = viewController as? SearchSongViewController {
                         seachCtrler.appleMusic = self.appleMusic
-                    } else if let playCtrler = viewController as? PlayWorkoutPlayController {
-                        playCtrler.appleMusic = self.appleMusic
+                    
                     }
-        
                 }
             } else {
                 DispatchQueue.main.async {

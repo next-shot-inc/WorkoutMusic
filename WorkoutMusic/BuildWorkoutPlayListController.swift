@@ -200,7 +200,7 @@ class DetailViewTableViewControler : UITableViewController {
        // navigationItem.rightBarButtonItem = self.editButtonItem
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveWPlayList(_:)))
         navigationItem.rightBarButtonItems = [self.editButtonItem, saveButton]
-        navigationItem.leftItemsSupplementBackButton = true
+        //navigationItem.leftItemsSupplementBackButton = true
         
         // Do any additional setup after loading the view.
         if( detailItem != nil ) {

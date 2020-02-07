@@ -35,6 +35,15 @@ class EditSongPlayedIntervalController : UIViewController {
         updateLabels()
     }
     
+    @IBAction func timeRangeSliderEditingEnd(_ sender: Any) {
+        if( playing ) {
+            // Stop the current song
+            play(self)
+            // Restart the current song with the new time interval settings
+            play(self)
+        }
+    }
+    
     func updateLabels() {
         let fmt = DateComponentsFormatter()
         fmt.allowedUnits = [.minute, .second]
@@ -65,7 +74,9 @@ class EditSongPlayedIntervalController : UIViewController {
         if( playing ) {
             appleMusic?.stopPlaying()
             playing = false
-            (sender as! UIButton).setTitle("Play", for: .normal)
+            if let button = sender as? UIButton {
+                button.setTitle("Play", for: .normal)
+            }
         } else {
             var wtracks = [WorkoutMusicPlayListTrack]()
             if( lastEdited == .lowerValue ) {
@@ -79,7 +90,9 @@ class EditSongPlayedIntervalController : UIViewController {
                 wtracks.append(pw)
             }
             appleMusic?.playSongs(wtracks: wtracks, complete: false)
-            (sender as! UIButton).setTitle("Stop", for: .normal)
+            if let button = sender as? UIButton {
+                  button.setTitle("Stop", for: .normal)
+            }
             playing = true
         }
     }

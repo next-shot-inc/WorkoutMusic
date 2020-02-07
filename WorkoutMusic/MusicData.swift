@@ -15,6 +15,10 @@ import CoreData
 
 class SongBPMStore {
     func retrieve(song: FetchAppleMusic.MusicTrackInfo) -> Int? {
+        if( song.storeId == nil ) {
+            return nil
+        }
+        
         guard let managedContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {
             return nil
         }
@@ -33,6 +37,10 @@ class SongBPMStore {
     }
     
     func save(song: FetchAppleMusic.MusicTrackInfo) {
+        if( song.storeId == nil ) {
+            return 
+        }
+        
         guard let managedContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {
             return
         }

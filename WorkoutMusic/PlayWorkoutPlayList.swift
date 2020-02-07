@@ -357,8 +357,7 @@ class PlayWorkoutPlayController : UIViewController {
         if segue.identifier == "editWorkout" {
             if let cell = sender as? PlayWorkoutPlayListTableCell? {
                 let object = cell?.playlistData
-                let navController = segue.destination as! UINavigationController
-                if let controller = navController.topViewController as? DetailViewTableViewControler {
+                if let controller = segue.destination as? DetailViewTableViewControler {
                    controller.appleMusic = appleMusic
                    controller.object = object
                 }
