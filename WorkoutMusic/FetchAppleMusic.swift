@@ -10,6 +10,20 @@ import Foundation
 import StoreKit
 import MediaPlayer
 
+extension URLComponents {
+
+    func getQueryStringParameter(name: String) -> String? {
+        if( self.queryItems != nil ) {
+            let item = self.queryItems!.first(where: { (item) in item.name == name })
+            if( item != nil ) {
+                return item!.value
+            }
+        }
+        return nil
+    }
+
+}
+
 class FetchAppleMusic {
     var countryCode = String()
     var userToken = String()
@@ -317,7 +331,9 @@ class FetchAppleMusic {
         }
     }
     
-    func getTracksForPlaylist(playList: PlayListInfo, limit: Int = 100, beginAt: Int = 0, completion: @escaping ([MusicTrackInfo]) -> ()) {
+    
+    
+    func getTracksForPlaylist(playList: PlayListInfo, limit: Int = 100, beginAt: Int = 0, completion: @escaping ([MusicTrackInfo], Int) -> ()) {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.music.apple.com"
@@ -329,7 +345,7 @@ class FetchAppleMusic {
         ]
         
         guard let url = components.url else {
-            return completion([])
+            return completion([], 0)
         }
         var request = URLRequest(url: url)
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
@@ -349,8 +365,14 @@ class FetchAppleMusic {
                     
                     // The response is of type Library.Song (which is different from Song)
                     if let response = json as? [String: Any] {
-                        //let nextMarker = response["next"] as? String?
-                        //print(nextMarker)
+                        let nextMarker = response["next"] as? String
+                        var offset : Int?
+                        if nextMarker != nil {
+                            let nextMarkerURL = URLComponents(string: nextMarker!)
+                            if let soffset = nextMarkerURL?.getQueryStringParameter(name: "offset") {
+                                offset = Int(soffset)
+                            }
+                        }
                         if let datas = response["data"] as? [[String:Any]] {
                             var tracks = [MusicTrackInfo]()
                             for data in datas {
@@ -359,9 +381,9 @@ class FetchAppleMusic {
                                     tracks.append(musicTrack!)
                                 }
                             }
-                            completion(tracks)
+                            completion(tracks, offset ?? 0)
                         } else {
-                            completion( [] )
+                            completion( [] , 0)
                         }
                         
                     }

@@ -70,7 +70,7 @@ class SearchSongTableViewControler : UITableViewController {
         self.genres.removeAll()
         self.songs.removeAll()
         for song in songs {
-            let genre = song.genres[0]
+            let genre = song.genres[0].capitalized
             var sectionIndex = genres.firstIndex(of: genre)
             if( sectionIndex == nil ) {
                 genres.append(genre)
@@ -247,6 +247,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
             DispatchQueue.main.async {
                 self.searchAndSortHelper.existingPlayListTracks = musicTracks
                 self.searchButtton.isEnabled = true
+                self.checkForSongsInPlayList(update: false)
             }
         })
         
@@ -288,6 +289,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
             tableViewCtrler.setSongs(songs: filtered_songs)
             
             DispatchQueue.main.async {
+                self.checkForSongsInPlayList(update: false)
                 self.searchButtton.isHighlighted = false
                 self.songsTableView.reloadData()
                 if( filtered_songs.count > 1 ) {
@@ -317,6 +319,7 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
         DispatchQueue.main.async {
             self.searchAndSortHelper.existingPlayListTracks = musicTracks
             self.searchSongTableViewController.changeCurrentPlayListName()
+            self.checkForSongsInPlayList(update: true)
         }
     }
     
@@ -359,13 +362,8 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
                     // See if it is not already in the existing workout list
                     self.searchAndSortHelper.setInPlayListFlag(song: song)
                     
-                    switch musicTracks[0].playId {
-                    case .catalog:
+                    if( musicTracks[0].storeId != nil ) {
                         song.search = .searchedAndFound
-                    case .purchased:
-                        song.search = .searchedAndFound
-                    default:
-                        print("got library id only")
                     }
                     
                     if( self.selectedSong === song ) {
@@ -379,6 +377,28 @@ class SearchSongViewController : UIViewController, PlayAndAddToPlayListViewDeleg
                 }
             }
         })
+    }
+    
+    // Cross-reference songs in current playlist
+    private func checkForSongsInPlayList(update: Bool) {
+        for songsPerGenre in searchSongTableViewController.songs.values {
+            for song in songsPerGenre {
+                for musicTrack in self.searchAndSortHelper.existingPlayListTracks {
+                    if( musicTrack.artistName == song.song.authorName && musicTrack.albumName == song.song.albumName && musicTrack.shortName() == song.songName() ) {
+                        if( musicTrack.storeId != nil ) {
+                            song.search = .searchedAndFound
+                            song.inPlayList = true
+                            song.track = musicTrack
+                            song.track?.bpm = song.song.bpm
+                            if( update ) {
+                                searchSongTableViewController.reloadSong(song: song)
+                            }
+                            break
+                        }
+                    }
+                }
+            }
+        }
     }
     
 }

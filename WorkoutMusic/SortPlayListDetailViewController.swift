@@ -23,15 +23,32 @@ class SortPlayListDetailViewTableController : UITableViewController {
     
     weak var sortSongViewController : SortPlayListDetailViewController?
     
-    var songs = [Song]()
-    var filtered_songs = [SearchAndSortPlaylistSongHelper.PlayListSong]()
+    var genres = [String]()
+    var songs = [Int: [Song]]()
+    
+    var filtered_songs = [Int: [Song]]()
     var filter_applied = false
     
-    func setTracks(tracks: [FetchAppleMusic.MusicTrackInfo]) {
+    func addTracks(tracks: [FetchAppleMusic.MusicTrackInfo]) -> [Song] {
+        var added = [Song]()
+        
         for track in tracks {
+            let genre = track.genreName
+            var sectionIndex = genres.firstIndex(of: genre)
+            if( sectionIndex == nil ) {
+                genres.append(genre)
+                sectionIndex = genres.count-1
+            }
+            var songsInGenre = self.songs[sectionIndex!]
+            if( songsInGenre == nil ) {
+                songsInGenre = [Song]()
+            }
             let song = Song(track: track)
-            songs.append(song)
+            songsInGenre!.append(song)
+            added.append(song)
+            self.songs[sectionIndex!] = songsInGenre!
         }
+        return added
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -43,11 +60,20 @@ class SortPlayListDetailViewTableController : UITableViewController {
             noDataLabel.numberOfLines = 0
             tableView.backgroundView  = noDataLabel
             tableView.separatorStyle  = .none
+            return 1
         } else {
             tableView.backgroundView = nil
             tableView.separatorStyle = .singleLine
+            return genres.count
         }
         return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if( genres.count == 0 ) {
+            return ""
+        }
+        return genres[section]
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,20 +81,19 @@ class SortPlayListDetailViewTableController : UITableViewController {
             return 0
         }
         if( filter_applied == false ) {
-            return songs.count
+            if( genres.count == 0 ) {
+                return 0
+            }
+            return songs[section]!.count
         } else {
-            return filtered_songs.count
+            return filtered_songs[section]!.count
         }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SortPlayListDetailTableCell", for: indexPath) as! SortPlayListDetailTableCell
         
-        if( filter_applied == false ) {
-            configureCell(cell, with: songs[indexPath.row])
-        } else {
-            configureCell(cell, with: filtered_songs[indexPath.row])
-        }
+        configureCell(cell, with: getSong(index: indexPath)!)
         return cell
     }
 
@@ -105,28 +130,36 @@ class SortPlayListDetailViewTableController : UITableViewController {
     }
     
     func getSong(index: IndexPath) -> Song? {
+        let songList : [Song]?
         if( filter_applied ) {
-            return filtered_songs[index.row]
+            songList = filtered_songs[index.section]
         } else {
-            return songs[index.row]
+            songList = songs[index.section]
         }
+        if( songList != nil ) {
+            if( index.row >= 0 && index.row < songList!.count ) {
+               return songList![index.row]
+            }
+        }
+        return nil
     }
     
     func findSong(song: Song) -> IndexPath? {
-        let index : Int?
-        if( filter_applied ) {
-            index = filtered_songs.firstIndex(where: { (isong) -> Bool in
-                isong === song
-            })
-        } else {
-            index = songs.firstIndex { (isong) -> Bool in
-                isong === song
-            }
-        }
-        if( index != nil ) {
-            return IndexPath(item: index!, section: 0)
-        } else {
+        func find(table: [Int: [Song]]) -> IndexPath? {
+            for songList in table.values.enumerated() {
+                let firstIndex = songList.element.firstIndex { (isong) -> Bool in
+                    isong === song
+                }
+                if( firstIndex != nil ) {
+                    return IndexPath(row: firstIndex!, section: songList.offset)
+                }
+             }
             return nil
+        }
+        if( filter_applied ) {
+            return find(table: filtered_songs)
+        } else {
+            return find(table: songs)
         }
     }
     
@@ -149,11 +182,15 @@ class SortPlayListDetailViewTableController : UITableViewController {
                 let filterValue = Int(sortSongViewController!.bpmStepper.value)
                 let songBpm = song.track?.bpm ?? 0
                 if( songBpm < filterValue + 5 || songBpm >= filterValue - 5 ) {
-                    filtered_songs.append(song)
-                    let newIndexPath = IndexPath(row: filtered_songs.count-1, section: 0)
-                    tableView.beginUpdates()
-                    tableView.insertRows(at: [newIndexPath], with: .fade)
-                    tableView.endUpdates()
+                    if let section = genres.firstIndex(of: song.track!.genreName) {
+                        var array = filtered_songs[section] ?? [Song]()
+                        array.append(song)
+                        filtered_songs[section] = array
+                        let newIndexPath = IndexPath(row: array.count-1, section: section)
+                        tableView.beginUpdates()
+                        tableView.insertRows(at: [newIndexPath], with: .fade)
+                        tableView.endUpdates()
+                    }
                 }
             }
         }
@@ -164,6 +201,25 @@ class SortPlayListDetailViewTableController : UITableViewController {
             let index = findSong(song: song)
             self.tableView.selectRow(at: index, animated: false, scrollPosition: .none)
         }
+    }
+    
+    func filter(bpm: Int) {
+        for elements in songs {
+            let array = elements.value.filter({ (song) -> Bool in
+                song.track!.bpm <= bpm + 5 && song.track!.bpm > bpm - 5
+            })
+            filtered_songs[elements.key] = array
+        }
+        filter_applied = true
+        self.tableView.reloadData()
+    }
+    
+    func allSongs() -> [Song] {
+        var songs = [Song]()
+        for list in self.songs.values {
+            songs.append(contentsOf: list)
+        }
+        return songs
     }
 }
 
@@ -226,49 +282,14 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
         // Update the user interface for the detail item.
         if let detail = detailItem {
             let playList = FetchAppleMusic.PlayListInfo(name: detail.name, description: detail.description, url: detail.url)
-            
-            appleMusic?.getTracksForPlaylist(playList:  playList, completion: { (tracks) in
-               
+            fetchPlayListData(playList: playList, beginAt: 0)
+           
+            // See which of the track exist in the current play list track
+            self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: self.playAndAddToPlayListView.controller.currentPlayListName, completion: { musicTracks in
                 DispatchQueue.main.async {
-                    self.sortPlayListDetailViewTableController.setTracks(tracks: tracks)
-                    self.songsDetailView.reloadData()
-                    
-                    let songs = self.sortPlayListDetailViewTableController.songs
-                    self.songsWithoutBPMs.unsafeCounter = songs.count
-                    self.songsWithoutBPMs.postContentAddedNotification()
-                     
-                    // See which of the track exist in the current play list track
-                    self.searchAndSortHelper.retrieveCurrentPlayListTracks( playListName: self.playAndAddToPlayListView.controller.currentPlayListName, completion: { musicTracks in
-                        DispatchQueue.main.async {
-                            self.searchAndSortHelper.existingPlayListTracks = musicTracks
-                            for song in songs {
-                                self.searchAndSortHelper.setInPlayListFlag(song: song)
-                            }
-                            self.songsDetailView.reloadData()
-                            self.sortPlayListDetailViewTableController.reselectSongAfterReloadTable()
-                        }
-                    })
-                    
-                    // Get PBM for each song
-                    let songBPStorage = SongBPMStore()
-                    for song in songs {
-                        if let songBPM = songBPStorage.retrieve(song: song.track!) {
-                            self.songsWithoutBPMs.add()
-                            song.track!.bpm = songBPM
-                            continue
-                        }
-                        let fetchSongBpm = FetchSongBPM()
-                        fetchSongBpm.getSongPBM(song: song.track!, completion: { (bpm) in
-                            song.track!.bpm = bpm
-                            self.songsWithoutBPMs.add()
-                            
-                            DispatchQueue.main.async {
-                                self.sortPlayListDetailViewTableController.reloadSong(song: song)
-                                songBPStorage.save(song: song.track!)
-                            }
-                        })
-                    }
-                
+                    self.searchAndSortHelper.existingPlayListTracks = musicTracks
+                    self.checkForSongsInPlayList()
+                    self.sortPlayListDetailViewTableController.reselectSongAfterReloadTable()
                 }
             })
         }
@@ -286,7 +307,7 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
         searchAndSortHelper = SearchAndSortPlaylistSongHelper(appleMusic: appleMusic!)
         
         navigationItem.backBarButtonItem?.title = "Back"
-        navigationItem.title = "Select songs (by BPM) from \"" + fromPlayListName + "\" and add to ..."
+        navigationItem.title = "Select from \"" + fromPlayListName + "\" & Add to ..."
         
         playAndAddToPlayListView = loadNibView(nibName: "PlayAndAddToPlayListView", into:customContainerView) as? UIPlayAndAddToPlayListView
         playAndAddToPlayListView.delegate = self
@@ -304,11 +325,7 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
     
     @IBAction func filterSongsByPBM(_ sender: Any) {
         let value = Int(bpmStepper.value)
-        sortPlayListDetailViewTableController.filtered_songs = sortPlayListDetailViewTableController.songs.filter({ (song) -> Bool in
-            song.track!.bpm <= value + 5 && song.track!.bpm > value - 5
-        })
-        sortPlayListDetailViewTableController.filter_applied = true
-        songsDetailView.reloadData()
+        sortPlayListDetailViewTableController.filter(bpm: value)
         applyFilterButton.isSelected = true
     }
     
@@ -329,8 +346,10 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
     func changedCurrentPlaylist(playListName: String, musicTracks: [FetchAppleMusic.MusicTrackInfo]) {
         DispatchQueue.main.async {
             self.searchAndSortHelper.existingPlayListTracks = musicTracks
-            for song in self.sortPlayListDetailViewTableController.songs {
-                self.searchAndSortHelper.setInPlayListFlag(song: song)
+            for songs in self.sortPlayListDetailViewTableController.songs.values {
+                for song in songs {
+                    self.searchAndSortHelper.setInPlayListFlag(song: song)
+                }
             }
             self.songsDetailView.reloadData()
             self.sortPlayListDetailViewTableController.reselectSongAfterReloadTable()
@@ -341,5 +360,58 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
         get {
             return playAndAddToPlayListView.selectedSong
         }
+    }
+    
+    func fetchPlayListData(playList: FetchAppleMusic.PlayListInfo, beginAt: Int = 0) {
+        
+        appleMusic?.getTracksForPlaylist(playList:  playList, limit: 100, beginAt: beginAt, completion: { (tracks, moreToFetch) in
+            
+            DispatchQueue.main.async {
+                let filtered_tracks = tracks.filter({ (track) -> Bool in
+                    if( track.genreName.isEmpty ) {
+                        return true
+                    }
+                    return genreSettings.genresPreference(appleGenreName: track.genreName)
+                })
+                
+                let songs = self.sortPlayListDetailViewTableController.addTracks(tracks: filtered_tracks)
+                self.checkForSongsInPlayList()
+                self.songsDetailView.reloadData()
+                
+                self.songsWithoutBPMs.unsafeCounter += songs.count
+                self.songsWithoutBPMs.postContentAddedNotification()
+                
+                // Get PBM for each song
+                let songBPStorage = SongBPMStore()
+                for song in songs {
+                    if let songBPM = songBPStorage.retrieve(song: song.track!) {
+                        self.songsWithoutBPMs.add()
+                        song.track!.bpm = songBPM
+                        continue
+                    }
+                    let fetchSongBpm = FetchSongBPM()
+                    fetchSongBpm.getSongPBM(song: song.track!, completion: { (bpm) in
+                        song.track!.bpm = bpm
+                        self.songsWithoutBPMs.add()
+                        
+                        DispatchQueue.main.async {
+                            self.sortPlayListDetailViewTableController.reloadSong(song: song)
+                            songBPStorage.save(song: song.track!)
+                        }
+                    })
+                }
+            }
+            
+            if( moreToFetch > 0 ) {
+                self.fetchPlayListData(playList: playList, beginAt: moreToFetch)
+            }
+        })
+    }
+    
+    private func checkForSongsInPlayList() {
+        for song in self.sortPlayListDetailViewTableController.allSongs() {
+            self.searchAndSortHelper.setInPlayListFlag(song: song)
+        }
+        self.songsDetailView.reloadData()
     }
 }

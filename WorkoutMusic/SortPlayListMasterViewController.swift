@@ -16,6 +16,8 @@ class SortPlayListMasterCell : UITableViewCell {
     var musicArtworkCollectionDelegate : MusicArtworkCollectionDelegate?
 }
 
+/// This class controls the display of the current user playlist
+/// to give to the sorting window.
 class SortPlayListMasterViewController : UITableViewController {
     var appleMusic : FetchAppleMusic? {
         didSet {
@@ -107,6 +109,7 @@ class SortPlayListMasterViewController : UITableViewController {
         return false
     }
 
+    /// Configure the playlist name, the playlist description and the playlist music artwork collection view.
     func configureCell(_ cell: UITableViewCell, withPlayList playlist: FetchAppleMusic.PlayListInfo) {
         let ecell = cell as? SortPlayListMasterCell
         ecell!.playListName!.text = playlist.name
@@ -123,7 +126,7 @@ class SortPlayListMasterViewController : UITableViewController {
 
 /**********************************************************/
 
-// Display a collection of Albums image of the playlist.
+/// Display a collection of Albums image of the playlist.
 class MusicArtworkCollectionViewCell : UICollectionViewCell {
     @IBOutlet weak var image: UIImageView!
     
@@ -148,7 +151,7 @@ class MusicArtworkCollectionDelegate : NSObject, UICollectionViewDataSource {
     
     var playlist : FetchAppleMusic.PlayListInfo? {
         didSet {
-            appleMusic?.getTracksForPlaylist(playList: playlist!, limit : 4, completion: { (tracks) in
+            appleMusic?.getTracksForPlaylist(playList: playlist!, limit : 4, completion: { (tracks, offset) in
                 for track in tracks {
                     if( track.artworkUrl != nil && !track.artworkUrl!.isEmpty ) {
                         self.artworks.append(AppleMusicArtwork(url: track.artworkUrl!))

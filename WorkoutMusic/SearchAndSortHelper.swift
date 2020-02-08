@@ -64,7 +64,7 @@ class SearchAndSortPlaylistSongHelper {
     func retrieveCurrentPlayListTracks( playListName: String, completion: @escaping ([FetchAppleMusic.MusicTrackInfo]) -> ()) {
         appleMusic.searchOnePlaylist(searchTerm: playListName, exactMatch: true, completion: { (playListInfos) in
             if( playListInfos.count == 1 ) {
-                self.appleMusic.getTracksForPlaylist(playList: playListInfos[0]) { (musicTracks) in
+                self.appleMusic.getTracksForPlaylist(playList: playListInfos[0]) { (musicTracks, offset) in
                     completion(musicTracks)
                 }
             } else {

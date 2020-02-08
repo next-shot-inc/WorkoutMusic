@@ -14,12 +14,13 @@ class SearchSongGenreCell : UICollectionViewCell {
     
     @IBAction func toggleButtonPushed(_ sender: Any) {
         toggleButton.isSelected = !toggleButton.isSelected
-        controller?.set(genre: toggleButton.title(for: .normal) ?? "", selected: toggleButton.isSelected)
+        controller?.set(genre: genre, selected: toggleButton.isSelected)
     }
     @IBOutlet weak var toggleButton: UIButton!
+    var genre = String()
 }
 
-class SearchSongGenresCollectionViewController : UICollectionViewController {
+class SearchSongGenresCollectionViewController : UICollectionViewController, UICollectionViewDelegateFlowLayout {
     var genres = ["electronic", "rock", "heavy metal", "pop", "jazz", "country", "hip hop", "rap", "classical", "punk", "funk", "folk", "blues", "latin"]
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -32,8 +33,9 @@ class SearchSongGenresCollectionViewController : UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCollectionViewCell", for: indexPath) as! SearchSongGenreCell
         
-        cell.toggleButton.setTitle(genres[indexPath.row], for: .normal)
-        cell.toggleButton.setTitle(genres[indexPath.row], for: .selected)
+        cell.genre = genres[indexPath.row]
+        cell.toggleButton.setTitle(genres[indexPath.row].capitalized, for: .normal)
+        cell.toggleButton.setTitle(genres[indexPath.row].capitalized, for: .selected)
         if let state = genreSettings.genresPreference[genres[indexPath.row]] {
             cell.toggleButton.isSelected = state
         }
@@ -44,6 +46,18 @@ class SearchSongGenresCollectionViewController : UICollectionViewController {
     func set(genre: String, selected: Bool) {
         genreSettings.genresPreference[genre] = selected
         genreSettings.save()
+    }
+    
+    lazy var cstCellSize : CGSize = {
+        // Use longest label to size all, so that all the cells are properly aligned.
+        let itemSize = "Heavy Metal".size(withAttributes: [
+            NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 17)
+        ])
+        return CGSize(width: itemSize.width + 46, height: max(itemSize.height, 28))
+    }()
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return cstCellSize
     }
 }
 
@@ -66,12 +80,28 @@ class GenreSettings {
         defaults.set(genresPreference, forKey: "preferredGenres")
     }
     
-    var genresToAppleMusicGenres : [String:String] = [
-        "electronic" : "Electronic", "rock" : "Rock", "heavy metal" : "Metal",
-        "pop" : "Pop", "jazz": "Jazz" , "country" : "Country Rock", "hip hop" : "Hip hop",
-        "rap" : "Rap", "classical": "Classical" , "punk" : "Punk" , "funk" : "Funk",
-        "folk" : "Folk", "blues" : "Blues", "latin" : "Latin"
+    private var appleMusicGenresToGenres : [String: [String]] = [
+        "Electronic" : ["electronic"], "Rock" : ["rock"], "Metal" : ["heavy metal"],
+        "Hard Rock " : [" heavy metal" ], 
+        "Pop" : ["pop"], "Jazz": ["jazz"] , "Country Rock" : ["country"], "Hip hop" : ["hip hop"],
+        "Alternative" : ["pop", "rock"],
+        "Rap" : [ "rap"], "Classical": ["classical"] , "Punk" : ["punk" ], "Funk" : ["funk"],
+        "Folk" : ["folk"], "Blues" : ["blues"], "Latin" : ["latin"]
     ]
+    
+    // Return true if the genres is to be included in the list
+    func genresPreference(appleGenreName: String) -> Bool {
+        if let simpleGenres = appleMusicGenresToGenres[appleGenreName] {
+            var genrePrefUnion = false
+            for genre in simpleGenres {
+                if let pref = genresPreference[genre]  {
+                    genrePrefUnion = genrePrefUnion || pref
+                }
+            }
+            return genrePrefUnion
+        }
+        return true
+    }
 }
 
 let genreSettings = GenreSettings()

@@ -108,6 +108,8 @@ class TracksDownloadManager {
 }
 
 /// Show for each music track, the time interval selected to play
+/// This controller can be called from two places: either from an existing WorkoutPlayList
+/// or from a collection of playlists to pick songs from.
 class DetailViewTableViewControler : UITableViewController {
     weak var appleMusic : FetchAppleMusic?
     var wplaylist = WorkoutMusicPlayList()
@@ -117,6 +119,7 @@ class DetailViewTableViewControler : UITableViewController {
     var object: WorkoutPlayListData?
     var hasChanges = false
     
+    /// Configure the table when coming from a list of playlists to build a new workout playlist
     func configureViewFromPlayLists() {
         if( detailItem == nil ) {
             return
@@ -127,7 +130,7 @@ class DetailViewTableViewControler : UITableViewController {
         for detail in detailItem! {
             let playList = FetchAppleMusic.PlayListInfo(name: detail.name, description: detail.description, url: detail.url)
             downloadGroup.enter()
-            appleMusic?.getTracksForPlaylist(playList:  playList, completion: { (tracks) in
+            appleMusic?.getTracksForPlaylist(playList:  playList, completion: { (tracks, offset) in
                 self.tracksDownloadManager.add(tracks: tracks)
                 downloadGroup.leave()
             })
@@ -140,6 +143,7 @@ class DetailViewTableViewControler : UITableViewController {
         }
     }
     
+    /// Configure the table when coming from an existing workout playlist
     func configureViewFromPlayListData() {
         guard let playListData = object else {
             return
@@ -165,6 +169,7 @@ class DetailViewTableViewControler : UITableViewController {
         }
     }
     
+    /// Finalize the configration of the view shared between the two entry paths
     func configureView() {
         DispatchQueue.main.async {
             // Your UI Updation here

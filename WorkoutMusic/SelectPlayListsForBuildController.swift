@@ -137,6 +137,7 @@ class MasterViewController: UITableViewController {
         return false
     }
 
+    /// Configure the playlist name, description and playlist music artwork collection view
     func configureCell(_ cell: UITableViewCell, withPlayList playlist: FetchAppleMusic.PlayListInfo) {
         let ecell = cell as? MasterViewPlayListCell
         ecell!.name!.text = playlist.name

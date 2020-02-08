@@ -273,6 +273,8 @@ class PlayWorkoutPlayController : UIViewController {
     
     var appleMusic: FetchAppleMusic?
     
+    @IBOutlet weak var funkyLabel: UILabel!
+    @IBOutlet weak var funkyImage: UIImageView!
     @IBOutlet weak var currentMusicArtworkImageView: UIImageView!
     @IBOutlet weak var workoutPlayButton: UIButton!
     @IBOutlet weak var workoutsTableView: UITableView!
@@ -336,6 +338,8 @@ class PlayWorkoutPlayController : UIViewController {
         currentMusicArtworkImageView.image = nil
         nowPlayingLabel.text = nil
         workoutPlayButton.setTitle("Start", for: .normal)
+        funkyImage.isHidden = true
+        funkyLabel.isHidden = true
     }
     
     // Execute the playlist linked to the workout
