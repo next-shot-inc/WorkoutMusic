@@ -287,11 +287,28 @@ class PlayWorkoutPlayController : UIViewController {
         }
     }
     var editingTable = false
-    var playing = false
+    enum  PlayingState { case stopped, paused, running }
+    var playingState : PlayingState = .stopped
     var timer : Timer?
     
     @IBOutlet weak var nowPlayingLabel: UILabel!
     @IBOutlet weak var workoutIntensityView: WorkoutIntensityView!
+    @IBOutlet weak var stickFigureView: RunningStickFigureView!
+    
+    struct StickFigureState {
+        var duration = 0
+        var bpm = 0
+        mutating func setupAnimation(stickFigureView: RunningStickFigureView, bpm: Int, duration: Int) {
+            self.bpm = bpm
+            self.duration = duration
+            stickFigureView.setup(animate: true, bpm: bpm, duration: duration)
+        }
+        mutating func resumeAnimation(stickFigureView: RunningStickFigureView, duration: Int) {
+            self.duration = duration
+            stickFigureView.setup(animate: true, bpm: bpm, duration: duration)
+        }
+    }
+    var stickFigureState = StickFigureState()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -302,6 +319,7 @@ class PlayWorkoutPlayController : UIViewController {
         workoutPlayButton.isEnabled = false
         countdownLabel.text = ""
         nowPlayingLabel.text = nil
+        stickFigureView.isHidden = true
         
         MPMusicPlayerController.applicationMusicPlayer.beginGeneratingPlaybackNotifications()
 
@@ -340,20 +358,41 @@ class PlayWorkoutPlayController : UIViewController {
         workoutPlayButton.setTitle("Start", for: .normal)
         funkyImage.isHidden = true
         funkyLabel.isHidden = true
+        stickFigureView.isHidden = false
+        
+        if( playingState == .running ) {
+            appleMusic?.stopPlaying()
+            playingState = .stopped
+            stickFigureView.stopAnimation()
+        }
+    }
+    
+    func getSongRemainingDuration() -> Double {
+        if( selectedWorkout != nil && workoutIntensityView.cursorLocationInS != nil ) {
+           return self.selectedWorkout!.totalDuration - self.workoutIntensityView.cursorLocationInS!
+        }
+        return 0
     }
     
     // Execute the playlist linked to the workout
     @IBAction func executeWorkout(_ sender: Any) {
-        if( playing == false ) {
+        if( playingState == .stopped ) {
             if( selectedWorkout != nil ) {
                 appleMusic?.playSongs(workoutMusic: selectedWorkout!.tracks)
-                playing = true
+                playingState = .running
                 workoutPlayButton.setTitle("Pause", for: .normal)
             }
+        } else if ( playingState == .paused ) {
+            appleMusic?.resumePlaying()
+            workoutPlayButton.setTitle("Pause", for: .normal)
+            playingState = .running
+            
+            self.stickFigureState.resumeAnimation(stickFigureView: self.stickFigureView, duration: Int(self.getSongRemainingDuration()))
         } else {
             workoutPlayButton.setTitle("Resume", for: .normal)
             appleMusic?.pausePlaying()
-            playing = false
+            playingState = .paused
+            self.stickFigureView.stopAnimation()
         }
     }
     
@@ -401,9 +440,12 @@ class PlayWorkoutPlayController : UIViewController {
             let firstIndex = selectedWorkout!.tracks.firstIndex(where: { (wsong) -> Bool in
                 wsong.songId == item!.playbackStoreID
             })
+           
             if( firstIndex != nil && firstIndex! == index ) {
+                let wsong = self.selectedWorkout!.tracks[index]
+                
                 DispatchQueue.main.async {
-                    self.nowPlayingLabel.text = "Now playing: \(self.selectedWorkout!.tracks[index].songName)"
+                    self.nowPlayingLabel.text = "Now playing: \(wsong.songName)"
                     
                     if( index == 0 ) {
                         if( self.timer == nil ) {
@@ -417,6 +459,8 @@ class PlayWorkoutPlayController : UIViewController {
                     //Grab currItem's artwork
                     let image : UIImage? = item?.artwork?.image(at: CGSize(width: 80, height: 80))
                     self.currentMusicArtworkImageView.image = image
+                    self.stickFigureView.stopAnimation()
+                    self.stickFigureState.setupAnimation(stickFigureView: self.stickFigureView, bpm: wsong.bpm, duration: Int(wsong.durationTime))
                 }
             }
         }
@@ -435,15 +479,18 @@ class PlayWorkoutPlayController : UIViewController {
                 self.nowPlayingLabel.text = "Stopped playing"
                 self.timer?.invalidate()
                 self.timer = nil
+                self.stickFigureView.stopAnimation()
             }
         } else if( state == .paused ) {
             self.timer?.invalidate()
             self.timer = nil
+            self.stickFigureView.stopAnimation()
             
         } else if( state == .playing ) {
             if( timer == nil ) {
                 timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
             }
+            self.stickFigureState.resumeAnimation(stickFigureView: self.stickFigureView, duration: Int(self.getSongRemainingDuration()))
         }
     }
     

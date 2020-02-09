@@ -34,6 +34,7 @@ class SearchSongTableCell : UITableViewCell {
     @IBOutlet weak var foundMusicWidget: UIImageView!
     @IBOutlet weak var addedToPlaylistWidget: UIImageView!
     @IBOutlet weak var notFoundMusicWidget: UIImageView!
+    @IBOutlet weak var stackView: UIStackView!
 }
 
 /// The controller linked to the table listing the song retrieve from the
@@ -110,9 +111,10 @@ class SearchSongTableViewControler : UITableViewController {
         if let index = findSong(song: song) {
             if let cell = tableView.cellForRow(at: index) as? SearchSongTableCell {
                 configureCell(cell: cell, song: song)
+                cell.stackView.setNeedsLayout()
                 cell.layoutIfNeeded()
             } else {
-               self.tableView.reloadRows(at: [index], with: .none)
+                self.tableView.reloadRows(at: [index], with: .middle)
             }
         }
     }

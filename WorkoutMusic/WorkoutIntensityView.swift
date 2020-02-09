@@ -36,6 +36,7 @@ class WorkoutIntensityView : UIView {
     }
     var timeLabel : UILabel?
     var timeAxisHeight : CGFloat = 0
+    var timeAxisLabelHeight : CGFloat = 0
     var timeAxisLabelViews = [UIView]()
     
     var cursorLocationInS : Double? {
@@ -119,12 +120,13 @@ class WorkoutIntensityView : UIView {
                 let xLabel  = UILabel()
                 xLabel.font = labelFont
                 xLabel.text = timestring
-                xLabel.frame = CGRect(x: curX - labelWidth/2, y: frame.height - margin, width: labelWidth, height: 20)
+                xLabel.frame = CGRect(x: curX - labelWidth/2, y: frame.height - margin - 20, width: labelWidth, height: 20)
                 xLabel.textAlignment = .center
                 addSubview(xLabel)
                 timeAxisLabelViews.append(xLabel)
             }
             timeAxisHeight = 12
+            timeAxisLabelHeight = 20
         }
     }
     
@@ -134,7 +136,7 @@ class WorkoutIntensityView : UIView {
         }
         let margin : CGFloat = 2
         let minHeight = frame.height/20
-        let height = frame.height - 2*margin - minHeight - timeAxisHeight
+        let height = frame.height - 2*margin - minHeight - timeAxisHeight - timeAxisLabelHeight
         let bpms = playList.tracks.map { (track) -> Int in
             return track.bpm
         }
@@ -151,7 +153,7 @@ class WorkoutIntensityView : UIView {
             for track in playList.tracks {
                 let w = CGFloat(track.durationTime)*xPerSeconds
                 let h = minHeight + yPerBPM*CGFloat(track.bpm - bpm_min)
-                let rect = CGRect(x: curX, y: frame.height - margin - h - timeAxisHeight, width: w, height: h)
+                let rect = CGRect(x: curX, y: frame.height - margin - h - timeAxisHeight - timeAxisLabelHeight, width: w, height: h)
                 context.fill(rect)
                 context.stroke(rect)
                 curX = curX + w
@@ -160,7 +162,7 @@ class WorkoutIntensityView : UIView {
             if( cursorLocationInS != nil ) {
                 context.setFillColor(barLineColor.cgColor )
                 let curX = margin + CGFloat(cursorLocationInS!) * xPerSeconds
-                let rect = CGRect(x: curX-margin/2, y: margin, width: margin, height: frame.height-2*margin - timeAxisHeight)
+                let rect = CGRect(x: curX-margin/2, y: margin, width: margin, height: frame.height-2*margin - timeAxisHeight - timeAxisLabelHeight)
                 context.fill(rect)
                 context.stroke(rect)
             }
@@ -168,12 +170,16 @@ class WorkoutIntensityView : UIView {
             for xlabel in timeAxisLabelViews {
                 context.setStrokeColor(UIColor.black.cgColor)
                 let xframe = xlabel.frame
-                let bottom_stick = CGPoint(x: xframe.origin.x + xframe.width/2, y: frame.height - margin - timeAxisHeight)
+                let bottom_stick = CGPoint(x: xframe.origin.x + xframe.width/2, y: frame.height - margin - timeAxisHeight - timeAxisLabelHeight)
                 let top_stick = CGPoint(x: bottom_stick.x, y: bottom_stick.y + 5)
                 context.move(to: bottom_stick)
                 context.addLine(to: top_stick)
                 context.drawPath(using: .stroke)
             }
+            
+            //context.setLineWidth(1)
+            //let rect = CGRect(x: 2, y: 2, width: frame.width-2, height: frame.height-2)
+            //context.stroke(rect)
         }
     }
 }

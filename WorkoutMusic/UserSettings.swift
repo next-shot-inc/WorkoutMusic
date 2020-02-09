@@ -102,6 +102,7 @@ class GenreSettings {
         }
         return true
     }
+    
 }
 
 let genreSettings = GenreSettings()
@@ -116,5 +117,25 @@ class UserSettingUIController : UIViewController {
         genreCollectionView.dataSource = genreCollectionViewController
         
         genreCollectionViewController.genres.sort()
+        bpmValueLabel.text = String(Int(bpmStepper.value))
+    }
+    
+    @IBOutlet weak var stickFigureView: RunningStickFigureView!
+    
+    @IBAction func animate(_ sender: Any) {
+        animating = true
+        stickFigureView.setup(animate: true, bpm: Int(bpmStepper.value), duration: 10)
+    }
+    
+    @IBOutlet weak var bpmValueLabel: UILabel!
+    @IBOutlet weak var bpmStepper: UIStepper!
+    var animating = false
+    
+    @IBAction func changeBPMValue(_ sender: Any) {
+        bpmValueLabel.text = String(Int(bpmStepper.value))
+        stickFigureView.stopAnimation()
+        if( animating ) {
+            stickFigureView.setup(animate: true, bpm: Int(bpmStepper.value), duration: 10)
+        }
     }
 }

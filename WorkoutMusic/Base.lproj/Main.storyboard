@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Title-->
+        <!--Workout PlayList Editing UIController-->
         <scene sceneID="cE9-P2-1Qk">
             <objects>
-                <tableViewController id="iUE-GL-R43" customClass="DetailViewTableViewControler" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="iUE-GL-R43" userLabel="Workout PlayList Editing UIController" customClass="DetailViewTableViewControler" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="IZ5-zg-MkA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -122,10 +122,10 @@
             </objects>
             <point key="canvasLocation" x="415" y="-483"/>
         </scene>
-        <!--Song ....-->
+        <!--Edit Song UIController-->
         <scene sceneID="igv-cr-O3w">
             <objects>
-                <viewController id="cdr-O8-XC7" customClass="EditSongPlayedIntervalController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cdr-O8-XC7" userLabel="Edit Song UIController" customClass="EditSongPlayedIntervalController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WYy-ZF-VUt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -295,10 +295,10 @@
             </objects>
             <point key="canvasLocation" x="1688.8" y="-528.48575712143929"/>
         </scene>
-        <!--Build From Playlist-->
+        <!--Select PlayLists for Build Workout Controller-->
         <scene sceneID="smW-Zh-WAh">
             <objects>
-                <tableViewController title="Build From Playlist" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" customClass="MasterViewController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Build From Playlist" clearsSelectionOnViewWillAppear="NO" id="7bK-jq-Zjz" userLabel="Select PlayLists for Build Workout Controller" customClass="MasterViewController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="r7i-6Z-zg0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -407,16 +407,16 @@
             </objects>
             <point key="canvasLocation" x="-703.20000000000005" y="-483.50824587706148"/>
         </scene>
-        <!--Workouts Playlists-->
+        <!--Select Workout and Play-->
         <scene sceneID="ifD-Ld-2QK">
             <objects>
-                <viewController id="4mG-D0-R1U" customClass="PlayWorkoutPlayController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="4mG-D0-R1U" userLabel="Select Workout and Play" customClass="PlayWorkoutPlayController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Pxe-WY-dgq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6d8-HC-QOg">
-                                <rect key="frame" x="0.0" y="44" width="375" height="295.5"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6d8-HC-QOg">
+                                <rect key="frame" x="0.0" y="44" width="375" height="312"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WorkoutPlayListTableCell" id="RsB-vf-XBY" customClass="PlayWorkoutPlayListTableCell" customModule="WorkoutMusic" customModuleProvider="target">
@@ -497,20 +497,20 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zoa-pA-hoL" customClass="WorkoutIntensityView" customModule="WorkoutMusic" customModuleProvider="target">
-                                <rect key="frame" x="10" y="349.5" width="355" height="128"/>
+                            <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Zoa-pA-hoL" customClass="WorkoutIntensityView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="10" y="368" width="355" height="130"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="runner-music-120" translatesAutoresizingMaskIntoConstraints="NO" id="tGG-GP-HjU">
-                                        <rect key="frame" x="113.5" y="0.0" width="128" height="128"/>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="run-to-the-beat" translatesAutoresizingMaskIntoConstraints="NO" id="tGG-GP-HjU">
+                                        <rect key="frame" x="67" y="1" width="221" height="128"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="128" id="7Zc-bZ-1Nv"/>
-                                            <constraint firstAttribute="width" constant="128" id="pCn-qo-4Qa"/>
+                                            <constraint firstAttribute="height" constant="128" id="hMH-u1-OfO"/>
+                                            <constraint firstAttribute="width" constant="221" id="pCn-qo-4Qa"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Run to the beat..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBA-oz-Ai9">
-                                        <rect key="frame" x="74.5" y="46" width="206.5" height="36"/>
+                                        <rect key="frame" x="74.5" y="47.5" width="206.5" height="35.5"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                        <nil key="textColor"/>
+                                        <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                         <color key="shadowColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <size key="shadowOffset" width="2" height="2"/>
@@ -518,21 +518,21 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="7vQ-Zx-jtI"/>
+                                    <constraint firstAttribute="height" constant="130" id="7vQ-Zx-jtI"/>
                                     <constraint firstItem="tGG-GP-HjU" firstAttribute="centerX" secondItem="Zoa-pA-hoL" secondAttribute="centerX" id="Onp-wa-xkG"/>
                                     <constraint firstItem="tGG-GP-HjU" firstAttribute="centerY" secondItem="Zoa-pA-hoL" secondAttribute="centerY" id="eiy-r3-yr6"/>
                                     <constraint firstItem="uBA-oz-Ai9" firstAttribute="centerX" secondItem="Zoa-pA-hoL" secondAttribute="centerX" id="fck-5N-T3l"/>
                                     <constraint firstItem="uBA-oz-Ai9" firstAttribute="centerY" secondItem="Zoa-pA-hoL" secondAttribute="centerY" id="kkA-ox-mZ0"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Now playing ......" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lgM-B4-pmu">
-                                <rect key="frame" x="110" y="578.5" width="255" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" text="Now playing ......" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lgM-B4-pmu">
+                                <rect key="frame" x="120" y="559" width="126" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dWJ-4F-d7h" userLabel="separator1">
-                                <rect key="frame" x="0.0" y="339.5" width="375" height="2"/>
+                                <rect key="frame" x="0.0" y="356" width="375" height="2"/>
                                 <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="6o4-bh-2lu"/>
@@ -545,8 +545,8 @@
                                     <constraint firstAttribute="height" constant="2" id="S0J-NW-nwv"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZg-nD-1Ty" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
-                                <rect key="frame" x="124.5" y="527.5" width="126.5" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZg-nD-1Ty" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="124" y="508" width="127" height="41"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                 <inset key="imageEdgeInsets" minX="-6" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -567,44 +567,61 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Sy-cH-XT0">
-                                <rect key="frame" x="20" y="528" width="80" height="80"/>
+                                <rect key="frame" x="10" y="508" width="100" height="100"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="aAb-CY-9IO"/>
-                                    <constraint firstAttribute="width" constant="80" id="sxX-AH-EJo"/>
+                                    <constraint firstAttribute="height" constant="100" id="aAb-CY-9IO"/>
+                                    <constraint firstAttribute="width" constant="100" id="sxX-AH-EJo"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IL5-XY-4b9" userLabel="Countdown label">
-                                <rect key="frame" x="261" y="537.5" width="42" height="21"/>
+                                <rect key="frame" x="166.5" y="589.5" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jCM-Po-rsx" customClass="RunningStickFigureView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="315" y="506" width="55" height="90"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="55" id="akV-ME-k5Z"/>
+                                    <constraint firstAttribute="height" constant="90" id="jr1-RL-wPB"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="scaling">
+                                        <real key="value" value="0.40000000000000002"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="bottom" secondItem="lgM-B4-pmu" secondAttribute="bottom" constant="19" id="0CV-Nh-1go"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" secondItem="lgM-B4-pmu" secondAttribute="trailing" constant="10" id="1Ni-2c-g4Q"/>
+                            <constraint firstItem="jCM-Po-rsx" firstAttribute="centerY" secondItem="7Sy-cH-XT0" secondAttribute="centerY" constant="-7" id="77T-uq-bFW"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" id="7eO-Kv-pNX"/>
                             <constraint firstItem="lgM-B4-pmu" firstAttribute="top" secondItem="sZg-nD-1Ty" secondAttribute="bottom" constant="10" id="AFV-me-dVV"/>
-                            <constraint firstItem="Zoa-pA-hoL" firstAttribute="top" secondItem="dWJ-4F-d7h" secondAttribute="bottom" constant="8" symbolic="YES" id="DR5-Cm-dVI"/>
+                            <constraint firstItem="Zoa-pA-hoL" firstAttribute="top" secondItem="dWJ-4F-d7h" secondAttribute="bottom" constant="10" id="DR5-Cm-dVI"/>
                             <constraint firstItem="9v3-VA-rxv" firstAttribute="bottom" secondItem="7Sy-cH-XT0" secondAttribute="bottom" constant="10" id="KFE-hH-bbc"/>
                             <constraint firstItem="sZg-nD-1Ty" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="Knj-RB-514"/>
+                            <constraint firstItem="sZg-nD-1Ty" firstAttribute="top" secondItem="7Sy-cH-XT0" secondAttribute="top" id="Mc6-Nf-IbF"/>
                             <constraint firstAttribute="trailing" secondItem="fCj-i1-9Zc" secondAttribute="trailing" id="ODD-fL-Pvq"/>
-                            <constraint firstItem="7Sy-cH-XT0" firstAttribute="leading" secondItem="Zoa-pA-hoL" secondAttribute="leading" constant="10" id="OSa-5R-jH9"/>
+                            <constraint firstItem="7Sy-cH-XT0" firstAttribute="leading" secondItem="Zoa-pA-hoL" secondAttribute="leading" id="OSa-5R-jH9"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="top" secondItem="9v3-VA-rxv" secondAttribute="top" id="RgV-Y1-LF9"/>
+                            <constraint firstItem="jCM-Po-rsx" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lgM-B4-pmu" secondAttribute="trailing" constant="10" id="UWc-Q9-7nf"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="top" secondItem="fCj-i1-9Zc" secondAttribute="bottom" id="VUd-GF-oyh"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IL5-XY-4b9" secondAttribute="trailing" constant="10" id="Wti-BT-nXt"/>
+                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" secondItem="jCM-Po-rsx" secondAttribute="trailing" constant="5" id="XZ9-Ds-OR5"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="Xmq-3j-rNw"/>
-                            <constraint firstItem="IL5-XY-4b9" firstAttribute="centerY" secondItem="sZg-nD-1Ty" secondAttribute="centerY" id="Ze8-Ek-o1B"/>
+                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" secondItem="Zoa-pA-hoL" secondAttribute="trailing" constant="10" id="Zf1-mC-JVU"/>
                             <constraint firstItem="Zoa-pA-hoL" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" constant="10" id="bco-hF-7h3"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" secondItem="Zoa-pA-hoL" secondAttribute="trailing" constant="10" id="coI-CL-AUX"/>
                             <constraint firstItem="fCj-i1-9Zc" firstAttribute="leading" secondItem="Pxe-WY-dgq" secondAttribute="leading" id="eXa-Lo-WKF"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="trailing" secondItem="9v3-VA-rxv" secondAttribute="trailing" id="fUJ-gd-vJ4"/>
+                            <constraint firstItem="IL5-XY-4b9" firstAttribute="top" secondItem="lgM-B4-pmu" secondAttribute="bottom" constant="10" id="fbw-cn-65m"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" id="gpA-4C-PMU"/>
-                            <constraint firstItem="sZg-nD-1Ty" firstAttribute="top" secondItem="Zoa-pA-hoL" secondAttribute="bottom" constant="50" id="n2z-P4-EB0"/>
-                            <constraint firstItem="IL5-XY-4b9" firstAttribute="leading" secondItem="sZg-nD-1Ty" secondAttribute="trailing" constant="10" id="osR-rb-Imn"/>
+                            <constraint firstItem="7Sy-cH-XT0" firstAttribute="top" secondItem="Zoa-pA-hoL" secondAttribute="bottom" constant="10" id="iby-fM-hPw"/>
+                            <constraint firstItem="IL5-XY-4b9" firstAttribute="centerX" secondItem="sZg-nD-1Ty" secondAttribute="centerX" id="lhH-7y-bPb"/>
+                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IL5-XY-4b9" secondAttribute="trailing" constant="20" id="oHa-Ij-Sba"/>
                             <constraint firstItem="lgM-B4-pmu" firstAttribute="leading" secondItem="7Sy-cH-XT0" secondAttribute="trailing" constant="10" id="py7-1u-kJw"/>
+                            <constraint firstItem="jCM-Po-rsx" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sZg-nD-1Ty" secondAttribute="trailing" constant="10" id="rft-0K-6TI"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="top" secondItem="6d8-HC-QOg" secondAttribute="bottom" id="tnF-UO-oe0"/>
+                            <constraint firstItem="9v3-VA-rxv" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lgM-B4-pmu" secondAttribute="bottom" constant="10" id="vt1-EK-Ije"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="9v3-VA-rxv"/>
                     </view>
@@ -622,6 +639,7 @@
                         <outlet property="funkyImage" destination="tGG-GP-HjU" id="4kP-qo-GeV"/>
                         <outlet property="funkyLabel" destination="uBA-oz-Ai9" id="8PE-Fp-4cR"/>
                         <outlet property="nowPlayingLabel" destination="lgM-B4-pmu" id="8Ne-Qk-gxF"/>
+                        <outlet property="stickFigureView" destination="jCM-Po-rsx" id="Uob-sI-YKf"/>
                         <outlet property="workoutIntensityView" destination="Zoa-pA-hoL" id="LVN-lJ-0bi"/>
                         <outlet property="workoutPlayButton" destination="sZg-nD-1Ty" id="dSt-wN-L5G"/>
                         <outlet property="workoutsTableView" destination="6d8-HC-QOg" id="21K-pL-kKQ"/>
@@ -631,10 +649,10 @@
             </objects>
             <point key="canvasLocation" x="284" y="-1315.5922038980511"/>
         </scene>
-        <!--Workout-->
+        <!--Navigation to Play Workout-->
         <scene sceneID="kri-Us-A2g">
             <objects>
-                <navigationController id="SIj-kr-8Cg" sceneMemberID="viewController">
+                <navigationController id="SIj-kr-8Cg" userLabel="Navigation to Play Workout" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Play" image="rworkout-music-list" id="uw6-sb-FV2"/>
                     <navigationItem key="navigationItem" title="Workout" id="eSC-sK-4XO">
                         <barButtonItem key="backBarButtonItem" title="Back" id="a8N-ed-C2v"/>
@@ -653,10 +671,10 @@
             </objects>
             <point key="canvasLocation" x="-703" y="-1314"/>
         </scene>
-        <!--iWorkout Music Tab Bar Controller-->
+        <!--Main Tab Controller-->
         <scene sceneID="WNJ-Xs-ul0">
             <objects>
-                <tabBarController storyboardIdentifier="workoutTabBarController" id="poQ-qi-rS3" customClass="UIWorkoutMusicTabBarController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="workoutTabBarController" id="poQ-qi-rS3" userLabel="Main Tab Controller" customClass="UIWorkoutMusicTabBarController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="fcD-jo-ZJY"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="N3Z-aE-XBL">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -826,6 +844,7 @@
                                             <outlet property="foundMusicWidget" destination="huI-5O-8Rg" id="QFp-q1-DkC"/>
                                             <outlet property="notFoundMusicWidget" destination="uWS-KV-rh2" id="s2b-TC-FQH"/>
                                             <outlet property="songName" destination="ee4-vQ-gUy" id="Tda-hh-kmJ"/>
+                                            <outlet property="stackView" destination="lN4-wb-iqH" id="XRC-FK-3uq"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -950,30 +969,92 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4mI-y5-Jn8" customClass="RunningStickFigureView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="115.5" y="436" width="150" height="150"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="8xB-Za-2FV"/>
+                                    <constraint firstAttribute="height" constant="150" id="Wq3-KX-OKa"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="animate" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="120" minimumValue="50" maximumValue="220" stepValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="dwc-a4-92y">
+                                <rect key="frame" x="174" y="389.5" width="94" height="32"/>
+                                <connections>
+                                    <action selector="changeBPMValue:" destination="cOP-Gm-9Yr" eventType="primaryActionTriggered" id="uMe-Ey-DjI"/>
+                                </connections>
+                            </stepper>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check BPM speed:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wSv-fK-msX">
+                                <rect key="frame" x="20" y="395" width="146" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="120" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8sP-oP-GLN">
+                                <rect key="frame" x="278" y="395" width="28" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Krm-Vw-7K8">
+                                <rect key="frame" x="0.0" y="367.5" width="375" height="2"/>
+                                <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2" id="3dk-36-5uI"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2YU-Dt-63H">
+                                <rect key="frame" x="285.5" y="496" width="57" height="30"/>
+                                <state key="normal" title="Animate"/>
+                                <connections>
+                                    <action selector="animate:" destination="cOP-Gm-9Yr" eventType="primaryActionTriggered" id="nZb-E8-gOx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8sP-oP-GLN" secondAttribute="trailing" constant="10" id="0GK-pe-oXT"/>
+                            <constraint firstItem="8sP-oP-GLN" firstAttribute="leading" secondItem="dwc-a4-92y" secondAttribute="trailing" constant="10" id="21u-jW-4Gd"/>
+                            <constraint firstItem="WKA-az-Sw0" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="4mI-y5-Jn8" secondAttribute="bottom" priority="250" constant="20" id="74n-NI-2Lf"/>
+                            <constraint firstItem="dwc-a4-92y" firstAttribute="centerY" secondItem="8sP-oP-GLN" secondAttribute="centerY" id="C2s-ht-wtY"/>
                             <constraint firstItem="WKA-az-Sw0" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="cyz-dw-4t8" secondAttribute="bottom" id="GbV-TQ-50g"/>
+                            <constraint firstItem="dwc-a4-92y" firstAttribute="leading" secondItem="wSv-fK-msX" secondAttribute="trailing" constant="8" id="NAz-Bw-WP1"/>
+                            <constraint firstItem="2YU-Dt-63H" firstAttribute="leading" secondItem="4mI-y5-Jn8" secondAttribute="trailing" constant="20" id="PBf-i2-zpa"/>
+                            <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2YU-Dt-63H" secondAttribute="trailing" constant="21" id="Pk1-48-ETl"/>
                             <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="JcT-rF-1bZ" secondAttribute="trailing" constant="5" id="RfW-Ua-fhn"/>
+                            <constraint firstItem="4mI-y5-Jn8" firstAttribute="top" secondItem="wSv-fK-msX" secondAttribute="bottom" constant="20" id="TW2-7C-deK"/>
+                            <constraint firstItem="dwc-a4-92y" firstAttribute="top" secondItem="Krm-Vw-7K8" secondAttribute="bottom" constant="20" id="XVq-sM-6lD"/>
+                            <constraint firstItem="Krm-Vw-7K8" firstAttribute="leading" secondItem="WKA-az-Sw0" secondAttribute="leading" id="Zi4-yu-nb2"/>
                             <constraint firstItem="cyz-dw-4t8" firstAttribute="top" secondItem="JcT-rF-1bZ" secondAttribute="bottom" constant="19" id="cG0-0J-jOx"/>
+                            <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" secondItem="Krm-Vw-7K8" secondAttribute="trailing" id="eWk-3g-ey4"/>
+                            <constraint firstItem="Krm-Vw-7K8" firstAttribute="top" secondItem="QYz-GW-A9d" secondAttribute="bottom" constant="20" id="epa-4z-8pB"/>
+                            <constraint firstItem="4mI-y5-Jn8" firstAttribute="centerY" secondItem="2YU-Dt-63H" secondAttribute="centerY" id="gFN-kn-m5a"/>
                             <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QYz-GW-A9d" secondAttribute="trailing" constant="10" id="hf3-oj-0qe"/>
+                            <constraint firstItem="wSv-fK-msX" firstAttribute="centerY" secondItem="dwc-a4-92y" secondAttribute="centerY" id="nSF-p2-rVB"/>
                             <constraint firstItem="WKA-az-Sw0" firstAttribute="trailing" secondItem="cyz-dw-4t8" secondAttribute="trailing" constant="10" id="ne0-L3-MI4"/>
                             <constraint firstItem="cyz-dw-4t8" firstAttribute="leading" secondItem="nuG-gc-NoT" secondAttribute="leadingMargin" id="oZY-po-QC2"/>
                             <constraint firstItem="JcT-rF-1bZ" firstAttribute="top" secondItem="WKA-az-Sw0" secondAttribute="top" constant="20" id="pfe-31-d67"/>
                             <constraint firstItem="QYz-GW-A9d" firstAttribute="top" secondItem="cyz-dw-4t8" secondAttribute="bottom" constant="8" symbolic="YES" id="sCy-cF-FdI"/>
                             <constraint firstItem="QYz-GW-A9d" firstAttribute="leading" secondItem="WKA-az-Sw0" secondAttribute="leading" constant="20" id="sYn-3i-IIQ"/>
                             <constraint firstItem="cyz-dw-4t8" firstAttribute="leading" secondItem="JcT-rF-1bZ" secondAttribute="leading" id="srx-49-Avl"/>
+                            <constraint firstItem="wSv-fK-msX" firstAttribute="leading" secondItem="WKA-az-Sw0" secondAttribute="leading" constant="20" id="u3O-76-mmV"/>
+                            <constraint firstItem="4mI-y5-Jn8" firstAttribute="centerX" secondItem="cyz-dw-4t8" secondAttribute="centerX" id="viE-DR-C7c"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="WKA-az-Sw0"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="gear" catalog="system" id="u5d-n6-bmE"/>
                     <connections>
+                        <outlet property="bpmStepper" destination="dwc-a4-92y" id="SdL-OP-S7T"/>
+                        <outlet property="bpmValueLabel" destination="8sP-oP-GLN" id="s8N-L5-ek2"/>
                         <outlet property="genreCollectionView" destination="cyz-dw-4t8" id="SOQ-ze-jGb"/>
+                        <outlet property="stickFigureView" destination="4mI-y5-Jn8" id="3A2-2E-B8j"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IJr-Sh-ZuJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2054" y="-2441"/>
+            <point key="canvasLocation" x="-2055.1999999999998" y="-2441.8290854572715"/>
         </scene>
         <!--Organize Playlists to build workouts-->
         <scene sceneID="Vtr-p7-hBy">
@@ -1079,10 +1160,10 @@
             </objects>
             <point key="canvasLocation" x="-1118" y="257"/>
         </scene>
-        <!--Organize-->
+        <!--Organize Navigation-->
         <scene sceneID="aHJ-gb-fEy">
             <objects>
-                <navigationController id="a7c-Ms-W8Y" sceneMemberID="viewController">
+                <navigationController id="a7c-Ms-W8Y" userLabel="Organize Navigation" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Organize" image="tray.2.fill" catalog="system" id="nMx-IY-DUI"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="jGO-18-mD2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -1096,10 +1177,10 @@
             </objects>
             <point key="canvasLocation" x="-2228" y="257"/>
         </scene>
-        <!--Build-->
+        <!--Build Navigation-->
         <scene sceneID="Vrq-It-qD9">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SR2-Ob-l6i" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SR2-Ob-l6i" userLabel="Build Navigation" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Build" image="music.note.list" catalog="system" selectedImage="music.note" springLoaded="YES" id="7DK-yB-fh5"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="J7M-Mn-4qs">
@@ -1269,6 +1350,7 @@
                                             <outlet property="bpmLabel" destination="CPE-gE-d4f" id="elL-sC-SUq"/>
                                             <outlet property="inPlayListImage" destination="IPr-Lk-6yd" id="WUL-wi-zDA"/>
                                             <outlet property="songName" destination="XRE-AJ-Wkd" id="RrD-4a-HeQ"/>
+                                            <outlet property="stackView" destination="y9K-Bd-CZC" id="u6t-6Z-fmd"/>
                                             <outlet property="storeIdMissingImage" destination="Oy1-za-OhP" id="vdB-Qq-yDo"/>
                                         </connections>
                                     </tableViewCell>
@@ -1362,7 +1444,7 @@
         <image name="play.fill" catalog="system" width="58" height="64"/>
         <image name="plus" catalog="system" width="64" height="56"/>
         <image name="questionmark" catalog="system" width="48" height="64"/>
-        <image name="runner-music-120" width="120" height="120"/>
+        <image name="run-to-the-beat" width="221" height="128"/>
         <image name="rworkout-music-list" width="32" height="32"/>
         <image name="square" catalog="system" width="64" height="56"/>
         <image name="tray.2.fill" catalog="system" width="64" height="56"/>

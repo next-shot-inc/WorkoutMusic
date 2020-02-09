@@ -788,6 +788,11 @@ class FetchAppleMusic {
         let player = MPMusicPlayerController.applicationQueuePlayer
         player.pause()
     }
+    
+    func resumePlaying() {
+        let player = MPMusicPlayerController.applicationQueuePlayer
+        player.play()
+    }
 }
 
 class AppleMusicArtwork {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F29B32423EFEAF0000B9451 /* RunningStickFigureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F29B32323EFEAF0000B9451 /* RunningStickFigureView.swift */; };
 		2F39DF6123E366010082408F /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F39DF6023E366010082408F /* RoundedButton.swift */; };
 		2F59C5AE23DE57D00002ACCE /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5AD23DE57D00002ACCE /* UserSettings.swift */; };
 		2F59C5B023DE93310002ACCE /* SortPlayListMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2F29B32323EFEAF0000B9451 /* RunningStickFigureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningStickFigureView.swift; sourceTree = "<group>"; };
 		2F39DF6023E366010082408F /* RoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		2F59C5AD23DE57D00002ACCE /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		2F59C5AF23DE93310002ACCE /* SortPlayListMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortPlayListMasterViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				2FEC2E1023D6A4A50075C560 /* SearchSongByPBM.swift */,
+				2F29B32323EFEAF0000B9451 /* RunningStickFigureView.swift */,
 				2F89955923E61AC3006DD5DA /* GetSongBPM.swift */,
 				2F59C5B323DEADA40002ACCE /* SearchAndSortHelper.swift */,
 				2FEC2E0E23D63E040075C560 /* TimeIntervalUIView.swift */,
@@ -355,6 +358,7 @@
 				2FEC2E0D23D3CB930075C560 /* MusicData.swift in Sources */,
 				2F89955E23E7DE41006DD5DA /* RangeSlider.swift in Sources */,
 				2FEC2DDB23D39A7E0075C560 /* SceneDelegate.swift in Sources */,
+				2F29B32423EFEAF0000B9451 /* RunningStickFigureView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,7 +532,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = A8SRM3ENGN;
 				INFOPLIST_FILE = WorkoutMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -548,7 +552,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = A8SRM3ENGN;
 				INFOPLIST_FILE = WorkoutMusic/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
