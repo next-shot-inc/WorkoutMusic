@@ -254,6 +254,10 @@ class PlayWorkoutPlayListController : UITableViewController , NSFetchedResultsCo
                 tableView.deleteRows(at: [indexPath!], with: .fade)
             case .update:
                 configureCell(tableView.cellForRow(at: indexPath!)!, withPlayList: anObject as! WorkoutPlayListData)
+                if( tableView.indexPathForSelectedRow == indexPath ) {
+                    let workout = StoredWorkoutMusicPlayList(data: anObject as! WorkoutPlayListData)
+                    mainController?.selectedWorkout = workout
+                }
             case .move:
                 configureCell(tableView.cellForRow(at: indexPath!)!, withPlayList: anObject as! WorkoutPlayListData)
                 tableView.moveRow(at: indexPath!, to: newIndexPath!)
@@ -271,7 +275,19 @@ class PlayWorkoutPlayListController : UITableViewController , NSFetchedResultsCo
 // UIViewController related to the execution of a WorkoutPlayList
 class PlayWorkoutPlayController : UIViewController {
     
-    var appleMusic: FetchAppleMusic?
+    var appleMusic: FetchAppleMusic? {
+        didSet {
+            // Attach the observer to the player controller used to play the songs.
+            // Cannot do that in viewDidLoad as appleMusic is still nil there.
+            appleMusic?.playerController.beginGeneratingPlaybackNotifications()
+
+            NotificationCenter.default.addObserver(
+                self, selector: #selector(playbackStateChanged), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: appleMusic?.playerController)
+
+            NotificationCenter.default.addObserver(
+                self, selector: #selector(refreshView), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: appleMusic?.playerController)
+        }
+    }
     
     @IBOutlet weak var funkyLabel: UILabel!
     @IBOutlet weak var funkyImage: UIImageView!
@@ -286,6 +302,7 @@ class PlayWorkoutPlayController : UIViewController {
             setSelectedWorkout()
         }
     }
+    
     var editingTable = false
     enum  PlayingState { case stopped, paused, running }
     var playingState : PlayingState = .stopped
@@ -321,24 +338,20 @@ class PlayWorkoutPlayController : UIViewController {
         nowPlayingLabel.text = nil
         stickFigureView.isHidden = true
         
-        MPMusicPlayerController.applicationMusicPlayer.beginGeneratingPlaybackNotifications()
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(playbackStateChanged),
-                                               name: .MPMusicPlayerControllerPlaybackStateDidChange,
-                                               object: MPMusicPlayerController.applicationMusicPlayer)
-
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(refreshView),
-                                               name: .MPMusicPlayerControllerNowPlayingItemDidChange,
-                                               object: MPMusicPlayerController.applicationMusicPlayer)
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
     
     deinit {
-        MPMusicPlayerController.applicationMusicPlayer.endGeneratingPlaybackNotifications()
+        appleMusic?.playerController.endGeneratingPlaybackNotifications()
         
-        NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: MPMusicPlayerController.applicationMusicPlayer)
-        NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerPlaybackStateDidChange, object: MPMusicPlayerController.applicationMusicPlayer)
+        NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: appleMusic?.playerController)
+        NotificationCenter.default.removeObserver(self, name: .MPMusicPlayerControllerPlaybackStateDidChange, object: appleMusic?.playerController)
+        
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+        
         timer?.invalidate()
         timer = nil
     }
@@ -367,6 +380,56 @@ class PlayWorkoutPlayController : UIViewController {
         }
     }
     
+    /// MARK: Handle backgrou/foreground operations
+    
+    /// Stop timers
+    @objc func didEnterBackground() {
+        if( playingState == .running ) {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    /// Update UI to reflect current song, time already played, etc.
+    @objc func willEnterForeground() {
+        if( playingState == .running ) {
+            
+            let currentItem = appleMusic!.playerController.nowPlayingItem
+            if( currentItem != nil ) {
+                 // Verify the validity of the index
+                 let songIndex = selectedWorkout!.tracks.firstIndex(where: { (wsong) -> Bool in
+                     wsong.songId == currentItem!.playbackStoreID
+                 })
+                if( songIndex != nil ) {
+                    // Update UI
+                    DispatchQueue.main.async {
+                        
+                        let wsong = self.selectedWorkout!.tracks[songIndex!]
+                        
+                        self.nowPlayingLabel.text = "Now playing: \(wsong.songName)"
+                        
+                        // Handle the current play time
+                        let elapseTimeOnCurrentItem = self.appleMusic!.playerController.currentPlaybackTime - wsong.startTime
+                        
+                        // Put the cursor at the right time
+                        self.workoutIntensityView.cursorLocationInS =
+                            self.selectedWorkout!.startTime(songIndex: songIndex!) + elapseTimeOnCurrentItem
+                        
+                        // Starts the timer
+                        self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
+                        
+                        // Grab current Item's artwork
+                        let image : UIImage? = currentItem?.artwork?.image(at: CGSize(width: 80, height: 80))
+                        self.currentMusicArtworkImageView.image = image
+                        
+                        // Handle the animation
+                        self.stickFigureState.setupAnimation(stickFigureView: self.stickFigureView, bpm: wsong.bpm, duration: Int(wsong.durationTime - elapseTimeOnCurrentItem))
+                    }
+                }
+            }
+        }
+    }
+    
     func getSongRemainingDuration() -> Double {
         if( selectedWorkout != nil && workoutIntensityView.cursorLocationInS != nil ) {
            return self.selectedWorkout!.totalDuration - self.workoutIntensityView.cursorLocationInS!
@@ -374,7 +437,7 @@ class PlayWorkoutPlayController : UIViewController {
         return 0
     }
     
-    // Execute the playlist linked to the workout
+    /// Execute the playlist linked to the workout
     @IBAction func executeWorkout(_ sender: Any) {
         if( playingState == .stopped ) {
             if( selectedWorkout != nil ) {
@@ -396,6 +459,7 @@ class PlayWorkoutPlayController : UIViewController {
         }
     }
     
+    /// Prepare for segue to the view/edit workout details
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "editWorkout" {
             if let cell = sender as? PlayWorkoutPlayListTableCell? {
@@ -410,7 +474,7 @@ class PlayWorkoutPlayController : UIViewController {
     
     @IBAction func unwindToViewControllerFromEditWorkout(segue: UIStoryboardSegue) {
         if segue.identifier == "unwindFromEditWorkout" {
-            // The fetchcontroller has already done the update... Nothing to do..
+            // The fetchcontroller has already done the update...
         }
     }
     
@@ -426,16 +490,15 @@ class PlayWorkoutPlayController : UIViewController {
         }
     }
     
-    // Monitor the MusicPlayer current playing item. Check that the player is playing one
-    // item of the workout playlist. If it is, change the Now playing label,
-    // and set the cursor location in the workoutIntensityView
-    @objc
-    func refreshView() {
+    /// Monitor the MusicPlayer current playing item. Check that the player is playing one
+    /// item of the workout playlist. If it is, change the Now playing label,
+    /// and set the cursor location in the workoutIntensityView. This is called when the playing song has changed.
+    @objc func refreshView() {
         if( selectedWorkout == nil ) {
             return
         }
-        let itemIndex = MPMusicPlayerController.applicationMusicPlayer.indexOfNowPlayingItem
-        let item = MPMusicPlayerController.applicationMusicPlayer.nowPlayingItem
+        let itemIndex = appleMusic!.playerController.indexOfNowPlayingItem
+        let item = appleMusic!.playerController.nowPlayingItem
         if( itemIndex >= 0 && itemIndex < selectedWorkout!.tracks.count ) {
             var songIndex : Int?
             if( item != nil ) {
@@ -461,8 +524,7 @@ class PlayWorkoutPlayController : UIViewController {
                         }
                     } else {
                         // Make sure to set at the right time (when we pause/skip)
-                        self.workoutIntensityView.cursorLocationInS =
-                            self.selectedWorkout!.startTime(songIndex: songIndex!)
+                        self.workoutIntensityView.cursorLocationInS = self.selectedWorkout!.startTime(songIndex: songIndex!)
                     }
                     //Grab current Item's artwork
                     let image : UIImage? = item?.artwork?.image(at: CGSize(width: 80, height: 80))
@@ -475,9 +537,8 @@ class PlayWorkoutPlayController : UIViewController {
         }
     }
     
-    // Monitor the playback status to know when to stop the timer.
-    @objc
-    func playbackStateChanged() {
+    /// Monitor the playback status to know when to stop the timer.
+    @objc func playbackStateChanged() {
         if( selectedWorkout == nil ) {
             return
         }
@@ -503,9 +564,8 @@ class PlayWorkoutPlayController : UIViewController {
         }
     }
     
-    // Update the timer cursor in the workoutIntensityView
-    @objc
-    func updateTime() {
+    /// Update the timer cursor in the workoutIntensityView
+    @objc func updateTime() {
         DispatchQueue.main.async {
             if( self.workoutIntensityView.cursorLocationInS == nil ) {
                self.workoutIntensityView.cursorLocationInS = self.timer!.timeInterval

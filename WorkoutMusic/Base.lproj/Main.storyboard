@@ -113,12 +113,8 @@
                         <barButtonItem title="Play Selected" id="xKr-KY-dhn"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Title" id="hrF-96-oEk"/>
-                    <connections>
-                        <segue destination="MX9-LJ-ocm" kind="unwind" identifier="unwindFromEditWorkout" unwindAction="unwindToViewControllerFromEditWorkoutWithSegue:" id="GXF-Lm-CmI"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Dx6-9Y-4JV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="MX9-LJ-ocm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="415" y="-483"/>
         </scene>
@@ -287,13 +283,13 @@
                         <outlet property="endTimeLabel" destination="W0D-0N-Wak" id="kOa-xx-aQl"/>
                         <outlet property="startTimeLabel" destination="jfS-PL-53p" id="ksb-JQ-I98"/>
                         <outlet property="timeRangeSlider" destination="j6B-Km-FWG" id="IVn-SP-bG0"/>
-                        <segue destination="htG-41-2Pe" kind="unwind" identifier="unwindFromEditSongPlayedInterval" unwindAction="unwindToViewControllerFromEditIntervalWithSegue:" id="JYH-GW-czu"/>
+                        <segue destination="htG-41-2Pe" kind="unwind" identifier="unwindFromEditSongPlayedInterval" unwindAction="unwindToViewControllerFromEditIntervalWithSegue:" id="h2F-Cw-Q2U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cZn-Jy-Yru" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="htG-41-2Pe" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1688.8" y="-528.48575712143929"/>
+            <point key="canvasLocation" x="1415" y="-499"/>
         </scene>
         <!--Select PlayLists for Build Workout Controller-->
         <scene sceneID="smW-Zh-WAh">

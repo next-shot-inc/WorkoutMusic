@@ -764,8 +764,10 @@ class FetchAppleMusic {
         }
     }
     
+    let playerController = MPMusicPlayerController.applicationQueuePlayer
+    
     private func playSongs(storeIds: [String], intervals: [TimeInterval]?) {
-        let player = MPMusicPlayerController.applicationQueuePlayer
+        let player = playerController
         let queue  = MPMusicPlayerStoreQueueDescriptor(storeIDs: storeIds)
         if( intervals != nil ) {
             for i in 0 ..< intervals!.count {
@@ -780,17 +782,17 @@ class FetchAppleMusic {
     }
     
     func stopPlaying() {
-        let player = MPMusicPlayerController.applicationQueuePlayer
+        let player = playerController
         player.stop()
     }
     
     func pausePlaying() {
-        let player = MPMusicPlayerController.applicationQueuePlayer
+        let player = playerController
         player.pause()
     }
     
     func resumePlaying() {
-        let player = MPMusicPlayerController.applicationQueuePlayer
+        let player = playerController
         player.play()
     }
 }

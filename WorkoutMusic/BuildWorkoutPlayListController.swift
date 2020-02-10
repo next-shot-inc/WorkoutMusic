@@ -18,10 +18,8 @@ class WorkoutMusicPlayList {
     init() {
     }
     
-    init(songs: [FetchAppleMusic.MusicTrackInfo]) {
-        for song in songs {
-            tracks.append(WorkoutMusicPlayListTrack(song: song))
-        }
+    init(tracks: [WorkoutMusicPlayListTrack]) {
+        self.tracks = tracks
     }
     
     /// Return "33:00 Workout" for example if the total duration is 33 minutes.
@@ -55,9 +53,22 @@ class WorkoutMusicPlayListTrack {
     var song : FetchAppleMusic.MusicTrackInfo
     var startTime = 0  // In seconds
     var durationTime = 0 // In seconds
+    var songTotalDuration = 0 // In seconds
+    
+    /// Construct from a MusicTrackInfo
     init(song: FetchAppleMusic.MusicTrackInfo) {
         self.song = song
         durationTime = song.durationInMs/1000
+        songTotalDuration = durationTime
+    }
+    
+    /// Construct from the persistent representation and the fetched associated MusicTrackInfo.
+    init(song: FetchAppleMusic.MusicTrackInfo, data: WorkoutSongData) {
+        self.song = song
+        durationTime = song.durationInMs/1000
+        songTotalDuration = song.durationInMs/1000
+        startTime = Int(data.startTime)
+        endTime = Int(data.endTime)
     }
     
     var endTime : Int {
@@ -82,7 +93,7 @@ class DetailViewTrackListCell : UITableViewCell {
 
 /// Encapsulate the multi-threading management of the full track list creation.
 class TracksDownloadManager {
-    private var unsafeTracks = [FetchAppleMusic.MusicTrackInfo]()
+    private var unsafeTracks = [WorkoutMusicPlayListTrack]()
     
     private let concurrentTracksQueue = DispatchQueue(
       label: "com.www.next-shot-inc.WorkoutMusic.tracksQueue",
@@ -94,12 +105,23 @@ class TracksDownloadManager {
             guard let self = self else {
                 return
             }
-            self.unsafeTracks.append(contentsOf: tracks)
+            for track in tracks {
+                self.unsafeTracks.append(WorkoutMusicPlayListTrack(song: track))
+            }
         }
     }
     
-    var tracks: [FetchAppleMusic.MusicTrackInfo] {
-      var tracksCopy: [FetchAppleMusic.MusicTrackInfo]!
+    func add(track: WorkoutMusicPlayListTrack) {
+        concurrentTracksQueue.async(flags: .barrier) { [weak self] in
+            guard let self = self else {
+                return
+            }
+            self.unsafeTracks.append(track)
+        }
+    }
+    
+    var tracks: [WorkoutMusicPlayListTrack] {
+      var tracksCopy: [WorkoutMusicPlayListTrack]!
       concurrentTracksQueue.sync {
         tracksCopy = self.unsafeTracks
       }
@@ -138,7 +160,7 @@ class DetailViewTableViewControler : UITableViewController {
         
         // At the end of the download group - Do the other tasks.
         downloadGroup.notify(queue: DispatchQueue.main) {
-            self.wplaylist = WorkoutMusicPlayList(songs: self.tracksDownloadManager.tracks)
+            self.wplaylist = WorkoutMusicPlayList(tracks: self.tracksDownloadManager.tracks)
             self.configureView()
         }
     }
@@ -155,7 +177,7 @@ class DetailViewTableViewControler : UITableViewController {
                 downloadGroup.enter()
                 appleMusic?.seachSongInStore(storeId: wsongData.storedId!, completion: { (track) in
                     if( track != nil ) {
-                        self.tracksDownloadManager.add(tracks: [track!])
+                        self.tracksDownloadManager.add(track: WorkoutMusicPlayListTrack(song: track!, data: wsongData))
                     }
                     downloadGroup.leave()
                 })
@@ -164,7 +186,19 @@ class DetailViewTableViewControler : UITableViewController {
         
         // At the end of the download group - Do the other tasks.
         downloadGroup.notify(queue: DispatchQueue.main) {
-            self.wplaylist = WorkoutMusicPlayList(songs: self.tracksDownloadManager.tracks)
+            // The download order is not guaranteed. Reorder according to the stored information.
+            var reordered_tracks = [WorkoutMusicPlayListTrack]()
+            for elt in playListData.elements!.array {
+                if let wsongData = elt as? WorkoutSongData {
+                    if let retrieved = self.tracksDownloadManager.tracks.first(where: { (wmt) -> Bool in
+                        wmt.song.storeId! == wsongData.storedId!
+                    }) {
+                        reordered_tracks.append(retrieved)
+                    }
+                }
+            }
+                
+            self.wplaylist = WorkoutMusicPlayList(tracks: reordered_tracks)
             self.configureView()
         }
     }
@@ -175,6 +209,8 @@ class DetailViewTableViewControler : UITableViewController {
             // Your UI Updation here
             self.title = self.wplaylist.detailText()
             self.tableView.reloadData()
+            
+            self.spinnerCtrler.removeSpinner()
             
             let songBPStorage = SongBPMStore()
             
@@ -198,14 +234,18 @@ class DetailViewTableViewControler : UITableViewController {
         }
     }
     
+    var spinnerCtrler = ShowSpinnerController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // On the navigation bar: we have on the right, the back button and on the left, the edit and save button
-       // navigationItem.rightBarButtonItem = self.editButtonItem
+        // navigationItem.rightBarButtonItem = self.editButtonItem
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveWPlayList(_:)))
         navigationItem.rightBarButtonItems = [self.editButtonItem, saveButton]
         //navigationItem.leftItemsSupplementBackButton = true
+        
+        spinnerCtrler.showSpinner(onView: self.view)
         
         // Do any additional setup after loading the view.
         if( detailItem != nil ) {
@@ -308,34 +348,30 @@ class DetailViewTableViewControler : UITableViewController {
         }
     }
     
+    /// Unwind from the edit interval controller
     @IBAction func unwindToViewControllerFromEditInterval(segue: UIStoryboardSegue) {
         if segue.identifier == "unwindFromEditSongPlayedInterval" {
             if let indexPath = tableView.indexPathForSelectedRow {
                 tableView.reloadRows(at: [indexPath], with: .none)
+                if let source = segue.source as? EditSongPlayedIntervalController {
+                    hasChanges = source.hasChanges
+                }
+                updateTitle()
             }
         }
     }
 
-    
-    // MARK - Actions
+    /// MARK: Actions
     
     func updateTitle() {
         let stared = hasChanges ? "* " : ""
         title = stared + wplaylist.detailText()
     }
     
-    func play( wtracks: [WorkoutMusicPlayListTrack], complete: Bool = false) {
-        appleMusic?.playSongs(wtracks: wtracks, complete: complete)
-    }
-    
-    func hitPlayForEdit(row: Int) {
-        var wtracks = [WorkoutMusicPlayListTrack]()
-        wtracks.append(wplaylist.tracks[row])
-        play(wtracks: wtracks, complete: true)
-    }
-    
-    @objc
-    func saveWPlayList(_ sender : Any) {
+    /// Called from the "Save Button"
+    /// If a persistent play list object already exist, just save it.
+    /// If not, ask the user for a new workout playlist name and save it.
+    @objc func saveWPlayList(_ sender : Any) {
         
         if( object != nil ) {
             saveWPlayList(playlistData: object!)
@@ -355,7 +391,8 @@ class DetailViewTableViewControler : UITableViewController {
         }
     }
     
-    func saveWPlayList(name: String) {
+    /// Save a new playlist under the given name
+    private func saveWPlayList(name: String) {
         guard let managedContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {
             return
         }
@@ -384,7 +421,9 @@ class DetailViewTableViewControler : UITableViewController {
         saveWPlayList(playlistData: playlistData!)
     }
     
-    func saveWPlayList(playlistData: WorkoutPlayListData) {
+    /// Save an existing playlist persistent object
+    /// Replace all the tracks info.
+    private func saveWPlayList(playlistData: WorkoutPlayListData) {
         guard let managedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else {
             return
         }

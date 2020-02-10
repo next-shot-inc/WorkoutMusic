@@ -22,6 +22,7 @@ class EditSongPlayedIntervalController : UIViewController {
     var playing = false
     enum LastEdited { case none, upperValue, lowerValue }
     var lastEdited : LastEdited = .none
+    var hasChanges = false
     
     @IBAction func timeRangeSliderValueChanged(_ sender: Any) {
         wtrack?.startTime = Int(timeRangeSlider.lowerValue)
@@ -32,6 +33,7 @@ class EditSongPlayedIntervalController : UIViewController {
             lastEdited = .upperValue
         }
         
+        hasChanges = true
         updateLabels()
     }
     
@@ -60,7 +62,7 @@ class EditSongPlayedIntervalController : UIViewController {
     
     override func viewDidLoad() {
         if( wtrack != nil ) {
-            timeRangeSlider.maximumValue = Double(wtrack!.durationTime)
+            timeRangeSlider.maximumValue = Double(wtrack!.songTotalDuration)
             timeRangeSlider.minimumValue = 0
             timeRangeSlider.lowerValue = Double(wtrack!.startTime)
             timeRangeSlider.upperValue = Double(wtrack!.endTime)
