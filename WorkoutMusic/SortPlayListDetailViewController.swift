@@ -358,7 +358,7 @@ class SortPlayListDetailViewController : UIViewController, PlayAndAddToPlayListV
     
     func fetchPlayListData(playList: FetchAppleMusic.PlayListInfo, beginAt: Int = 0) {
         
-        appleMusic?.getTracksForPlaylist(playList:  playList, limit: 2, beginAt: beginAt, completion: { (tracks, moreToFetch) in
+        appleMusic?.getTracksForPlaylist(playList:  playList, limit: 64, beginAt: beginAt, completion: { (tracks, moreToFetch) in
            
             DispatchQueue.main.async {
                 let filtered_tracks = tracks.filter({ (track) -> Bool in

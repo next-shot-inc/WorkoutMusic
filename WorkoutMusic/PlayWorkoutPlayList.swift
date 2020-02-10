@@ -434,31 +434,40 @@ class PlayWorkoutPlayController : UIViewController {
         if( selectedWorkout == nil ) {
             return
         }
-        let index  = MPMusicPlayerController.applicationMusicPlayer.indexOfNowPlayingItem
+        let itemIndex = MPMusicPlayerController.applicationMusicPlayer.indexOfNowPlayingItem
         let item = MPMusicPlayerController.applicationMusicPlayer.nowPlayingItem
-        if( index >= 0 && index < selectedWorkout!.tracks.count && item != nil ) {
-            let firstIndex = selectedWorkout!.tracks.firstIndex(where: { (wsong) -> Bool in
-                wsong.songId == item!.playbackStoreID
-            })
-           
-            if( firstIndex != nil && firstIndex! == index ) {
-                let wsong = self.selectedWorkout!.tracks[index]
+        if( itemIndex >= 0 && itemIndex < selectedWorkout!.tracks.count ) {
+            var songIndex : Int?
+            if( item != nil ) {
+                // Verify the validity of the index
+                let firstIndex = selectedWorkout!.tracks.firstIndex(where: { (wsong) -> Bool in
+                    wsong.songId == item!.playbackStoreID
+                })
+                if( firstIndex != nil && firstIndex! == itemIndex ) {
+                    songIndex = itemIndex
+                }
+            } else {
+                songIndex = itemIndex
+            }
+            if( songIndex != nil ) {
+                let wsong = self.selectedWorkout!.tracks[songIndex!]
                 
                 DispatchQueue.main.async {
                     self.nowPlayingLabel.text = "Now playing: \(wsong.songName)"
                     
-                    if( index == 0 ) {
+                    if( songIndex! == 0 ) {
                         if( self.timer == nil ) {
                            self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTime), userInfo: nil, repeats: true)
                         }
                     } else {
                         // Make sure to set at the right time (when we pause/skip)
                         self.workoutIntensityView.cursorLocationInS =
-                            self.selectedWorkout!.startTime(songIndex: index)
+                            self.selectedWorkout!.startTime(songIndex: songIndex!)
                     }
-                    //Grab currItem's artwork
+                    //Grab current Item's artwork
                     let image : UIImage? = item?.artwork?.image(at: CGSize(width: 80, height: 80))
                     self.currentMusicArtworkImageView.image = image
+                    // Handle animation
                     self.stickFigureView.stopAnimation()
                     self.stickFigureState.setupAnimation(stickFigureView: self.stickFigureView, bpm: wsong.bpm, duration: Int(wsong.durationTime))
                 }
