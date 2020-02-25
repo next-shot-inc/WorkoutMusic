@@ -795,6 +795,11 @@ class FetchAppleMusic {
         let player = playerController
         player.play()
     }
+    
+    func skipToNextSong() {
+        let player = playerController
+        player.skipToNextItem()
+    }
 }
 
 class AppleMusicArtwork {

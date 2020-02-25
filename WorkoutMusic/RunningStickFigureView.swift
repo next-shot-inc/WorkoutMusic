@@ -76,6 +76,12 @@ class RunningStickFigureView : UIView {
         }
     }
     
+    @IBInspectable public var showFrame = false {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         initialConfig()
@@ -190,10 +196,11 @@ class RunningStickFigureView : UIView {
             context.scaleBy(x: 1/CGFloat(scaling), y: 1/CGFloat(scaling))
             context.translateBy(x: 0, y: -10)
             
-            context.setLineWidth(1)
-            let rect = CGRect(x: 2, y: 2, width: frame.width-2, height: frame.height-2)
-            context.stroke(rect)
-            
+            if( showFrame ) {
+                context.setLineWidth(1)
+                let rect = CGRect(x: 2, y: 2, width: frame.width-2, height: frame.height-2)
+                context.stroke(rect)
+            }
         }
     }
 }

@@ -17,6 +17,12 @@ class WorkoutIntensityView : UIView {
         }
     }
     
+    @IBInspectable public var barBottomColor: UIColor = UIColor(red: 0.25, green: 0.45, blue: 0.94, alpha: 1.0) {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    
     @IBInspectable public var barLineColor: UIColor = UIColor(white: 0.9, alpha: 1.0) {
         didSet {
             setNeedsDisplay()
@@ -149,13 +155,38 @@ class WorkoutIntensityView : UIView {
         if let context = UIGraphicsGetCurrentContext() {
             context.setFillColor(barColor.cgColor)
             context.setStrokeColor(barLineColor.cgColor )
+            
+            let colors = [barColor.cgColor, barBottomColor.cgColor]
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let colorLocations : [CGFloat] = [0, 1]
+            let colgradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: colorLocations)
+            
+            let glossColor1 = UIColor.white.withAlphaComponent(0.35)
+            let glossColor2 = UIColor.white.withAlphaComponent(0.0)
+            let glossColors = [glossColor1.cgColor, glossColor2.cgColor]
+            let glossgradient = CGGradient(colorsSpace: colorSpace, colors: glossColors as CFArray, locations: colorLocations)
+            
             var curX = margin
             for track in playList.tracks {
                 let w = CGFloat(track.durationTime)*xPerSeconds
                 let h = minHeight + yPerBPM*CGFloat(track.bpm - bpm_min)
                 let rect = CGRect(x: curX, y: frame.height - margin - h - timeAxisHeight - timeAxisLabelHeight, width: w, height: h)
-                context.fill(rect)
+                // Draw a color gradient from top to base of column
+                context.saveGState()
+                context.clip(to: rect)
+                context.drawLinearGradient(colgradient!, start: CGPoint(x: rect.minX, y: rect.minY), end: CGPoint(x: rect.minX, y: rect.maxY), options: [])
+                context.restoreGState()
+                // Draw a glossy finish for the top half.
+                var topHalf = rect
+                topHalf.size.height /= 2
+                context.saveGState()
+                context.clip(to: topHalf)
+                context.drawLinearGradient(glossgradient!, start: CGPoint(x: topHalf.minX, y: topHalf.minY), end: CGPoint(x: topHalf.minX, y: topHalf.maxY), options: [])
+                context.restoreGState()
+                
+                // Draw the boundary
                 context.stroke(rect)
+                
                 curX = curX + w
             }
             
@@ -168,7 +199,7 @@ class WorkoutIntensityView : UIView {
             }
             
             for xlabel in timeAxisLabelViews {
-                context.setStrokeColor(UIColor.black.cgColor)
+                context.setStrokeColor(UIColor.label.cgColor)
                 let xframe = xlabel.frame
                 let bottom_stick = CGPoint(x: xframe.origin.x + xframe.width/2, y: frame.height - margin - timeAxisHeight - timeAxisLabelHeight)
                 let top_stick = CGPoint(x: bottom_stick.x, y: bottom_stick.y + 5)

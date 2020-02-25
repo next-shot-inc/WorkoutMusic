@@ -254,6 +254,7 @@
                             <constraint firstItem="Tp3-AC-D7u" firstAttribute="leading" secondItem="PaN-kR-M65" secondAttribute="trailing" constant="10" id="EgP-pb-t41"/>
                             <constraint firstItem="hhH-XF-PXd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jfS-PL-53p" secondAttribute="trailing" constant="5" id="HJP-Az-7FB"/>
                             <constraint firstItem="WUo-6x-9D5" firstAttribute="leading" secondItem="P23-g2-MRY" secondAttribute="leading" constant="16" id="Hc1-PH-trs"/>
+                            <constraint firstItem="P23-g2-MRY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WUo-6x-9D5" secondAttribute="trailing" constant="10" id="LxN-GC-8LE"/>
                             <constraint firstItem="j6B-Km-FWG" firstAttribute="leading" secondItem="P23-g2-MRY" secondAttribute="leading" constant="21" id="RdU-q4-19o"/>
                             <constraint firstItem="jfS-PL-53p" firstAttribute="leading" secondItem="j6B-Km-FWG" secondAttribute="leading" id="Rje-Ko-3Im"/>
                             <constraint firstItem="PaN-kR-M65" firstAttribute="top" secondItem="WUo-6x-9D5" secondAttribute="bottom" constant="10" id="RuO-Bc-YVp"/>
@@ -411,8 +412,66 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="run-to-the-beat" translatesAutoresizingMaskIntoConstraints="NO" id="tGG-GP-HjU">
+                                <rect key="frame" x="77" y="49" width="221" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="hMH-u1-OfO"/>
+                                    <constraint firstAttribute="width" constant="221" id="pCn-qo-4Qa"/>
+                                </constraints>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nah-Be-GPV" userLabel="gradiantView1" customClass="GradientView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="49" width="77" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                        <color key="value" red="0.99056273698806763" green="0.66614300012588501" blue="0.80487865209579468" alpha="0.9960784912109375" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                        <color key="value" red="0.52200555801391602" green="0.70004266500473022" blue="0.99062496423721313" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="startLocation">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="endLocation">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I1m-4M-MaD" userLabel="gradiantView2" customClass="GradientView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="298" y="49" width="77" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="startColor">
+                                        <color key="value" red="0.51363849639892578" green="0.70400500297546387" blue="0.9946175217628479" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="endColor">
+                                        <color key="value" red="0.98650604486465454" green="0.67012107372283936" blue="0.80892282724380493" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="startLocation">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="endLocation">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontalMode" value="NO"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCj-i1-9Zc" userLabel="separator2">
+                                <rect key="frame" x="0.0" y="187" width="375" height="2"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2" id="S0J-NW-nwv"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dWJ-4F-d7h" userLabel="separator1">
+                                <rect key="frame" x="0.0" y="616" width="375" height="2"/>
+                                <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="2" id="6o4-bh-2lu"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6d8-HC-QOg">
-                                <rect key="frame" x="0.0" y="44" width="375" height="312"/>
+                                <rect key="frame" x="0.0" y="189" width="375" height="427"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WorkoutPlayListTableCell" id="RsB-vf-XBY" customClass="PlayWorkoutPlayListTableCell" customModule="WorkoutMusic" customModuleProvider="target">
@@ -460,6 +519,7 @@
                                             <outlet property="playListIntensityView" destination="YzV-5c-OpR" id="dzf-Bt-sbc"/>
                                             <outlet property="playListName" destination="Ubs-NR-7KA" id="J0S-4e-nFU"/>
                                             <segue destination="iUE-GL-R43" kind="show" identifier="editWorkout" trigger="accessoryAction" id="RqZ-VF-Vio"/>
+                                            <segue destination="n7o-KB-tyX" kind="show" identifier="playWorkout" id="oKe-Vo-hiH"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="AddWorkoutPlayListTableCell" rowHeight="62" id="nzK-vp-5gf">
@@ -488,136 +548,45 @@
                                                 <constraint firstItem="gc6-eU-EbR" firstAttribute="top" secondItem="G64-3t-ltT" secondAttribute="topMargin" id="OQS-RW-oRG"/>
                                                 <constraint firstItem="gc6-eU-EbR" firstAttribute="centerY" secondItem="G64-3t-ltT" secondAttribute="centerY" id="hOy-Ff-A4I"/>
                                                 <constraint firstItem="E4z-hI-iRW" firstAttribute="leading" secondItem="gc6-eU-EbR" secondAttribute="trailing" constant="20" id="oss-dz-557"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="E4z-hI-iRW" secondAttribute="trailing" constant="20" id="tpO-CW-EPZ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Zoa-pA-hoL" customClass="WorkoutIntensityView" customModule="WorkoutMusic" customModuleProvider="target">
-                                <rect key="frame" x="10" y="368" width="355" height="130"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="run-to-the-beat" translatesAutoresizingMaskIntoConstraints="NO" id="tGG-GP-HjU">
-                                        <rect key="frame" x="67" y="1" width="221" height="128"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="128" id="hMH-u1-OfO"/>
-                                            <constraint firstAttribute="width" constant="221" id="pCn-qo-4Qa"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Run to the beat..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBA-oz-Ai9">
-                                        <rect key="frame" x="74.5" y="47.5" width="206.5" height="35.5"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                        <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                        <color key="shadowColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <size key="shadowOffset" width="2" height="2"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="130" id="7vQ-Zx-jtI"/>
-                                    <constraint firstItem="tGG-GP-HjU" firstAttribute="centerX" secondItem="Zoa-pA-hoL" secondAttribute="centerX" id="Onp-wa-xkG"/>
-                                    <constraint firstItem="tGG-GP-HjU" firstAttribute="centerY" secondItem="Zoa-pA-hoL" secondAttribute="centerY" id="eiy-r3-yr6"/>
-                                    <constraint firstItem="uBA-oz-Ai9" firstAttribute="centerX" secondItem="Zoa-pA-hoL" secondAttribute="centerX" id="fck-5N-T3l"/>
-                                    <constraint firstItem="uBA-oz-Ai9" firstAttribute="centerY" secondItem="Zoa-pA-hoL" secondAttribute="centerY" id="kkA-ox-mZ0"/>
-                                </constraints>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" text="Now playing ......" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lgM-B4-pmu">
-                                <rect key="frame" x="120" y="559" width="126" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exercise to the beat..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBA-oz-Ai9">
+                                <rect key="frame" x="57.5" y="95" width="260" height="36"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
+                                <color key="shadowColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <size key="shadowOffset" width="2" height="2"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dWJ-4F-d7h" userLabel="separator1">
-                                <rect key="frame" x="0.0" y="356" width="375" height="2"/>
-                                <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="6o4-bh-2lu"/>
-                                </constraints>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCj-i1-9Zc" userLabel="separator2">
-                                <rect key="frame" x="0.0" y="42" width="375" height="2"/>
-                                <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="2" id="S0J-NW-nwv"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZg-nD-1Ty" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
-                                <rect key="frame" x="124" y="508" width="127" height="41"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
-                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="-6" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Start" image="play" catalog="system">
-                                    <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <state key="disabled" title="Select Workout"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                        <real key="value" value="10"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
-                                        <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="executeWorkout:" destination="4mG-D0-R1U" eventType="primaryActionTriggered" id="HzH-fP-MnE"/>
-                                </connections>
-                            </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7Sy-cH-XT0">
-                                <rect key="frame" x="10" y="508" width="100" height="100"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="aAb-CY-9IO"/>
-                                    <constraint firstAttribute="width" constant="100" id="sxX-AH-EJo"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IL5-XY-4b9" userLabel="Countdown label">
-                                <rect key="frame" x="166.5" y="589.5" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jCM-Po-rsx" customClass="RunningStickFigureView" customModule="WorkoutMusic" customModuleProvider="target">
-                                <rect key="frame" x="315" y="506" width="55" height="90"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="55" id="akV-ME-k5Z"/>
-                                    <constraint firstAttribute="height" constant="90" id="jr1-RL-wPB"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="scaling">
-                                        <real key="value" value="0.40000000000000002"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="jCM-Po-rsx" firstAttribute="centerY" secondItem="7Sy-cH-XT0" secondAttribute="centerY" constant="-7" id="77T-uq-bFW"/>
+                            <constraint firstItem="I1m-4M-MaD" firstAttribute="bottom" secondItem="tGG-GP-HjU" secondAttribute="bottom" id="3u2-K8-gvN"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" id="7eO-Kv-pNX"/>
-                            <constraint firstItem="lgM-B4-pmu" firstAttribute="top" secondItem="sZg-nD-1Ty" secondAttribute="bottom" constant="10" id="AFV-me-dVV"/>
-                            <constraint firstItem="Zoa-pA-hoL" firstAttribute="top" secondItem="dWJ-4F-d7h" secondAttribute="bottom" constant="10" id="DR5-Cm-dVI"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="bottom" secondItem="7Sy-cH-XT0" secondAttribute="bottom" constant="10" id="KFE-hH-bbc"/>
-                            <constraint firstItem="sZg-nD-1Ty" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="Knj-RB-514"/>
-                            <constraint firstItem="sZg-nD-1Ty" firstAttribute="top" secondItem="7Sy-cH-XT0" secondAttribute="top" id="Mc6-Nf-IbF"/>
+                            <constraint firstItem="9v3-VA-rxv" firstAttribute="bottom" secondItem="dWJ-4F-d7h" secondAttribute="bottom" id="ApY-5N-0bi"/>
+                            <constraint firstItem="uBA-oz-Ai9" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="C6m-GF-tXK"/>
+                            <constraint firstItem="Nah-Be-GPV" firstAttribute="top" secondItem="tGG-GP-HjU" secondAttribute="top" id="CJ6-mG-lxD"/>
                             <constraint firstAttribute="trailing" secondItem="fCj-i1-9Zc" secondAttribute="trailing" id="ODD-fL-Pvq"/>
-                            <constraint firstItem="7Sy-cH-XT0" firstAttribute="leading" secondItem="Zoa-pA-hoL" secondAttribute="leading" id="OSa-5R-jH9"/>
-                            <constraint firstItem="6d8-HC-QOg" firstAttribute="top" secondItem="9v3-VA-rxv" secondAttribute="top" id="RgV-Y1-LF9"/>
-                            <constraint firstItem="jCM-Po-rsx" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lgM-B4-pmu" secondAttribute="trailing" constant="10" id="UWc-Q9-7nf"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="top" secondItem="fCj-i1-9Zc" secondAttribute="bottom" id="VUd-GF-oyh"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" secondItem="jCM-Po-rsx" secondAttribute="trailing" constant="5" id="XZ9-Ds-OR5"/>
+                            <constraint firstItem="uBA-oz-Ai9" firstAttribute="centerY" secondItem="tGG-GP-HjU" secondAttribute="centerY" id="W6o-rR-p8B"/>
                             <constraint firstItem="6d8-HC-QOg" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="Xmq-3j-rNw"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" secondItem="Zoa-pA-hoL" secondAttribute="trailing" constant="10" id="Zf1-mC-JVU"/>
-                            <constraint firstItem="Zoa-pA-hoL" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" constant="10" id="bco-hF-7h3"/>
+                            <constraint firstItem="I1m-4M-MaD" firstAttribute="top" secondItem="tGG-GP-HjU" secondAttribute="top" id="ZyP-9f-xml"/>
+                            <constraint firstItem="Nah-Be-GPV" firstAttribute="leading" secondItem="fCj-i1-9Zc" secondAttribute="leading" id="cTf-hq-mBB"/>
+                            <constraint firstItem="tGG-GP-HjU" firstAttribute="bottom" secondItem="fCj-i1-9Zc" secondAttribute="top" constant="-10" id="dKK-Eu-OSw"/>
                             <constraint firstItem="fCj-i1-9Zc" firstAttribute="leading" secondItem="Pxe-WY-dgq" secondAttribute="leading" id="eXa-Lo-WKF"/>
+                            <constraint firstItem="I1m-4M-MaD" firstAttribute="leading" secondItem="tGG-GP-HjU" secondAttribute="trailing" id="f3A-57-I3V"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="trailing" secondItem="9v3-VA-rxv" secondAttribute="trailing" id="fUJ-gd-vJ4"/>
-                            <constraint firstItem="IL5-XY-4b9" firstAttribute="top" secondItem="lgM-B4-pmu" secondAttribute="bottom" constant="10" id="fbw-cn-65m"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="leading" secondItem="9v3-VA-rxv" secondAttribute="leading" id="gpA-4C-PMU"/>
-                            <constraint firstItem="7Sy-cH-XT0" firstAttribute="top" secondItem="Zoa-pA-hoL" secondAttribute="bottom" constant="10" id="iby-fM-hPw"/>
-                            <constraint firstItem="IL5-XY-4b9" firstAttribute="centerX" secondItem="sZg-nD-1Ty" secondAttribute="centerX" id="lhH-7y-bPb"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="IL5-XY-4b9" secondAttribute="trailing" constant="20" id="oHa-Ij-Sba"/>
-                            <constraint firstItem="lgM-B4-pmu" firstAttribute="leading" secondItem="7Sy-cH-XT0" secondAttribute="trailing" constant="10" id="py7-1u-kJw"/>
-                            <constraint firstItem="jCM-Po-rsx" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sZg-nD-1Ty" secondAttribute="trailing" constant="10" id="rft-0K-6TI"/>
+                            <constraint firstItem="tGG-GP-HjU" firstAttribute="centerX" secondItem="Pxe-WY-dgq" secondAttribute="centerX" id="k4X-bx-W2t"/>
+                            <constraint firstItem="I1m-4M-MaD" firstAttribute="trailing" secondItem="fCj-i1-9Zc" secondAttribute="trailing" id="l9M-sP-PgL"/>
+                            <constraint firstItem="tGG-GP-HjU" firstAttribute="top" secondItem="9v3-VA-rxv" secondAttribute="top" constant="5" id="nj5-yZ-ADf"/>
                             <constraint firstItem="dWJ-4F-d7h" firstAttribute="top" secondItem="6d8-HC-QOg" secondAttribute="bottom" id="tnF-UO-oe0"/>
-                            <constraint firstItem="9v3-VA-rxv" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lgM-B4-pmu" secondAttribute="bottom" constant="10" id="vt1-EK-Ije"/>
+                            <constraint firstItem="tGG-GP-HjU" firstAttribute="leading" secondItem="Nah-Be-GPV" secondAttribute="trailing" id="uHj-Jg-QiA"/>
+                            <constraint firstItem="Nah-Be-GPV" firstAttribute="bottom" secondItem="tGG-GP-HjU" secondAttribute="bottom" id="ukY-7K-Wf4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="9v3-VA-rxv"/>
                     </view>
@@ -630,20 +599,180 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="countdownLabel" destination="IL5-XY-4b9" id="KYG-pJ-hv1"/>
-                        <outlet property="currentMusicArtworkImageView" destination="7Sy-cH-XT0" id="kK3-xt-gYM"/>
                         <outlet property="funkyImage" destination="tGG-GP-HjU" id="4kP-qo-GeV"/>
                         <outlet property="funkyLabel" destination="uBA-oz-Ai9" id="8PE-Fp-4cR"/>
-                        <outlet property="nowPlayingLabel" destination="lgM-B4-pmu" id="8Ne-Qk-gxF"/>
-                        <outlet property="stickFigureView" destination="jCM-Po-rsx" id="Uob-sI-YKf"/>
-                        <outlet property="workoutIntensityView" destination="Zoa-pA-hoL" id="LVN-lJ-0bi"/>
-                        <outlet property="workoutPlayButton" destination="sZg-nD-1Ty" id="dSt-wN-L5G"/>
                         <outlet property="workoutsTableView" destination="6d8-HC-QOg" id="21K-pL-kKQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bQ4-h5-TIj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="284" y="-1315.5922038980511"/>
+        </scene>
+        <!--Workout-->
+        <scene sceneID="mCc-yS-zgW">
+            <objects>
+                <viewController id="n7o-KB-tyX" customClass="PlayWorkoutUIController" customModule="WorkoutMusic" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rTg-om-JnX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" text="Playing next ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gyT-sd-mam">
+                                <rect key="frame" x="20" y="577" width="111" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mpj-yS-QBt" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="30" y="516" width="128.5" height="41"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="-6" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Start" image="arrowtriangle.right.fill" catalog="system">
+                                    <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <state key="disabled" title="No workout"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="executeWorkout:" destination="n7o-KB-tyX" eventType="primaryActionTriggered" id="AA0-qF-cED"/>
+                                </connections>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BL1-Cj-8jU">
+                                <rect key="frame" x="20" y="231" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="WAh-pv-UTf"/>
+                                    <constraint firstAttribute="height" constant="200" id="dn9-9G-hyu"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10:28" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fBL-3X-LnD" userLabel="Countdown label">
+                                <rect key="frame" x="322" y="192" width="43" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xuP-un-A31" customClass="RunningStickFigureView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="300" y="281" width="65" height="100"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="65" id="HNq-h3-Ab4"/>
+                                    <constraint firstAttribute="height" constant="100" id="dFg-8X-wMG"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="scaling">
+                                        <real key="value" value="0.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ek4-IP-5WZ" customClass="UIRoundButton" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="198.5" y="516" width="123" height="41"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="-6" maxY="0.0"/>
+                                <state key="normal" title="Skip" image="forward.fill" catalog="system">
+                                    <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="bgColor">
+                                        <color key="value" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="skipToNextSong:" destination="n7o-KB-tyX" eventType="primaryActionTriggered" id="Qm4-AA-tO4"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FWE-sa-GUB" customClass="WorkoutIntensityView" customModule="WorkoutMusic" customModuleProvider="target">
+                                <rect key="frame" x="20" y="54" width="335" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="y7A-6T-nfB"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="music-playing-1" translatesAutoresizingMaskIntoConstraints="NO" id="VJc-0v-3Pc" userLabel="animatedPlaying">
+                                <rect key="frame" x="20" y="439" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="32" id="DTt-el-zVE"/>
+                                    <constraint firstAttribute="height" constant="32" id="ZmU-dS-Oub"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now playing ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lRw-GS-KFE">
+                                <rect key="frame" x="62" y="449" width="112" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01:22" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rNE-N8-G8X">
+                                <rect key="frame" x="16" y="192" width="42.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Countdowns" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yLp-Jf-JD9">
+                                <rect key="frame" x="139" y="192" width="97" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="yLp-Jf-JD9" firstAttribute="centerX" secondItem="FWE-sa-GUB" secondAttribute="centerX" id="0Kl-Gs-oBh"/>
+                            <constraint firstItem="lRw-GS-KFE" firstAttribute="firstBaseline" secondItem="VJc-0v-3Pc" secondAttribute="bottom" constant="-6" id="1rV-IQ-gyU"/>
+                            <constraint firstItem="gyT-sd-mam" firstAttribute="top" secondItem="Mpj-yS-QBt" secondAttribute="bottom" constant="20" id="2QW-FP-yo7"/>
+                            <constraint firstItem="xuP-un-A31" firstAttribute="centerY" secondItem="BL1-Cj-8jU" secondAttribute="centerY" id="2ZU-Wf-kpt"/>
+                            <constraint firstItem="BL1-Cj-8jU" firstAttribute="leading" secondItem="PaO-d4-klp" secondAttribute="leading" constant="20" id="5Nv-VX-Ulk"/>
+                            <constraint firstItem="fBL-3X-LnD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yLp-Jf-JD9" secondAttribute="trailing" constant="10" id="6pn-OH-COw"/>
+                            <constraint firstItem="FWE-sa-GUB" firstAttribute="leading" secondItem="PaO-d4-klp" secondAttribute="leading" constant="20" id="7S6-1d-Y34"/>
+                            <constraint firstItem="rNE-N8-G8X" firstAttribute="leading" secondItem="rTg-om-JnX" secondAttribute="leadingMargin" id="9bq-5I-5yF"/>
+                            <constraint firstItem="VJc-0v-3Pc" firstAttribute="top" secondItem="BL1-Cj-8jU" secondAttribute="bottom" constant="8" symbolType="layoutAnchor" id="9wA-8F-gR6"/>
+                            <constraint firstItem="fBL-3X-LnD" firstAttribute="top" secondItem="FWE-sa-GUB" secondAttribute="bottom" constant="10" id="BAZ-fc-lSc"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="trailing" secondItem="xuP-un-A31" secondAttribute="trailing" constant="10" id="DNN-y5-cod"/>
+                            <constraint firstItem="rNE-N8-G8X" firstAttribute="baseline" secondItem="fBL-3X-LnD" secondAttribute="baseline" id="DqC-r2-09V"/>
+                            <constraint firstItem="FWE-sa-GUB" firstAttribute="top" secondItem="PaO-d4-klp" secondAttribute="top" constant="10" id="E1L-gz-qpY"/>
+                            <constraint firstItem="VJc-0v-3Pc" firstAttribute="leading" secondItem="BL1-Cj-8jU" secondAttribute="leading" id="HEY-Bs-epN"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gyT-sd-mam" secondAttribute="trailing" constant="10" id="HQc-ir-8yg"/>
+                            <constraint firstItem="yLp-Jf-JD9" firstAttribute="baseline" secondItem="rNE-N8-G8X" secondAttribute="baseline" id="LP4-D1-4Hb"/>
+                            <constraint firstItem="ek4-IP-5WZ" firstAttribute="centerY" secondItem="Mpj-yS-QBt" secondAttribute="centerY" id="Oyq-O4-t3s"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lRw-GS-KFE" secondAttribute="trailing" constant="10" id="PqH-VJ-LT8"/>
+                            <constraint firstItem="VJc-0v-3Pc" firstAttribute="leading" secondItem="gyT-sd-mam" secondAttribute="leading" id="YOO-tb-PT3"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="trailing" secondItem="FWE-sa-GUB" secondAttribute="trailing" constant="20" id="iVN-Le-aHT"/>
+                            <constraint firstItem="BL1-Cj-8jU" firstAttribute="centerY" secondItem="PaO-d4-klp" secondAttribute="centerY" id="pLT-uF-JKe"/>
+                            <constraint firstItem="ek4-IP-5WZ" firstAttribute="leading" secondItem="Mpj-yS-QBt" secondAttribute="trailing" constant="40" id="rQT-O1-6Vt"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="bottom" secondItem="gyT-sd-mam" secondAttribute="bottom" constant="20" id="ri2-To-mA8"/>
+                            <constraint firstItem="yLp-Jf-JD9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="rNE-N8-G8X" secondAttribute="trailing" constant="10" id="tdI-dm-f2J"/>
+                            <constraint firstItem="lRw-GS-KFE" firstAttribute="leading" secondItem="VJc-0v-3Pc" secondAttribute="trailing" constant="10" id="uGZ-Yc-BCL"/>
+                            <constraint firstItem="Mpj-yS-QBt" firstAttribute="leading" secondItem="PaO-d4-klp" secondAttribute="leading" constant="30" id="v3p-QO-0Wp"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="trailing" secondItem="fBL-3X-LnD" secondAttribute="trailing" constant="10" id="xM8-mu-C7z"/>
+                            <constraint firstItem="PaO-d4-klp" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ek4-IP-5WZ" secondAttribute="trailing" constant="20" id="yCA-eE-vyJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="PaO-d4-klp"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Workout" id="dTb-4f-d5L">
+                        <barButtonItem key="backBarButtonItem" title="Back" id="cnW-24-XEm"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="animatedPlayingImageView" destination="VJc-0v-3Pc" id="WWe-Wk-Kck"/>
+                        <outlet property="countdownLabel" destination="fBL-3X-LnD" id="pcU-gR-sA1"/>
+                        <outlet property="currentMusicArtworkImageView" destination="BL1-Cj-8jU" id="mEh-gK-TB5"/>
+                        <outlet property="nextSongLabel" destination="gyT-sd-mam" id="g1a-xA-udW"/>
+                        <outlet property="nowPlayingLabel" destination="lRw-GS-KFE" id="izt-8N-fQc"/>
+                        <outlet property="songCountDown" destination="rNE-N8-G8X" id="spj-LC-Jch"/>
+                        <outlet property="stickFigureView" destination="xuP-un-A31" id="9vq-li-Eu0"/>
+                        <outlet property="workoutIntensityView" destination="FWE-sa-GUB" id="jSk-JT-Lqt"/>
+                        <outlet property="workoutPlayButton" destination="Mpj-yS-QBt" id="Tsx-8O-Wgl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TZy-bK-WdS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1088.8" y="-1316.4917541229386"/>
         </scene>
         <!--Navigation to Play Workout-->
         <scene sceneID="kri-Us-A2g">
@@ -1432,11 +1561,12 @@
         <image name="checkmark.circle" catalog="system" width="64" height="60"/>
         <image name="checkmark.square" catalog="system" width="64" height="56"/>
         <image name="circle" catalog="system" width="64" height="60"/>
+        <image name="forward.fill" catalog="system" width="64" height="38"/>
         <image name="gear" catalog="system" width="64" height="58"/>
         <image name="magnifyingglass" catalog="system" width="64" height="56"/>
+        <image name="music-playing-1" width="32" height="32"/>
         <image name="music.note" catalog="system" width="48" height="64"/>
         <image name="music.note.list" catalog="system" width="64" height="56"/>
-        <image name="play" catalog="system" width="60" height="64"/>
         <image name="play.fill" catalog="system" width="58" height="64"/>
         <image name="plus" catalog="system" width="64" height="56"/>
         <image name="questionmark" catalog="system" width="48" height="64"/>
